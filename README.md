@@ -11,6 +11,7 @@ Community Flywheel Ratio, or CFR, estimates how much growth a brand can create f
 - Rediem brand profile model for ecommerce platform, loyalty, subscriptions, reviews, UGC/social, retail, sustainability, mission, migration pain, and agentic commerce signals.
 - Evidence-backed brand analysis with source URL, provider, confidence, capturedAt, and raw excerpts where available.
 - Community Flywheel Ratio snapshots, leak detection, and recommended CFR plays.
+- Loyalty maturity levels from no program through behavioral and agentic loyalty.
 - Explainable Rediem scoring for fit, loyalty pain, community readiness, migration pain, agentic commerce, and tiering.
 - Rediem activation idea generation for review rewards, referrals, subscription retention, UGC challenges, receipt rewards, product drops, mission challenges, VIP migration, retail-to-DTC, and zero-party preference collection.
 - Rediem buyer committee resolution for ecommerce, retention, lifecycle, loyalty, community, CRM, CMO, founder, and technical integration buyers.

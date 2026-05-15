@@ -25,7 +25,7 @@
 
 ## P1 Evidence and Quality
 
-1. Persist CFR snapshots, leaks, and plays from the Rediem brand analysis workflow once UI-triggered jobs are wired.
+1. Add CFR and loyalty maturity panels to the Rediem account detail UI.
 1. Make every BrandProfile field in `analyzeBrandForRediem` show source URL, provider, confidence, and excerpt when available.
 2. Add low-confidence handling in the Rediem UI so unsupported claims appear as unknown rather than positive/negative facts.
 3. Add Rediem eval fixtures for beauty, beverage, apparel, wellness, food, home, and pet brands.

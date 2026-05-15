@@ -16,6 +16,10 @@ import {
   type RediemSignalInput,
   type RediemTier
 } from "@/server/scoring/rediem";
+import {
+  calculateCommunityFlywheelRatio,
+  type CommunityFlywheelSnapshotEstimate
+} from "@/server/scoring/communityFlywheel";
 import { canonicalizeDomain } from "./researchAccount";
 
 type ProviderResultStatus = "SUCCESS" | "PARTIAL" | "FAILED" | "CACHED";
@@ -64,6 +68,7 @@ type BrandProfileRecord = RediemBrandProfileInput & {
   accountId: string;
   rediemFitScore?: number | null;
   loyaltyMaturityScore?: number | null;
+  loyaltyMaturityLevel?: number | null;
   communityReadinessScore?: number | null;
   migrationPainScore?: number | null;
   agenticCommerceScore?: number | null;
@@ -106,6 +111,20 @@ export type AnalyzeBrandForRediemClient = CacheEntryClient & {
     createMany(args: {
       data: Array<Record<string, unknown>>;
     }): Promise<{ count: number }>;
+  };
+  brandScoreHistory: {
+    create(args: { data: Record<string, unknown> }): Promise<Record<string, unknown>>;
+  };
+  communityFlywheelSnapshot: {
+    create(args: { data: Record<string, unknown> }): Promise<Record<string, unknown> & { id: string }>;
+  };
+  communityFlywheelLeak: {
+    deleteMany(args: { where: { workspaceId: string; accountId: string } }): Promise<{ count: number }>;
+    createMany(args: { data: Array<Record<string, unknown>> }): Promise<{ count: number }>;
+  };
+  communityFlywheelPlay: {
+    deleteMany(args: { where: { workspaceId: string; accountId: string } }): Promise<{ count: number }>;
+    createMany(args: { data: Array<Record<string, unknown>> }): Promise<{ count: number }>;
   };
   evidence: {
     create(args: { data: Omit<EvidenceRecord, "id" | "createdAt"> }): Promise<EvidenceRecord>;
@@ -174,6 +193,7 @@ type BrandProfileClaims = {
   instagramUrl: Claim<string>;
   tiktokUrl: Claim<string>;
   socialCommunityScore: Claim<number>;
+  loyaltyMaturityLevel: Claim<number>;
   hasRetailPresence: Claim<boolean>;
   retailSignals: Claim<Record<string, unknown>>;
   sustainabilityAngle: Claim<string>;
@@ -337,6 +357,12 @@ export async function analyzeBrandForRediem(
     ...analysis.profileClaims,
     rediemFitScore: claimNumber(rediemFitScore, analysis.primarySourceUrl, 0.8, "Weighted Rediem fit score."),
     loyaltyMaturityScore: claimNumber(loyaltyPainScore, analysis.primarySourceUrl, 0.75, "Derived loyalty pain score."),
+    loyaltyMaturityLevel: claimNumber(
+      calculateLoyaltyMaturityLevel(profileForScoring, analysis.signals, analysis.allContent),
+      analysis.primarySourceUrl,
+      0.75,
+      "Derived Rediem loyalty maturity level."
+    ),
     communityReadinessScore: claimNumber(communityReadinessScore, analysis.primarySourceUrl, 0.75, "Derived community readiness score."),
     migrationPainScore: claimNumber(migrationPainScore, analysis.primarySourceUrl, 0.75, "Derived migration pain score."),
     agenticCommerceScore: claimNumber(agenticCommerceScore, analysis.primarySourceUrl, 0.75, "Derived agentic commerce score.")
@@ -381,6 +407,33 @@ export async function analyzeBrandForRediem(
     claims: scoredClaims,
     detections: analysis.detections,
     signals: analysis.signals
+  });
+  const cfrSnapshot = calculateCommunityFlywheelRatio({
+    profile: scoredProfileData as RediemBrandProfileInput,
+    signals: analysis.signals,
+    detections: analysis.detections,
+    evidence: evidence.map((item) => ({
+      id: item.id,
+      fieldName: item.fieldName,
+      value: item.value,
+      sourceUrl: item.sourceUrl,
+      provider: item.provider,
+      rawExcerpt: item.rawExcerpt,
+      confidence: item.confidence
+    }))
+  });
+
+  await writeBrandScoreHistory(client, {
+    workspaceId: input.workspaceId,
+    accountId: account.id,
+    rediemFitScore,
+    tier: breakdown.tier,
+    components: breakdown.components
+  });
+  await writeCommunityFlywheelRecords(client, {
+    workspaceId: input.workspaceId,
+    accountId: account.id,
+    snapshot: cfrSnapshot
   });
 
   await client.account.update({
@@ -490,6 +543,22 @@ function analyzePagesForRediem(domain: string, pages: PageSnapshot[]) {
     instagramUrl: social.instagramUrl,
     tiktokUrl: social.tiktokUrl,
     socialCommunityScore: social.score,
+    loyaltyMaturityLevel: claimNumber(
+      calculateLoyaltyMaturityLevel(
+        {
+          hasLoyaltyProgram: loyalty.exists.value,
+          loyaltyProgramType: loyalty.programType.value,
+          hasReferralProgram: loyalty.hasReferral.value,
+          hasReviews: reviews.exists.value,
+          hasUGC: social.hasUGC.value,
+          socialCommunityScore: social.score.value
+        },
+        signals,
+        allContent
+      ),
+      primarySourceUrl,
+      0.65
+    ),
     hasRetailPresence: retail.exists,
     retailSignals: retail.signals,
     sustainabilityAngle: angles.sustainability,
@@ -507,6 +576,7 @@ function analyzePagesForRediem(domain: string, pages: PageSnapshot[]) {
 
   return {
     primarySourceUrl,
+    allContent,
     profileClaims,
     detections,
     signals
@@ -1056,6 +1126,170 @@ function claimsToProfileData(claims: BrandProfileClaims): Record<string, unknown
   return Object.fromEntries(
     Object.entries(claims).map(([key, claim]) => [key, claim.value])
   );
+}
+
+export function calculateLoyaltyMaturityLevel(
+  profile: RediemBrandProfileInput,
+  signals: RediemSignalInput[] = [],
+  contextText = ""
+): number {
+  if (!profile.hasLoyaltyProgram) {
+    return 0;
+  }
+
+  const text = [
+    profile.loyaltyProvider,
+    profile.loyaltyProgramType,
+    profile.missionDrivenAngle,
+    profile.sustainabilityAngle,
+    contextText,
+    ...signals.map((signal) => `${signal.type ?? ""} ${signal.title ?? ""} ${signal.description ?? ""}`)
+  ]
+    .filter(Boolean)
+    .join(" ")
+    .toLowerCase();
+  const hasPoints = matchesAny(text, ["points", "earn", "redeem", "cash back", "store credit"]);
+  const hasVipOrReferral =
+    profile.hasReferralProgram || matchesAny(text, ["vip", "tier", "level", "referral", "refer"]);
+  const hasCommunityLoop =
+    Boolean(profile.hasUGC || profile.hasReviews || profile.hasReferralProgram) &&
+    matchesAny(text, ["ugc", "review", "referral", "refer", "challenge", "ambassador", "creator", "community"]);
+  const hasBehavioralOrAgenticLoop = matchesAny(text, [
+    "personalized",
+    "personalised",
+    "journey",
+    "predictive",
+    "preference",
+    "quiz",
+    "profile",
+    "survey",
+    "zero-party",
+    "zero party",
+    "agentic"
+  ]);
+
+  if (hasBehavioralOrAgenticLoop) {
+    return 4;
+  }
+
+  if (hasCommunityLoop) {
+    return 3;
+  }
+
+  if (hasPoints && hasVipOrReferral) {
+    return 2;
+  }
+
+  return 1;
+}
+
+async function writeBrandScoreHistory(
+  client: AnalyzeBrandForRediemClient,
+  input: {
+    workspaceId: string;
+    accountId: string;
+    rediemFitScore: number;
+    tier: string;
+    components: {
+      ecommerceFit: number;
+      loyaltyPain: number;
+      communityReadiness: number;
+      retentionNeed: number;
+      migrationOpportunity: number;
+    };
+  }
+) {
+  await client.brandScoreHistory.create({
+    data: {
+      workspaceId: input.workspaceId,
+      accountId: input.accountId,
+      rediemFitScore: input.rediemFitScore,
+      tier: input.tier,
+      ecommerceFit: input.components.ecommerceFit,
+      loyaltyPain: input.components.loyaltyPain,
+      communityReadiness: input.components.communityReadiness,
+      retentionNeed: input.components.retentionNeed,
+      migrationOpportunity: input.components.migrationOpportunity,
+      scoredAt: new Date()
+    }
+  });
+}
+
+async function writeCommunityFlywheelRecords(
+  client: AnalyzeBrandForRediemClient,
+  input: {
+    workspaceId: string;
+    accountId: string;
+    snapshot: CommunityFlywheelSnapshotEstimate;
+  }
+) {
+  const createdSnapshot = await client.communityFlywheelSnapshot.create({
+    data: {
+      workspaceId: input.workspaceId,
+      accountId: input.accountId,
+      snapshotDate: input.snapshot.snapshotDate,
+      estimatedCfr: input.snapshot.estimatedCfr,
+      cfrConfidence: input.snapshot.cfrConfidence,
+      cfrTier: input.snapshot.cfrTier,
+      verifiedParticipationValue: input.snapshot.verifiedParticipationValue,
+      repeatParticipationRate: input.snapshot.repeatParticipationRate,
+      advocacyConversionRate: input.snapshot.advocacyConversionRate,
+      zeroPartyCompletionRate: input.snapshot.zeroPartyCompletionRate,
+      retentionLiftValue: input.snapshot.retentionLiftValue,
+      discountDependency: input.snapshot.discountDependency,
+      rewardCostRatio: input.snapshot.rewardCostRatio,
+      paidCacDependency: input.snapshot.paidCacDependency,
+      churnRecoveryCost: input.snapshot.churnRecoveryCost,
+      earnedCommunityGrowth: input.snapshot.earnedCommunityGrowth,
+      subsidizedTransactionalGrowth: input.snapshot.subsidizedTransactionalGrowth,
+      primaryLeak: input.snapshot.primaryLeak,
+      secondaryLeak: input.snapshot.secondaryLeak,
+      recommendedPlay: input.snapshot.recommendedPlay,
+      explanation: input.snapshot.explanation
+    }
+  });
+
+  await Promise.all([
+    client.communityFlywheelLeak.deleteMany({
+      where: { workspaceId: input.workspaceId, accountId: input.accountId }
+    }),
+    client.communityFlywheelPlay.deleteMany({
+      where: { workspaceId: input.workspaceId, accountId: input.accountId }
+    })
+  ]);
+
+  if (input.snapshot.leaks.length > 0) {
+    await client.communityFlywheelLeak.createMany({
+      data: input.snapshot.leaks.map((leak) => ({
+        workspaceId: input.workspaceId,
+        accountId: input.accountId,
+        snapshotId: createdSnapshot.id,
+        leakType: leak.leakType,
+        severity: leak.severity,
+        description: leak.description,
+        evidenceIds: leak.evidenceIds,
+        sourceUrls: leak.sourceUrls,
+        recommendedFix: leak.recommendedFix
+      }))
+    });
+  }
+
+  if (input.snapshot.plays.length > 0) {
+    await client.communityFlywheelPlay.createMany({
+      data: input.snapshot.plays.map((play) => ({
+        workspaceId: input.workspaceId,
+        accountId: input.accountId,
+        playType: play.playType,
+        title: play.title,
+        description: play.description,
+        targetBehavior: play.targetBehavior,
+        expectedCfrImpact: play.expectedCfrImpact,
+        expectedTimeToImpact: play.expectedTimeToImpact,
+        confidence: play.confidence,
+        evidenceIds: play.evidenceIds
+      }))
+    });
+  }
 }
 
 async function getCachedDossier(

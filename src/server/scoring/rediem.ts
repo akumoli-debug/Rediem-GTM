@@ -20,6 +20,7 @@ export type RediemBrandProfileInput = {
   instagramUrl?: string | null;
   tiktokUrl?: string | null;
   socialCommunityScore?: number | null;
+  loyaltyMaturityLevel?: number | null;
   hasRetailPresence?: boolean | null;
   sustainabilityAngle?: string | null;
   missionDrivenAngle?: string | null;

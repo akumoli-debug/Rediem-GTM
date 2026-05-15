@@ -3,6 +3,7 @@ import { test } from "node:test";
 import type { WebPageResult, WebResearchProvider } from "../src/server/providers";
 import {
   analyzeBrandForRediem,
+  calculateLoyaltyMaturityLevel,
   type AnalyzeBrandForRediemClient
 } from "../src/server/workflows/analyzeBrandForRediem";
 
@@ -46,6 +47,10 @@ function createWorkflowClient(): AnalyzeBrandForRediemClient & {
     accounts: Array<Record<string, unknown>>;
     brandProfiles: Array<Record<string, unknown>>;
     detections: Array<Record<string, unknown>>;
+    scoreHistory: Array<Record<string, unknown>>;
+    cfrSnapshots: Array<Record<string, unknown>>;
+    cfrLeaks: Array<Record<string, unknown>>;
+    cfrPlays: Array<Record<string, unknown>>;
     evidence: Array<Record<string, unknown>>;
     providerResults: Array<Record<string, unknown>>;
     cacheEntries: Array<Record<string, unknown>>;
@@ -55,6 +60,10 @@ function createWorkflowClient(): AnalyzeBrandForRediemClient & {
     accounts: [] as Array<Record<string, unknown>>,
     brandProfiles: [] as Array<Record<string, unknown>>,
     detections: [] as Array<Record<string, unknown>>,
+    scoreHistory: [] as Array<Record<string, unknown>>,
+    cfrSnapshots: [] as Array<Record<string, unknown>>,
+    cfrLeaks: [] as Array<Record<string, unknown>>,
+    cfrPlays: [] as Array<Record<string, unknown>>,
     evidence: [] as Array<Record<string, unknown>>,
     providerResults: [] as Array<Record<string, unknown>>,
     cacheEntries: [] as Array<Record<string, unknown>>
@@ -128,6 +137,66 @@ function createWorkflowClient(): AnalyzeBrandForRediemClient & {
         return { count: args.data.length };
       }
     },
+    brandScoreHistory: {
+      async create(args) {
+        const score = {
+          id: `score_${id++}`,
+          ...args.data
+        };
+        rows.scoreHistory.push(score);
+        return score;
+      }
+    },
+    communityFlywheelSnapshot: {
+      async create(args) {
+        const snapshot = {
+          id: `cfr_snapshot_${id++}`,
+          ...args.data
+        };
+        rows.cfrSnapshots.push(snapshot);
+        return snapshot;
+      }
+    },
+    communityFlywheelLeak: {
+      async deleteMany(args) {
+        const before = rows.cfrLeaks.length;
+        rows.cfrLeaks = rows.cfrLeaks.filter(
+          (leak) =>
+            leak.workspaceId !== args.where.workspaceId ||
+            leak.accountId !== args.where.accountId
+        );
+        return { count: before - rows.cfrLeaks.length };
+      },
+      async createMany(args) {
+        rows.cfrLeaks.push(
+          ...args.data.map((leak) => ({
+            id: `cfr_leak_${id++}`,
+            ...leak
+          }))
+        );
+        return { count: args.data.length };
+      }
+    },
+    communityFlywheelPlay: {
+      async deleteMany(args) {
+        const before = rows.cfrPlays.length;
+        rows.cfrPlays = rows.cfrPlays.filter(
+          (play) =>
+            play.workspaceId !== args.where.workspaceId ||
+            play.accountId !== args.where.accountId
+        );
+        return { count: before - rows.cfrPlays.length };
+      },
+      async createMany(args) {
+        rows.cfrPlays.push(
+          ...args.data.map((play) => ({
+            id: `cfr_play_${id++}`,
+            ...play
+          }))
+        );
+        return { count: args.data.length };
+      }
+    },
     evidence: {
       async create(args) {
         const evidence = {
@@ -178,6 +247,45 @@ function createWorkflowClient(): AnalyzeBrandForRediemClient & {
   };
 }
 
+test("calculateLoyaltyMaturityLevel follows Rediem loyalty maturity ladder", () => {
+  assert.equal(calculateLoyaltyMaturityLevel({ hasLoyaltyProgram: false }), 0);
+  assert.equal(
+    calculateLoyaltyMaturityLevel({
+      hasLoyaltyProgram: true,
+      loyaltyProgramType: "Earn points and redeem rewards"
+    }),
+    1
+  );
+  assert.equal(
+    calculateLoyaltyMaturityLevel({
+      hasLoyaltyProgram: true,
+      loyaltyProgramType: "Points with VIP tiers",
+      hasReferralProgram: true
+    }),
+    2
+  );
+  assert.equal(
+    calculateLoyaltyMaturityLevel({
+      hasLoyaltyProgram: true,
+      loyaltyProgramType: "Points with VIP tiers",
+      hasReferralProgram: true,
+      hasReviews: true,
+      hasUGC: true
+    }, [], "review challenge ambassador community"),
+    3
+  );
+  assert.equal(
+    calculateLoyaltyMaturityLevel({
+      hasLoyaltyProgram: true,
+      loyaltyProgramType: "Personalized preference journeys and predictive rewards",
+      hasReferralProgram: true,
+      hasReviews: true,
+      hasUGC: true
+    }, [], "zero-party quiz profile"),
+    4
+  );
+});
+
 test("analyzeBrandForRediem creates a cited Rediem dossier from mocked pages", async () => {
   const client = createWorkflowClient();
   const provider = new MockBrandWebProvider({
@@ -213,6 +321,14 @@ test("analyzeBrandForRediem creates a cited Rediem dossier from mocked pages", a
   assert.equal(client.rows.accounts.length, 1);
   assert.equal(client.rows.brandProfiles[0]?.hasLoyaltyProgram, true);
   assert.equal(client.rows.brandProfiles[0]?.brandCategory, "beauty");
+  assert.equal(client.rows.brandProfiles[0]?.loyaltyMaturityLevel, 3);
+  assert.equal(client.rows.scoreHistory.length, 1);
+  assert.equal(client.rows.scoreHistory[0]?.tier, "Tier 1");
+  assert.equal(client.rows.cfrSnapshots.length, 1);
+  assert.equal(typeof client.rows.cfrSnapshots[0]?.estimatedCfr, "number");
+  assert.equal(typeof client.rows.cfrSnapshots[0]?.cfrConfidence, "number");
+  assert.ok(client.rows.cfrLeaks.length > 0);
+  assert.ok(client.rows.cfrPlays.length > 0);
   assert.ok(client.rows.detections.some((detection) => detection.vendor === "Smile.io"));
   assert.ok(client.rows.detections.some((detection) => detection.vendor === "Recharge"));
   assert.ok(

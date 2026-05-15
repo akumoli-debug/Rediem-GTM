@@ -121,6 +121,7 @@ model Workspace {
   brandProfiles            BrandProfile[]
   brandActivationIdeas     BrandActivationIdea[]
   competitorToolDetections CompetitorToolDetection[]
+  brandScoreHistory          BrandScoreHistory[]
   communityFlywheelSnapshots CommunityFlywheelSnapshot[]
   communityFlywheelLeaks     CommunityFlywheelLeak[]
   communityFlywheelPlays     CommunityFlywheelPlay[]
@@ -152,6 +153,7 @@ model Account {
   brandProfile             BrandProfile?
   brandActivationIdeas     BrandActivationIdea[]
   competitorToolDetections CompetitorToolDetection[]
+  brandScoreHistory          BrandScoreHistory[]
   communityFlywheelSnapshots CommunityFlywheelSnapshot[]
   communityFlywheelLeaks     CommunityFlywheelLeak[]
   communityFlywheelPlays     CommunityFlywheelPlay[]
@@ -398,6 +400,7 @@ model BrandProfile {
   instagramUrl            String?
   tiktokUrl               String?
   socialCommunityScore    Float?
+  loyaltyMaturityLevel    Int?
   hasRetailPresence       Boolean?
   retailSignals           Json?
   sustainabilityAngle     String?
@@ -418,6 +421,7 @@ model BrandProfile {
   @@index([rediemFitScore])
   @@index([brandCategory])
   @@index([ecommercePlatform])
+  @@index([loyaltyMaturityLevel])
 }
 
 model BrandActivationIdea {
@@ -461,6 +465,30 @@ model CompetitorToolDetection {
   @@index([accountId])
   @@index([category])
   @@index([vendor])
+}
+
+model BrandScoreHistory {
+  id                 String   @id @default(cuid())
+  workspaceId        String
+  accountId          String
+  rediemFitScore     Float
+  tier               String
+  ecommerceFit       Float
+  loyaltyPain        Float
+  communityReadiness Float
+  retentionNeed      Float
+  migrationOpportunity Float
+  scoredAt           DateTime
+  createdAt          DateTime @default(now())
+
+  workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  account   Account   @relation(fields: [accountId], references: [id], onDelete: Cascade)
+
+  @@index([workspaceId])
+  @@index([accountId])
+  @@index([scoredAt])
+  @@index([tier])
+  @@index([rediemFitScore])
 }
 
 model CommunityFlywheelSnapshot {

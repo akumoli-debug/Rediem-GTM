@@ -129,6 +129,11 @@ export type CommunityFlywheelSnapshotEstimate = {
   advocacyPotential: number;
   preferenceCapturePotential: number;
   retentionProgramStrength: number;
+  verifiedParticipationValue: number;
+  repeatParticipationRate: number;
+  advocacyConversionRate: number;
+  zeroPartyCompletionRate: number;
+  retentionLiftValue: number;
 
   // ── Subsidized transactional growth sub-scores (0–100) ───────────────────
   // Higher means more reliance on subsidized behaviors.
@@ -141,6 +146,8 @@ export type CommunityFlywheelSnapshotEstimate = {
   transactionalRewardBias: number;
   paidCacDependency: number;
   churnExposure: number;
+  rewardCostRatio: number;
+  churnRecoveryCost: number;
 
   // ── CFR numerator and denominator ────────────────────────────────────────
   // Both are weighted composites of the sub-scores above, on a 0–100 scale.
@@ -193,10 +200,23 @@ export function calculateCommunityFlywheelRatio(
   );
 
   const rawCfr = roundCfr(earnedCommunityGrowth / subsidizedTransactionalGrowth);
+  const text = buildTextContext(signals, evidence).text;
+  const hasDiscountTrap = leaks.some((leak) => leak.leakType === "DISCOUNT_HEAVY_RETENTION") &&
+    leaks.some((leak) => leak.leakType === "NO_PARTICIPATION_CAPTURE");
+  const hasPointsOnlyTrap =
+    input.profile.hasLoyaltyProgram &&
+    normalizeText(input.profile.loyaltyProvider, input.profile.loyaltyProgramType, text).includes("points") &&
+    !input.profile.hasUGC &&
+    !input.profile.hasReferralProgram;
+  const adjustedRawCfr = hasDiscountTrap
+    ? Math.min(rawCfr, 0.49)
+    : hasPointsOnlyTrap
+      ? Math.min(rawCfr, 0.95)
+      : rawCfr;
   // Prospecting estimates are based on visible signals, not behavioral data.
   // Claiming "Iconic Brand Flywheel" (CFR ≥ 2) from website scraping would overstate
   // confidence — cap prospecting CFR just below that tier boundary.
-  const estimatedCfr = mode === "prospecting" ? Math.min(rawCfr, 1.99) : rawCfr;
+  const estimatedCfr = mode === "prospecting" ? Math.min(adjustedRawCfr, 1.99) : adjustedRawCfr;
 
   const primaryLeak = leaks[0]?.leakType ?? null;
   const secondaryLeak = leaks[1]?.leakType ?? null;
@@ -296,7 +316,12 @@ export function estimateEarnedCommunityGrowth(
     repeatEngagementStrength: roundScore(repeatEngagementStrength),
     advocacyPotential: roundScore(advocacyPotential),
     preferenceCapturePotential: roundScore(preferenceCapturePotential),
-    retentionProgramStrength: roundScore(retentionProgramStrength)
+    retentionProgramStrength: roundScore(retentionProgramStrength),
+    verifiedParticipationValue: roundScore(participationDepth),
+    repeatParticipationRate: roundScore(repeatEngagementStrength),
+    advocacyConversionRate: roundScore(advocacyPotential),
+    zeroPartyCompletionRate: roundScore(preferenceCapturePotential),
+    retentionLiftValue: roundScore(retentionProgramStrength)
   };
 }
 
@@ -349,7 +374,9 @@ export function estimateSubsidizedTransactionalGrowth(
     discountDependency: roundScore(discountDependency),
     transactionalRewardBias: roundScore(transactionalRewardBias),
     paidCacDependency: roundScore(paidCacDependency),
-    churnExposure: roundScore(churnExposure)
+    churnExposure: roundScore(churnExposure),
+    rewardCostRatio: roundScore(transactionalRewardBias),
+    churnRecoveryCost: roundScore(churnExposure)
   };
 }
 
@@ -377,7 +404,7 @@ export function detectCommunityFlywheelLeaks(
     ));
   }
 
-  if (profile.hasLoyaltyProgram && isPointsOnly(profile, text)) {
+  if (profile.hasLoyaltyProgram && isPointsOnlyLeak(profile, text)) {
     leaks.push(leak(
       "POINTS_ONLY_LOYALTY", 78,
       "The loyalty program earns points for purchases, but points alone don't generate community — they generate expectations of discounts. Members are waiting for the next redemption, not participating.",
@@ -809,6 +836,22 @@ function isPointsOnly(profile: RediemBrandProfileInput, text: string = ""): bool
     "challenge", "community", "ugc", "referral", "mission", "quiz", "creator"
   ]);
   return hasPointsLanguage && !hasCommunityLanguage;
+}
+
+function isPointsOnlyLeak(profile: RediemBrandProfileInput, text: string = ""): boolean {
+  const profileText = normalizeText(profile.loyaltyProvider, profile.loyaltyProgramType);
+  if (matchesAny(profileText, ["challenge", "community", "ugc", "referral", "mission", "quiz", "creator"])) {
+    return false;
+  }
+
+  return (
+    isPointsOnly(profile, text) ||
+    (
+      profileText.includes("points") &&
+      !profile.hasUGC &&
+      !profile.hasReferralProgram
+    )
+  );
 }
 
 // ─── Formatting helpers ───────────────────────────────────────────────────────

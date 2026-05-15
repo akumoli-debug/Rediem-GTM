@@ -33,7 +33,9 @@ Last reviewed: 2026-05-15
 | Seed script | Complete | Seed creates sample beauty, beverage, and apparel consumer brands with BrandProfile, detections, evidence, signals, and activation ideas. |
 | Rediem scoring | Complete | `src/server/scoring/rediem.ts` implements fit, loyalty pain, community readiness, migration pain, agentic commerce, tiering, component breakdowns, and reasons. |
 | Rediem formula templates | Complete | Rediem Tier, Points Loyalty Migration, Community Gap, Review Activation Fit, Subscription Retention Fit, Retail-to-DTC Fit, Agentic Commerce Angle, and AE Priority are installed as templates. |
-| Community Flywheel Ratio | Complete | Prisma models, scoring heuristics, CFR tiers, leak detection, play recommendations, explanations, and formula templates are implemented. Estimates are conservative and confidence-scored. |
+| Community Flywheel Ratio | Complete | Prisma models, scoring heuristics, CFR tiers, leak detection, play recommendations, explanations, formula templates, and Rediem analysis snapshot writes are implemented. Estimates are conservative and confidence-scored. |
+| Loyalty maturity | Complete | `analyzeBrandForRediem` computes Rediem loyalty maturity level 0-4 and stores it on BrandProfile. |
+| Brand score history | Complete | `BrandScoreHistory` stores Rediem fit score, tier, component scores, and scoredAt after each Rediem brand analysis. |
 | Safe formula engine | Complete | Formula evaluation uses a parser/AST evaluator, accepts `{brand.*}` references, rejects unknown functions, and does not use unsafe runtime eval. |
 | Evidence support | Complete | Enriched fields can attach source URL, provider, confidence, capturedAt, and raw excerpts through Evidence rows. |
 | Rediem brand workflow | Partial | `analyzeBrandForRediem` detects stack, loyalty, subscriptions, reviews, UGC/social, retail, mission/sustainability, creates evidence, scores, and stores BrandProfile/detections. It is tested with mocked pages; live provider quality depends on configured providers. |
@@ -48,8 +50,9 @@ Last reviewed: 2026-05-15
 
 - Rediem-specific data model and seed examples.
 - Rediem scoring with explainable component scores and tier classification.
+- Rediem loyalty maturity ladder, from no loyalty to behavioral/agentic loyalty.
 - Rediem formula templates using safe formula syntax and `{brand.*}` references.
-- Community Flywheel Ratio scoring, leak detection, recommended plays, and snapshot data models.
+- Community Flywheel Ratio scoring, leak detection, recommended plays, snapshot data models, and workflow persistence.
 - Evidence-backed Rediem brand analysis workflow with mocked tests.
 - Rediem buying committee title taxonomy and workflow.
 - Evidence-backed activation idea generator.
