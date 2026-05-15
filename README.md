@@ -1,26 +1,122 @@
 # Rediem GTM Intelligence
 
-Rediem GTM Intelligence helps prioritize community-driven consumer brands with high participation potential and an uncaptured community flywheel. The focus is not primarily Shopify, revenue, or company size; those are useful filters, while the core thesis is whether customers already identify with, advocate for, review, subscribe to, share, or culturally participate in the brand.
+A Rediem-specific GTM intelligence layer, community flywheel diagnostic, and outbound orchestration engine for identifying community-driven consumer brands and turning latent customer participation into measurable growth loops.
 
-It is built for community-driven loyalty, referrals, reviews, social challenges, subscriptions, receipt rewards, zero-party data, and AI discoverability.
+This repo is built for Rediem's actual ICP: consumer brands where customers already review, refer, subscribe, share, buy in retail, follow culturally, or participate socially, but where that participation is fragmented across social, loyalty, reviews, subscriptions, SMS, retail, referrals, and paid acquisition.
 
-The workspace imports brand accounts, analyzes commerce and loyalty readiness, preserves evidence for every claim, estimates Community Flywheel Ratio, scores Rediem fit, generates activation ideas, resolves Rediem-specific buyer committees, and exports CRM-ready account context.
+It is not positioned as a generic enrichment clone. The primary product path is Rediem brand analysis, Rediem fit scoring, Community Flywheel Ratio, activation ideas, buyer angles, and n8n/CRM-ready account intelligence.
 
-Community Flywheel Ratio, or CFR, estimates how much growth a brand can create from verified customer participation compared with growth it has to buy through discounts, points, paid acquisition, and one-off incentives.
+## What It Does
 
-## Core Features
+- Identifies community-driven consumer brands with high participation potential.
+- Diagnoses loyalty, community, retail-to-owned-data, subscription, reviews, UGC, and referral gaps.
+- Classifies community archetypes such as cult consumer brand, mission-led brand, ritual repeat-use brand, retail-to-DTC bridge brand, creator/ambassador-led brand, and product-drop brand.
+- Scores Rediem fit around community energy, participation capture gap, ritual repeat-purchase fit, retail-to-owned-data opportunity, mission identity, stack migration opportunity, and timing.
+- Estimates Community Flywheel Ratio, or CFR.
+- Detects flywheel leaks and recommends Rediem-specific plays.
+- Generates activation ideas and buyer angles for Rediem AEs.
+- Resolves Rediem buyer personas across ecommerce, retention, lifecycle, loyalty, community, CRM, CMO, founder, and technical integration stakeholders.
+- Produces n8n-ready workflow outputs and CRM-ready account intelligence for HubSpot, Google Sheets, Airtable, Smartlead, and Instantly.
 
-- Rediem brand profile model for ecommerce platform, loyalty, subscriptions, reviews, UGC/social, retail, sustainability, mission, migration pain, and agentic commerce signals.
-- Community archetype classification for cult consumer, mission-led, ritual repeat-use, retail-to-DTC bridge, creator/ambassador-led, product drop, education/trust-led, and low-community commodity brands.
-- Evidence-backed brand analysis with source URL, provider, confidence, capturedAt, and raw excerpts where available.
-- Community Flywheel Ratio snapshots, leak detection, and recommended CFR plays.
-- Loyalty maturity levels from no program through behavioral and agentic loyalty.
-- Explainable Rediem scoring weighted toward community energy, participation capture gap, repeat-purchase ritual fit, retail-to-owned-data opportunity, mission identity strength, stack migration opportunity, and timing signals.
-- Rediem activation idea generation for review rewards, referrals, subscription retention, UGC challenges, receipt rewards, product drops, mission challenges, VIP migration, retail-to-DTC, and zero-party preference collection.
-- Rediem buyer committee resolution for ecommerce, retention, lifecycle, loyalty, community, CRM, CMO, founder, and technical integration buyers.
-- Safe formula columns with Rediem templates and `{brand.*}` references. Formula evaluation uses a parser/AST evaluator, not JavaScript execution.
-- Rediem cockpit pages for accounts, account detail, import, playbooks, and formulas.
-- Mock-first provider, workflow, scoring, evidence, formula, cache, CRM rule, and eval tests.
+## Why Rediem-Specific
+
+Rediem sells community-driven loyalty and brand participation infrastructure. The useful GTM question is not just whether a company uses Shopify, has a certain revenue band, or has a certain team size. Those are filters.
+
+The core question is:
+
+> Does this brand already have customer participation that Rediem can capture, connect, and turn into a repeatable growth loop?
+
+The engine prioritizes evidence of:
+
+- Customer reviews and review tools
+- Referrals, affiliates, ambassadors, creators, and UGC
+- Subscriptions, replenishment, rituals, and repeat-use language
+- Retail presence, marketplaces, and receipt-to-owned-data opportunities
+- Loyalty, rewards, VIP, points, and referral pages
+- SMS, email, subscription, review, loyalty, and retail data fragmentation
+- Mission, sustainability, wellness, science, clean ingredients, education, or identity hooks
+
+## Community Flywheel Ratio
+
+Community Flywheel Ratio is Rediem's north-star diagnostic:
+
+```text
+CFR = Earned Community Growth / Subsidized Transactional Growth
+```
+
+Plain English: CFR estimates how much growth a brand creates from verified customer participation compared with how much growth it has to buy through discounts, points, paid acquisition, and one-off incentives.
+
+Prospecting CFR is conservative and confidence-scored. The system does not fabricate exact customer metrics from public data.
+
+CFR tiers:
+
+- `< 0.5`: Transactional Trap
+- `0.5 to < 1.0`: Emerging Community Loop
+- `1.0 to < 2.0`: Healthy Community Flywheel
+- `>= 2.0`: Iconic Brand Flywheel
+
+## Architecture
+
+```mermaid
+flowchart LR
+  A["CSV / brand domain"] --> B["analyzeBrandForRediem"]
+  B --> C["Evidence-backed BrandProfile"]
+  B --> D["Community archetypes"]
+  B --> E["Rediem Fit Score"]
+  B --> F["Community Flywheel Ratio"]
+  F --> G["Flywheel leaks + Rediem plays"]
+  C --> H["resolveRediemBuyingCommittee"]
+  C --> I["generateRediemActivationIdeas"]
+  E --> J["n8n / CRM / sequencer export"]
+  G --> J
+  H --> J
+  I --> J
+```
+
+Primary Rediem modules:
+
+- `src/server/workflows/analyzeBrandForRediem.ts`
+- `src/server/scoring/rediem.ts`
+- `src/server/scoring/communityArchetypes.ts`
+- `src/server/scoring/communityFlywheel.ts`
+- `src/server/workflows/resolveRediemBuyingCommittee.ts`
+- `src/server/workflows/generateRediemActivationIdeas.ts`
+- `src/server/rediem/uiData.ts`
+- `src/server/exports/`
+- `src/server/crm/`
+
+Legacy generic modules are documented in [LEGACY_MODULES.md](/LEGACY_MODULES.md) and should not be extended for Rediem work.
+
+## Demo
+
+<!-- Screenshot placeholder:
+![Rediem cockpit](docs/assets/rediem-cockpit.png)
+Place the screenshot at docs/assets/rediem-cockpit.png, then remove this comment.
+-->
+
+See [docs/DEMO.md](/docs/DEMO.md) and [examples/sample-rediem-dossier.json](/examples/sample-rediem-dossier.json).
+
+Run a mocked local brand analysis:
+
+```bash
+npm run workflow:rediem-brand -- --domain sample-beverage.test
+npm run workflow:rediem-brand -- --domain sample-beverage.test --output examples/sample-run-output.json
+```
+
+The demo output shape includes:
+
+- `brandProfile`
+- `communityArchetypes`
+- `rediemScores`
+- `communityFlywheelRatio`
+- `flywheelLeaks`
+- `activationIdeas`
+- `buyerCommittee`
+- `recommendedFirstContact`
+- `outboundAngles`
+- `n8nExport`
+- `crmFields`
+- `evidence`
 
 ## Quickstart
 
@@ -31,124 +127,101 @@ npm run db:generate
 npm run dev
 ```
 
-Open `http://localhost:3000/rediem/accounts`.
+Open:
 
-For database-backed pages and seed data, set `DATABASE_URL`, then run:
+```text
+http://localhost:3000/rediem/accounts
+```
+
+For database-backed pages and seed data:
 
 ```bash
 npm run db:migrate
 npm run db:seed
 ```
 
-## Environment Variables
+## Environment
 
-Copy `.env.example` to `.env` and fill what you need:
+See [ENVIRONMENT.md](/ENVIRONMENT.md).
+
+Local mock mode:
 
 ```bash
 DATABASE_URL=
-REDIS_URL=
-MCP_RESEARCH_SERVER_COMMAND=
-MCP_RESEARCH_SERVER_ARGS=
+GTM_ENGINE_RESEARCH_PROVIDER=mock
 MCP_RESEARCH_MOCK_RESPONSES=true
-APIFY_TOKEN=
-FIRECRAWL_API_KEY=
-BROWSERBASE_API_KEY=
-BROWSERBASE_PROJECT_ID=
-OPENAI_API_KEY=
-ANTHROPIC_API_KEY=
-HUBSPOT_ACCESS_TOKEN=
-SALESFORCE_CLIENT_ID=
-SALESFORCE_CLIENT_SECRET=
-SALESFORCE_REFRESH_TOKEN=
 ```
 
-Local tests use mock providers by default. Configure external providers only when you are ready to run live research.
+Live provider keys are optional. Provider adapters are still follow-up work unless explicitly implemented.
 
-## Running Locally
+## Commands
 
 ```bash
 npm run dev
 npm run build
 npm run lint
-npm run test
+npm test
 npm run eval
-```
-
-Database commands:
-
-```bash
-npm run db:generate
-npm run db:migrate
-npm run db:studio
-npm run db:seed
-```
-
-## Importing Brands
-
-Use `/rediem/import` or start from `examples/accounts.csv`.
-
-Required column:
-
-- `domain` or `company website`
-
-Optional columns:
-
-- `companyName`
-- `linkedinUrl`
-- `industry`
-- `notes`
-
-The importer validates domains, dedupes by workspace and domain, and previews rows before import.
-
-## Running Rediem Workflows
-
-Analyze a brand for Rediem fit:
-
-```bash
 npm run workflow:rediem-brand -- --domain example.com
+npm run crm:dry-run
 ```
 
-Generic account research and buying committee scripts still exist as implementation utilities, but the Rediem cockpit should use Rediem-specific workflows first.
+## n8n And CRM Outputs
 
-## Rediem Formula Templates
+The export shape is designed to feed:
 
-Installed templates include:
+- n8n webhook and HTTP Request nodes
+- HubSpot company/contact creation through reviewed dry-run mappings
+- Smartlead or Instantly sequence handoff
+- Google Sheets or Airtable review queues
+- CRM custom fields for Rediem fit, CFR tier, primary flywheel leak, recommended play, buyer persona, and evidence URLs
 
-- Rediem Tier
-- Points Loyalty Migration
-- Community Gap
-- Review Activation Fit
-- Subscription Retention Fit
-- Retail-to-DTC Fit
-- Agentic Commerce Angle
-- AE Priority
+See [docs/N8N_WORKFLOW.md](/docs/N8N_WORKFLOW.md).
 
-Example:
+## Docs
 
-```text
-IF(AND({brand.rediemFitScore} >= 80, {brand.migrationPainScore} >= 60), "Work now", IF({brand.rediemFitScore} >= 65, "Nurture", "Skip"))
-```
+- [ARCHITECTURE.md](/ARCHITECTURE.md)
+- [GTM_PLAYBOOK.md](/GTM_PLAYBOOK.md)
+- [COMMUNITY_FLYWHEEL_RATIO.md](/COMMUNITY_FLYWHEEL_RATIO.md)
+- [docs/DEMO.md](/docs/DEMO.md)
+- [docs/N8N_WORKFLOW.md](/docs/N8N_WORKFLOW.md)
+- [docs/ROADMAP.md](/docs/ROADMAP.md)
+- [ENVIRONMENT.md](/ENVIRONMENT.md)
+- [SECURITY.md](/SECURITY.md)
+- [KNOWN_LIMITATIONS.md](/KNOWN_LIMITATIONS.md)
 
-Use `/rediem/formulas` to review and install Rediem templates.
+Archived generic implementation notes are in `docs/archive/`.
 
-## Evidence Rules
+## Current Status
+
+Implemented:
+
+- Rediem brand analysis with mocked providers
+- Rediem fit scoring
+- Community archetype scoring
+- CFR scoring, leak detection, and recommended plays
+- Rediem activation ideas
+- Rediem buyer committee scoring
+- CSV import/export primitives
+- CRM-ready export shape and dry-run mappings
+- n8n/CRM export shape documentation
+
+Still follow-up:
+
+- Live web and people provider adapters
+- Brand discovery queue
+- Live HubSpot/Salesforce field sync
+- n8n webhook templates
+- CFR and archetype UI panels
+- Production auth and workspace access controls
+- npm audit remediation
+
+## Evidence And Safety
 
 - Do not fabricate invisible or unknown fields.
-- Store source URL, provider, confidence, capturedAt, and raw excerpt whenever available.
-- Low-confidence claims should remain low confidence in scoring and UI.
-- Outbound angles and activation ideas should be tied to stored evidence or signals.
-
-## Documentation
-
-- `STATUS.md`
-- `BACKLOG.md`
-- `ARCHITECTURE.md`
-- `DEVELOPMENT.md`
-- `WORKFLOWS.md`
-- `FORMULAS.md`
-- `PROVIDERS.md`
-- `CRM_SYNC.md`
-- `EVALS.md`
-- `SECURITY.md`
+- Preserve source URL, provider, confidence, capturedAt, and raw excerpt whenever available.
+- Treat public-prospect CFR as an estimate, not an exact customer metric.
+- Do not mark an account outbound-ready unless contact safety rules pass.
+- Do not store secrets in logs or fixtures.
 
 No substantial third-party source code is copied into this repository. A third-party notices file is not needed unless future changes vendor external source code.

@@ -191,16 +191,12 @@ export async function getRediemAccountDetailData(
     row,
     fitBreakdown: breakdown
       ? [
-          { label: "Ecommerce Fit", score: breakdown.ecommerceFit },
-          { label: "Community Readiness", score: breakdown.communityReadiness },
-          { label: "Loyalty Pain", score: breakdown.loyaltyPain },
-          { label: "Retention Need", score: breakdown.retentionNeed },
-          { label: "Social/UGC Potential", score: breakdown.socialUGCPotential },
-          {
-            label: "Subscription/Repeat Purchase",
-            score: breakdown.subscriptionRepeatPurchaseFit
-          },
-          { label: "Migration Opportunity", score: breakdown.migrationOpportunity },
+          { label: "Community Energy", score: breakdown.communityEnergy },
+          { label: "Participation Capture Gap", score: breakdown.participationCaptureGap },
+          { label: "Ritual Repeat Purchase Fit", score: breakdown.ritualRepeatPurchaseFit },
+          { label: "Retail-to-Owned Data", score: breakdown.retailToOwnedDataOpportunity },
+          { label: "Mission / Identity Strength", score: breakdown.missionIdentityStrength },
+          { label: "Stack / Migration Opportunity", score: breakdown.stackMigrationOpportunity },
           { label: "Timing Signal", score: breakdown.timingSignal }
         ]
       : [],

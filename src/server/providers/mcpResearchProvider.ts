@@ -151,7 +151,7 @@ export class MCPResearchProvider
       );
     }
 
-    // TODO: Wire a real MCP client transport here. The adapter intentionally
+    // Deferred integration: wire a real MCP client transport here. The adapter intentionally
     // keeps the rest of the app coupled only to provider interfaces.
     throw new ProviderError(
       `MCP tool '${toolName}' is not implemented yet for command '${this.command}'.`,

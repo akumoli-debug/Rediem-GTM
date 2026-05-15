@@ -1,4 +1,4 @@
-// ⚠️  GENERIC B2B MODULE — DO NOT EXTEND FOR REDIEM USE CASES
+// LEGACY B2B MODULE - DO NOT EXTEND FOR REDIEM USE CASES
 //
 // This workflow resolves a B2B SaaS buying committee: CRO, RevOps, VP Engineering,
 // CISO, CFO. Its persona model and title taxonomy target enterprise software buyers.

@@ -85,12 +85,12 @@ export class SalesforceCRMProvider implements CRMProvider {
   }
 
   async findCompanyByDomain(_domain: string): Promise<CRMRecordSnapshot | null> {
-    // TODO: Query Salesforce Account records by website/domain after auth setup.
+    // Deferred live integration: query Salesforce Account records by website/domain after auth setup.
     return null;
   }
 
   async findContactByEmail(_email: string): Promise<CRMRecordSnapshot | null> {
-    // TODO: Query Salesforce Contact records by email after auth setup.
+    // Deferred live integration: query Salesforce Contact records by email after auth setup.
     return null;
   }
 
@@ -99,7 +99,7 @@ export class SalesforceCRMProvider implements CRMProvider {
 
     if (mutations.some((mutation) => !mutation.dryRun && mutation.allowed)) {
       this.assertConfigured();
-      // TODO: Apply allowed mutations through Salesforce REST/Bulk APIs.
+      // Deferred live integration: apply allowed mutations through Salesforce REST/Bulk APIs.
     }
 
     return mutations;
@@ -111,4 +111,3 @@ export class SalesforceCRMProvider implements CRMProvider {
     }
   }
 }
-

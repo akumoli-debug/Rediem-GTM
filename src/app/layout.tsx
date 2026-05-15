@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "GTM Engine",
+  title: "Rediem GTM Intelligence",
   description:
-    "Account intelligence, signal scoring, enrichment workflows, formula columns, and CRM-ready exports."
+    "Rediem-specific GTM intelligence for community-driven consumer brands, Community Flywheel Ratio, activation ideas, buyer personas, and CRM-ready exports."
 };
 
 export default function RootLayout({

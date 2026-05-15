@@ -1,4 +1,4 @@
-# Rediem GTM Intelligence Status
+# Known Limitations
 
 Last reviewed: 2026-05-15
 
@@ -9,7 +9,8 @@ Last reviewed: 2026-05-15
 | `npm run db:generate` | Passed | Prisma Client generated to `src/generated/prisma`. |
 | `npm run lint` | Passed | ESLint completed with `--max-warnings=0`. |
 | `npm run build` | Passed | Next.js production build and TypeScript checks completed successfully. |
-| `npm run test` | Passed | Full mock-first suite passes. |
+| `npm test` | Passed | 231 mock-first tests passed. |
+| `npm install` | Passed | Dependencies installed and Prisma postinstall generated the client. npm audit reports 5 moderate dependency findings. |
 | `npx prisma migrate status` | Not rerun in this pass | Requires a reachable Postgres database matching `DATABASE_URL`. Earlier stabilization noted local Postgres was unavailable. |
 
 ## Repo Structure
@@ -28,7 +29,7 @@ Last reviewed: 2026-05-15
 
 | Phase | Status | Implementation Notes |
 | --- | --- | --- |
-| Stabilization | Complete | Build, lint, tests, and Prisma generate pass. Status and backlog now reflect the Rediem pivot. |
+| Stabilization | Complete | Build, lint, tests, and Prisma generate pass. |
 | Prisma schema | Complete | `BrandProfile`, `BrandActivationIdea`, and `CompetitorToolDetection` exist with relationships from `Workspace` and `Account`. |
 | Seed script | Complete | Seed creates sample beauty, beverage, and apparel consumer brands with BrandProfile, detections, evidence, signals, and activation ideas. |
 | Rediem scoring | Complete | `src/server/scoring/rediem.ts` implements fit, loyalty pain, community readiness, migration pain, agentic commerce, tiering, component breakdowns, and reasons. |
@@ -43,9 +44,10 @@ Last reviewed: 2026-05-15
 | Rediem buying committee | Partial | Rediem title taxonomy and workflow exist for ecommerce, retention, lifecycle, loyalty, community, CMO, founder, and technical buyers. Live people lookup depends on configured providers. |
 | Activation ideas | Complete for stored data | `generateRediemActivationIdeas` creates evidence-backed ideas from BrandProfile, Signals, Evidence, and detections, then stores BrandActivationIdea rows. |
 | Rediem UI | Partial | `/rediem/accounts`, account detail, import, playbooks, and formulas pages exist. Buttons currently show queued notices; they do not yet trigger background jobs. |
+| Legacy UI surface | De-prioritized | Root, `/accounts`, `/people`, `/signals`, and `/settings/formulas` now redirect to Rediem cockpit surfaces. |
 | Provider integration | Partial | Provider interfaces, registry, mock provider, redaction, caching, and generic MCP boundary exist. Live provider adapters remain a follow-up. |
 | Queue/runtime | Partial | Queue abstraction exists, but Redis/BullMQ workers and UI-triggered background execution are not wired. |
-| Docs | Partial | README now positions the repo around Rediem-specific GTM intelligence. Deeper docs still include some generic GTM architecture sections and should be tightened next. |
+| External docs | Complete for review | README, architecture, demo, roadmap, n8n workflow, environment, CFR, GTM playbook, and known limitations are Rediem-specific. Older broad docs are archived under `docs/archive/`. |
 
 ## Implemented
 
@@ -59,6 +61,7 @@ Last reviewed: 2026-05-15
 - Rediem buying committee title taxonomy and workflow.
 - Evidence-backed activation idea generator.
 - Rediem account cockpit and detail UI.
+- Rediem-first public README, architecture, GTM playbook, CFR, n8n, environment, and legacy-module docs.
 - Mock-first test coverage for scoring, workflows, formulas, evidence, providers, cache, CSV, CRM rules, and observability.
 
 ## Partially Implemented
@@ -67,21 +70,22 @@ Last reviewed: 2026-05-15
 - Workflow execution from Rediem UI actions.
 - Background jobs, retry orchestration, and Redis-backed queues.
 - Run-level provider result linking for every nested provider call.
-- Rediem export mapping for CRM-specific field names.
-- Documentation cleanup from generic GTM language to Rediem-first language.
+- Rediem export mapping UI for CRM-specific field names.
+- npm audit dependency remediation.
 
-## Broken
+## Known Limitations
 
 - No blocking build, lint, test, or Prisma generate errors are present.
+- `npm install` reports 5 moderate dependency audit findings; these were not force-upgraded because that may require breaking dependency changes.
 - Database migration status still depends on a local or hosted Postgres instance being available.
 
-## Missing
+## Follow-Up Areas
 
 - Auth, workspace access control, and production multi-tenant safeguards.
 - Live Rediem workflow trigger API routes from the UI.
 - Production provider implementations and provider-specific live evals.
-- CRM-safe Rediem field mapping UI and guarded live CRM sync.
-- Screenshots for Rediem cockpit docs.
+- CRM-safe Rediem field mapping UI and guarded live CRM sync after dry-run mapping review.
+- Real Rediem cockpit screenshot at `docs/assets/rediem-cockpit.png`.
 
 ## Recommended Next Sequence
 
@@ -91,4 +95,4 @@ Last reviewed: 2026-05-15
 4. Thread `workflowRunId` through Rediem workflow provider calls and cache hits.
 5. Implement live web research and structured extraction adapters first.
 6. Add live people lookup only after brand scoring quality is stable.
-7. Tighten docs so Rediem-specific workflows are the default path and generic GTM docs become implementation background.
+7. Add CFR/community archetype panels and a real cockpit screenshot for the external demo.

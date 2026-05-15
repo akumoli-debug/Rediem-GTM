@@ -83,12 +83,12 @@ export class HubSpotCRMProvider implements CRMProvider {
   }
 
   async findCompanyByDomain(_domain: string): Promise<CRMRecordSnapshot | null> {
-    // TODO: Query HubSpot companies by domain once OAuth/private app setup is added.
+    // Deferred live integration: query HubSpot companies by domain once OAuth/private app setup is added.
     return null;
   }
 
   async findContactByEmail(_email: string): Promise<CRMRecordSnapshot | null> {
-    // TODO: Query HubSpot contacts by email once OAuth/private app setup is added.
+    // Deferred live integration: query HubSpot contacts by email once OAuth/private app setup is added.
     return null;
   }
 
@@ -97,7 +97,7 @@ export class HubSpotCRMProvider implements CRMProvider {
 
     if (mutations.some((mutation) => !mutation.dryRun && mutation.allowed)) {
       this.assertConfigured();
-      // TODO: Apply allowed mutations through HubSpot CRM object APIs.
+      // Deferred live integration: apply allowed mutations through HubSpot CRM object APIs.
     }
 
     return mutations;
@@ -109,4 +109,3 @@ export class HubSpotCRMProvider implements CRMProvider {
     }
   }
 }
-

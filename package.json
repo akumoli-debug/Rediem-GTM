@@ -1,9 +1,17 @@
 {
-  "name": "gtm-engine",
+  "name": "rediem-gtm-intelligence",
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "Rediem GTM Intelligence: brand fit scoring, loyalty signals, activation ideas, and evidence-backed ecommerce account prioritization.",
+  "description": "A Rediem-specific GTM intelligence and outbound orchestration engine for identifying community-driven consumer brands and turning latent customer participation into measurable growth loops.",
+  "keywords": [
+    "rediem",
+    "gtm-intelligence",
+    "community-flywheel-ratio",
+    "loyalty",
+    "consumer-brands"
+  ],
+  "license": "UNLICENSED",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -11,9 +19,7 @@
     "db:migrate": "prisma migrate dev",
     "db:studio": "prisma studio",
     "db:seed": "prisma db seed",
-    "workflow:research-account": "tsx scripts/research-account.ts",
     "workflow:rediem-brand": "tsx scripts/rediem-brand.ts",
-    "workflow:buying-committee": "tsx scripts/buying-committee.ts",
     "crm:dry-run": "tsx scripts/crm-dry-run.ts",
     "eval": "tsx evals/runEval.ts",
     "lint": "eslint . --max-warnings=0",

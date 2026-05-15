@@ -19,7 +19,7 @@ export type FormulaTemplateDefinition = {
 export const formulaTemplates: FormulaTemplateDefinition[] = [
   // ── Generic B2B templates (not shown in Rediem UI) ───────────────────────
   // These target enterprise SaaS motions and are not relevant to DTC brands.
-  // TODO: Move to a separate genericTemplates export once the B2B path is archived.
+  // Deferred cleanup: move to a separate genericTemplates export once the B2B path is archived.
   {
     key: "account-tier",
     name: "Account Tier",

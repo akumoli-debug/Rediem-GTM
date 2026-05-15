@@ -1,4 +1,4 @@
-// ⚠️  GENERIC B2B MODULE — DO NOT EXTEND FOR REDIEM USE CASES
+// LEGACY B2B MODULE - DO NOT EXTEND FOR REDIEM USE CASES
 //
 // This title taxonomy is built for B2B SaaS buying committees: RevOps, Engineering,
 // Security, Finance, Product, CRO. Its role families and motion keywords target

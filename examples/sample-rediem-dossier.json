@@ -1,0 +1,228 @@
+{
+  "sampleData": true,
+  "note": "Fictional Rediem demo dossier. Public prospecting estimates are confidence-scored and should not be treated as exact customer metrics.",
+  "brandProfile": {
+    "brandName": "Sample Beverage Co.",
+    "domain": "sample-beverage.test",
+    "brandCategory": "Beverage",
+    "productCategory": "Functional beverage",
+    "targetCustomer": "Wellness-minded consumers who buy functional drinks in retail and online",
+    "ecommercePlatform": "Shopify",
+    "hasSubscription": true,
+    "subscriptionProvider": "Recharge",
+    "hasLoyaltyProgram": true,
+    "loyaltyProvider": "Legacy points app",
+    "loyaltyProgramType": "points and VIP tiers",
+    "hasReferralProgram": false,
+    "hasReviews": true,
+    "reviewProvider": "Okendo",
+    "hasUGC": true,
+    "instagramUrl": "https://instagram.com/samplebeverage",
+    "tiktokUrl": "https://tiktok.com/@samplebeverage",
+    "hasRetailPresence": true,
+    "retailSignals": {
+      "retailers": ["Target", "Whole Foods", "Sprouts"],
+      "evidence": "Store locator and retailer badges visible on sample pages"
+    },
+    "sustainabilityAngle": "Recyclable packaging and lower-sugar positioning",
+    "missionDrivenAngle": "Better-for-you soda alternative with gut health education",
+    "loyaltyMaturityLevel": 2
+  },
+  "communityArchetypes": [
+    "CULT_CONSUMER_BRAND",
+    "RITUAL_REPEAT_USE_BRAND",
+    "RETAIL_TO_DTC_BRIDGE_BRAND"
+  ],
+  "rediemScores": {
+    "rediemFitScore": 87,
+    "tier": "Tier 1",
+    "communityEnergy": 91,
+    "participationCaptureGap": 82,
+    "ritualRepeatPurchaseFit": 88,
+    "retailToOwnedDataOpportunity": 84,
+    "missionIdentityStrength": 72,
+    "stackMigrationOpportunity": 76,
+    "timingSignal": 68,
+    "confidence": 0.64
+  },
+  "communityFlywheelRatio": {
+    "estimatedCfr": 0.82,
+    "cfrConfidence": 0.61,
+    "cfrTier": "Emerging Community Loop",
+    "earnedCommunityGrowth": 58,
+    "subsidizedTransactionalGrowth": 71,
+    "primaryLeak": "POINTS_ONLY_LOYALTY",
+    "secondaryLeak": "RETAIL_NOT_CONNECTED_TO_DTC",
+    "recommendedPlay": "VIP_TIER_MIGRATION",
+    "explanation": [
+      "Visible reviews, UGC, subscriptions, and retail presence suggest real participation potential.",
+      "The loyalty motion appears points-heavy, so earned community behavior may not be fully captured.",
+      "Retail buyers appear disconnected from owned DTC profiles, making receipt upload a strong first loop."
+    ]
+  },
+  "flywheelLeaks": [
+    {
+      "leakType": "POINTS_ONLY_LOYALTY",
+      "severity": 86,
+      "description": "Rewards language centers on points and VIP tiers, with limited evidence of reviews, referrals, UGC, or zero-party data connected to loyalty.",
+      "recommendedFix": "Audit the points program and migrate high-intent customers into participation-based rewards.",
+      "evidenceIds": ["ev_rewards_points"],
+      "sourceUrls": ["https://sample-beverage.test/rewards"]
+    },
+    {
+      "leakType": "RETAIL_NOT_CONNECTED_TO_DTC",
+      "severity": 78,
+      "description": "Retail presence is visible, but the sample evidence does not show a receipt upload or retail-to-owned-profile loop.",
+      "recommendedFix": "Launch a receipt upload challenge to turn retail buyers into owned community profiles.",
+      "evidenceIds": ["ev_store_locator"],
+      "sourceUrls": ["https://sample-beverage.test/store-locator"]
+    }
+  ],
+  "activationIdeas": [
+    {
+      "type": "RECEIPT_UPLOAD_CHALLENGE",
+      "title": "Turn retail buyers into owned community profiles",
+      "targetBehavior": "Upload a retail receipt, join the community profile, and receive a personalized DTC reward",
+      "whyItFits": "The brand has retail presence, reviews, UGC, and subscriptions, but no visible retail-to-owned loop.",
+      "rediemValuePropAngle": "Connect retail demand to owned customer profiles and follow-on subscriptions.",
+      "suggestedOutboundOneLiner": "Your retail and review footprint suggests customers are already participating; Rediem can help convert those offline buyers into owned profiles and repeat DTC loops.",
+      "confidence": 0.72,
+      "evidenceIds": ["ev_store_locator", "ev_reviews"]
+    },
+    {
+      "type": "VIP_TIER_MIGRATION",
+      "title": "Move points and VIP tiers into participation-based rewards",
+      "targetBehavior": "Reward reviews, referrals, UGC, preference completion, and subscription milestones instead of only purchases",
+      "whyItFits": "The sample loyalty page emphasizes points and VIP tiers while reviews and UGC appear separate.",
+      "rediemValuePropAngle": "Shift loyalty from transaction subsidy to verified community participation.",
+      "suggestedOutboundOneLiner": "Your VIP program already has the scaffolding; Rediem can help make the rewards loop about verified participation, not just points.",
+      "confidence": 0.69,
+      "evidenceIds": ["ev_rewards_points", "ev_ugc"]
+    }
+  ],
+  "buyerCommittee": {
+    "economicBuyers": [
+      {
+        "fullName": "Jordan Lee",
+        "title": "VP Marketing",
+        "personaGroup": "economicBuyer",
+        "roleScore": 84,
+        "angle": "Revenue impact, brand community differentiation, and retention strategy"
+      }
+    ],
+    "operatorBuyers": [
+      {
+        "fullName": "Maya Chen",
+        "title": "Director of Retention",
+        "personaGroup": "operatorBuyer",
+        "roleScore": 91,
+        "angle": "Lifecycle, loyalty migration, subscription retention, and campaign execution"
+      }
+    ],
+    "technicalBuyers": [
+      {
+        "fullName": "Theo Patel",
+        "title": "Head of Ecommerce",
+        "personaGroup": "technicalBuyer",
+        "roleScore": 77,
+        "angle": "Commerce stack, integrations, data flows, and implementation risk"
+      }
+    ],
+    "influencers": [
+      {
+        "fullName": "Avery Morgan",
+        "title": "Community Manager",
+        "personaGroup": "influencer",
+        "roleScore": 73,
+        "angle": "UGC, creator participation, community programming, and social proof"
+      }
+    ]
+  },
+  "recommendedFirstContact": {
+    "fullName": "Maya Chen",
+    "title": "Director of Retention",
+    "personaGroup": "operatorBuyer",
+    "reason": "Most directly owns retention, lifecycle, loyalty, and repeat-purchase loops."
+  },
+  "outboundAngles": [
+    {
+      "angleTitle": "Retail participation is not yet owned",
+      "whyNow": "Retail presence and review activity are visible, but receipt-to-profile capture is not.",
+      "painHypothesis": "Retail buyers are creating demand and proof, but their participation is not turning into owned DTC profiles.",
+      "suggestedOneLiner": "Rediem can help convert retail buyers into owned community members through receipt upload, rewards, and follow-on subscription loops.",
+      "confidence": 0.68,
+      "sourceUrls": ["https://sample-beverage.test/store-locator", "https://sample-beverage.test/reviews"]
+    },
+    {
+      "angleTitle": "Points loyalty is leaving community value uncaptured",
+      "whyNow": "The rewards page emphasizes points and VIP tiers while reviews and UGC appear separate.",
+      "painHypothesis": "The brand may be subsidizing purchases without capturing verified participation.",
+      "suggestedOneLiner": "Rediem can help turn points/VIP loyalty into participation-based rewards for reviews, referrals, UGC, and preferences.",
+      "confidence": 0.66,
+      "sourceUrls": ["https://sample-beverage.test/rewards"]
+    }
+  ],
+  "n8nExport": {
+    "webhookEvent": "rediem.account_scored",
+    "domain": "sample-beverage.test",
+    "rediemFitScore": 87,
+    "rediemTier": "Tier 1",
+    "cfrTier": "Emerging Community Loop",
+    "primaryFlywheelLeak": "POINTS_ONLY_LOYALTY",
+    "recommendedPlay": "VIP_TIER_MIGRATION",
+    "recommendedFirstContactTitle": "Director of Retention",
+    "sequencerEligible": false,
+    "sequencerEligibilityReason": "Sample dossier does not include a verified email."
+  },
+  "crmFields": {
+    "rediem_fit_score": 87,
+    "rediem_tier": "Tier 1",
+    "community_archetypes": "CULT_CONSUMER_BRAND,RITUAL_REPEAT_USE_BRAND,RETAIL_TO_DTC_BRIDGE_BRAND",
+    "community_energy_score": 91,
+    "participation_capture_gap": 82,
+    "loyalty_maturity_level": 2,
+    "estimated_cfr": 0.82,
+    "cfr_tier": "Emerging Community Loop",
+    "primary_flywheel_leak": "POINTS_ONLY_LOYALTY",
+    "recommended_rediem_play": "VIP_TIER_MIGRATION",
+    "rediem_source_urls": "https://sample-beverage.test/rewards, https://sample-beverage.test/reviews, https://sample-beverage.test/store-locator"
+  },
+  "evidence": [
+    {
+      "id": "ev_rewards_points",
+      "fieldName": "loyaltyProgramType",
+      "value": "points and VIP tiers",
+      "sourceUrl": "https://sample-beverage.test/rewards",
+      "provider": "mock",
+      "confidence": 0.74,
+      "rawExcerpt": "Earn points and climb VIP tiers with every purchase."
+    },
+    {
+      "id": "ev_reviews",
+      "fieldName": "hasReviews",
+      "value": "true",
+      "sourceUrl": "https://sample-beverage.test/reviews",
+      "provider": "mock",
+      "confidence": 0.78,
+      "rawExcerpt": "Customer reviews and product ratings are displayed on the sample review page."
+    },
+    {
+      "id": "ev_store_locator",
+      "fieldName": "hasRetailPresence",
+      "value": "true",
+      "sourceUrl": "https://sample-beverage.test/store-locator",
+      "provider": "mock",
+      "confidence": 0.71,
+      "rawExcerpt": "Find us at Target, Whole Foods, and Sprouts."
+    },
+    {
+      "id": "ev_ugc",
+      "fieldName": "hasUGC",
+      "value": "true",
+      "sourceUrl": "https://sample-beverage.test/community",
+      "provider": "mock",
+      "confidence": 0.63,
+      "rawExcerpt": "Join our creator community and share your daily ritual."
+    }
+  ]
+}

@@ -26,7 +26,7 @@ scripts/crm-dry-run.ts
 - `findCompanyByDomain`
 - `findContactByEmail`
 
-HubSpot and Salesforce classes are stubs with clear TODO boundaries for future API-specific implementation.
+HubSpot and Salesforce classes are stubs with clear deferred-integration boundaries for future API-specific implementation.
 
 ## Supported Company Fields
 

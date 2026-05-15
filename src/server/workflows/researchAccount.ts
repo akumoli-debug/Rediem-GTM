@@ -1,4 +1,4 @@
-// ⚠️  GENERIC B2B MODULE — DO NOT EXTEND FOR REDIEM USE CASES
+// LEGACY B2B MODULE - DO NOT EXTEND FOR REDIEM USE CASES
 //
 // This workflow was designed for generic B2B GTM research (SaaS, enterprise, compliance,
 // hiring signals). It is NOT the Rediem brand research path.

@@ -1,6 +1,32 @@
 # Architecture
 
-GTM Engine is a Next.js and TypeScript application for evidence-backed account enrichment. The system is organized around provider-neutral workflows, normalized data, source evidence, scoring, cost controls, and CRM-ready exports.
+Rediem GTM Intelligence is a Rediem-specific GTM intelligence and outbound orchestration engine. It finds community-driven consumer brands, identifies where customer participation is fragmented, estimates Community Flywheel Ratio, recommends Rediem plays, and prepares evidence-backed data for CRM-ready export shapes, n8n, spreadsheets, and sequencer review.
+
+The product path is Rediem-first. Generic B2B enrichment modules are legacy internals and are not the main application surface.
+
+## System Flow
+
+```mermaid
+flowchart TD
+  A["Brand domain import"] --> B["Provider layer"]
+  B --> C["analyzeBrandForRediem"]
+  C --> D["BrandProfile"]
+  C --> E["Evidence"]
+  C --> F["Signals"]
+  C --> G["CompetitorToolDetection"]
+  D --> H["Community archetype scoring"]
+  D --> I["Rediem Fit Score"]
+  D --> J["Community Flywheel Ratio"]
+  J --> K["CommunityFlywheelSnapshot"]
+  J --> L["Leaks"]
+  J --> M["Plays"]
+  D --> N["resolveRediemBuyingCommittee"]
+  D --> O["generateRediemActivationIdeas"]
+  I --> P["Rediem cockpit"]
+  K --> P
+  N --> Q["CRM-ready / n8n / sequencer exports"]
+  O --> Q
+```
 
 ## Stack
 
@@ -9,92 +35,77 @@ GTM Engine is a Next.js and TypeScript application for evidence-backed account e
 - Postgres
 - Prisma ORM
 - Provider adapter interfaces
-- Safe formula parser and evaluator
+- Evidence-first normalization
+- Safe formula parser/evaluator for Rediem templates
 - CSV import/export
-- In-process workflow execution today, with queue interfaces ready for Redis-backed workers later
+- In-process workflows today, with queue interfaces ready for Redis-backed workers
 
-## Source Layout
+## Rediem Core Modules
 
 ```text
-src/
-  app/                    Next.js pages and API routes
-  components/             Workspace table UI, drawers, galleries, shared UI
-  lib/                    App-level helpers
-  server/
-    cache/                Provider call cache helpers
-    crm/                  CRM provider abstractions, mapping, sync rules
-    db/                   Prisma client
-    evidence/             Evidence-first field persistence helpers
-    exports/              CSV export builders
-    formulas/             Parser, evaluator, functions, templates, service
-    imports/              CSV import preview and account creation
-    observability/        Run, provider, budget, and fill-rate metrics
-    playbooks/            Saved GTM playbook examples and services
-    providers/            Provider interfaces, registry, mock and MCP adapters
-    queue/                Queue abstraction placeholder
-    scoring/              Signal and title/persona scoring
-    workflows/            Account, committee, contact, waterfall, outreach workflows
-    workspace/            Server-side table data loaders
-  types/                  Shared exported types
-prisma/
-  schema.prisma
-  migrations/
-  seed.ts
-evals/
-  golden_accounts.json
-  golden_people.json
-  expected_signals.json
-  runEval.ts
+src/server/workflows/analyzeBrandForRediem.ts
+src/server/workflows/resolveRediemBuyingCommittee.ts
+src/server/workflows/generateRediemActivationIdeas.ts
+src/server/scoring/rediem.ts
+src/server/scoring/communityArchetypes.ts
+src/server/scoring/communityFlywheel.ts
+src/server/scoring/rediemTitleTaxonomy.ts
+src/server/rediem/uiData.ts
+src/server/exports/
+src/server/crm/       CRM-ready export shape and dry-run mappings
 ```
 
 ## Data Model
 
-Core Prisma models:
+Core Rediem models:
 
-- `Workspace`: tenant boundary for accounts, people, signals, evidence, runs, formulas, playbooks, and provider results.
-- `Account`: company-level profile, enrichment summaries, scores, and timestamps.
-- `Person`: buying committee/contact record with persona, role score, email status, and contactability score.
-- `Signal`: account-level events such as hiring, funding, product launch, compliance, pricing, and news.
-- `Evidence`: field-level provenance for account, person, signal, and formula result claims.
-- `WorkflowRun`: run status, counts, cost, timing, and errors.
-- `ProviderResult`: provider call audit log with raw/normalized response, cost, latency, cache status, and error details.
-- `FormulaColumn` and `FormulaResult`: safe computed columns and evaluated values.
-- `FormulaTemplate`: reusable template formulas that can be added to a workspace.
-- `CacheEntry`: provider call cache by namespace and normalized key.
-- `Playbook`: saved GTM motions with personas, signal rules, workflow steps, formulas, exports, and budgets.
+- `BrandProfile`: Rediem-specific profile for commerce stack, category, subscription, loyalty, reviews, UGC/social, retail, mission, sustainability, loyalty maturity, and score fields.
+- `CompetitorToolDetection`: detected loyalty, review, subscription, referral, email, SMS, and commerce tooling.
+- `BrandActivationIdea`: evidence-backed Rediem activation ideas such as review reward series, referral challenge, receipt upload challenge, VIP migration, and zero-party preference challenge.
+- `BrandScoreHistory`: score snapshots for Rediem fit and component scores.
+- `CommunityFlywheelSnapshot`: CFR estimate, confidence, tier, earned/subsidized inputs, primary leak, secondary leak, and recommended play.
+- `CommunityFlywheelLeak`: diagnosed leaks such as points-only loyalty, reviews isolated from rewards, retail not connected to DTC, or no zero-party data loop.
+- `CommunityFlywheelPlay`: recommended Rediem plays with expected CFR impact and confidence.
+- `Evidence`: field-level provenance for every enriched claim.
 
-## Workflow Layer
+Shared platform models:
 
-Workflows use narrow client interfaces so they can run against Prisma in production and in-memory clients in tests/evals.
+- `Workspace`
+- `Account`
+- `Person`
+- `Signal`
+- `WorkflowRun`
+- `ProviderResult`
+- `FormulaColumn`
+- `FormulaResult`
+- `CacheEntry`
 
-- `researchAccount`: canonicalizes domain, checks cache, enriches company fields, scrapes/extracts website pages, searches recent events, stores evidence, creates signals, scores account, and caches the dossier.
-- `resolveBuyingCommittee`: loads or researches an account, derives role hints from motion/playbook, calls people providers, normalizes titles, scores people, stores evidence, and groups personas.
-- `enrichContacts`: verifies existing emails, calls contact providers, generates candidate patterns, verifies candidates, updates contactability, and preserves evidence.
-- `generateOutreachAngles`: generates conservative evidence-backed outreach angles only when Account/Person, Signal, and Evidence rows support the claim.
-- `runWaterfall`: reusable ordered-step enrichment engine with conditions, stop rules, retries, cost limits, cache hooks, and ProviderResult persistence.
+## Scoring Model
 
-## Provider Layer
+Rediem Fit Score is not centered on Shopify, revenue, or headcount. Those are filters. The primary score is weighted around participation potential:
 
-Application logic depends on interfaces in `src/server/providers/types.ts`, not vendor-specific APIs.
+- Community Energy: 25%
+- Participation Capture Gap: 20%
+- Repeat Purchase / Ritual Fit: 15%
+- Retail-to-Owned Data Opportunity: 15%
+- Mission / Identity Strength: 10%
+- Stack / Migration Opportunity: 10%
+- Timing Signal: 5%
 
-Provider categories:
+Community archetypes:
 
-- Company enrichment
-- People discovery
-- Contact enrichment
-- Email verification
-- Web research
-- Browser/style inspection
-
-Adapters include:
-
-- `MockProvider` for local development, tests, CI, and evals.
-- `MCPResearchProvider` for configured external MCP research provider commands.
-- Stubs for CRM providers where OAuth or API-specific implementation is intentionally deferred.
+- `CULT_CONSUMER_BRAND`
+- `MISSION_LED_BRAND`
+- `RITUAL_REPEAT_USE_BRAND`
+- `RETAIL_TO_DTC_BRIDGE_BRAND`
+- `CREATOR_AMBASSADOR_LED_BRAND`
+- `PRODUCT_DROP_BRAND`
+- `EDUCATION_TRUST_LED_BRAND`
+- `LOW_COMMUNITY_COMMODITY_BRAND`
 
 ## Evidence Model
 
-Every enriched field should preserve:
+Every claim should preserve:
 
 - `value`
 - `sourceUrl`
@@ -103,30 +114,50 @@ Every enriched field should preserve:
 - `capturedAt`
 - `rawExcerpt` when available
 
-Default overwrite policy is `BLANK_ONLY`. Workflows can opt into `HIGHER_CONFIDENCE`, `ALWAYS`, or `NEVER` for specific behavior.
+Unknown or invisible fields must remain unknown, null, false, or low-confidence depending on the field. The system should not invent loyalty programs, customer counts, revenue, conversion rates, or social metrics.
 
-## Formula System
+## Provider Layer
 
-The formula system parses expressions into an AST and evaluates them against a bounded context. It does not use JavaScript `eval` or `new Function`.
+Application logic depends on provider interfaces rather than specific vendors. Current provider categories:
 
-Formula scopes:
+- Web research
+- Company enrichment
+- People discovery
+- Contact enrichment
+- Email verification
+- Browser/style inspection
 
-- `ACCOUNT`
-- `PERSON`
+Local tests use mock providers. Live providers should be configured through environment variables and logged through `ProviderResult` with redaction.
 
-Signal summary fields are available to both account and person contexts when an account can be resolved.
+Current status: mock/demo providers work now. Live provider adapters are follow-up work and require API keys plus provider-specific implementation.
 
-## Cost, Cache, and Observability
+## CRM And Orchestration
 
-Provider calls are logged in `ProviderResult`. Expensive calls can be wrapped in `withCache`, using `CacheEntry` namespaces and TTLs. Run dashboards calculate cost, latency, cache hit rate, success/failure rates, and provider health.
+The repository currently supports CRM-ready export shapes and dry-run mappings. Live HubSpot/Salesforce mutation flows are intentionally follow-up work.
 
-Budget controls support:
+The n8n and sequencer docs describe payload contracts for:
 
-- Max cost per account
-- Max cost per contact
-- Max total run cost
-- Stop-on-budget-exceeded behavior
+- HubSpot company/contact field mapping after review
+- Smartlead/Instantly handoff for verified-email-only contacts
+- Google Sheets/Airtable review queues
+- CRM custom fields for Rediem fit, CFR, flywheel leak, recommended play, buyer persona, and source URLs
 
-## Third-Party Code
+## Legacy Modules
 
-No substantial third-party source code is vendored in this repo. Runtime dependencies are installed through package management. If future work copies substantial MIT-licensed source into the repository, add `THIRD_PARTY_NOTICES.md` with the required copyright and license text.
+The following generic B2B modules remain only to avoid destabilizing earlier tests and support utilities:
+
+- `src/server/workflows/researchAccount.ts`
+- `src/server/workflows/resolveBuyingCommittee.ts`
+- `src/server/workflows/outreachAngles.ts`
+- `src/server/scoring/titleTaxonomy.ts`
+- `src/server/playbooks/examples.ts`
+
+They are de-prioritized and should not be extended for Rediem work. Rediem workflows should use the Rediem modules listed above.
+
+## Deployment Notes
+
+- Run Postgres-backed migrations before using real data.
+- Keep live provider credentials in `.env`, not code.
+- Prefer mock providers for local tests and CI.
+- Treat CFR as a confidence-scored estimate during prospecting.
+- Keep outbound exports verified-email-only.

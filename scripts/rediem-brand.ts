@@ -1,3 +1,4 @@
+import { writeFile } from "node:fs/promises";
 import { prisma } from "../src/server/db/client";
 import {
   MCPResearchProvider,
@@ -17,6 +18,8 @@ type CliArgs = {
   domain?: string;
   workspaceId?: string;
   forceRefresh?: boolean;
+  json?: boolean;
+  output?: string;
 };
 
 async function main() {
@@ -47,7 +50,17 @@ async function main() {
       )
   );
 
-  console.log(JSON.stringify(dossier, null, 2));
+  const json = JSON.stringify(dossier, null, 2);
+
+  if (args.output) {
+    await writeFile(args.output, `${json}\n`, "utf8");
+  }
+
+  if (args.json || !args.output) {
+    console.log(json);
+  } else {
+    console.log(`Wrote Rediem dossier to ${args.output}`);
+  }
 }
 
 function createWebResearchProvider(): WebResearchProvider {
@@ -95,6 +108,11 @@ function parseArgs(args: string[]): CliArgs {
       index += 1;
     } else if (arg === "--force-refresh") {
       parsed.forceRefresh = true;
+    } else if (arg === "--json") {
+      parsed.json = true;
+    } else if (arg === "--output") {
+      parsed.output = next;
+      index += 1;
     }
   }
 

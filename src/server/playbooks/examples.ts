@@ -1,8 +1,8 @@
-// ⚠️  GENERIC B2B PLAYBOOKS — NOT USED BY REDIEM WORKFLOWS
+// LEGACY B2B PLAYBOOKS - NOT USED BY REDIEM WORKFLOWS
 //
 // These example playbooks are for generic B2B GTM motions:
 // "AI GTM Workflow Sale", "Developer Infrastructure Sale", "VC Founder Research".
-// They reference researchAccount, resolveBuyingCommittee, and generateOutreachAngles —
+// They reference researchAccount, resolveBuyingCommittee, and generateOutreachAngles,
 // all generic modules being deprecated for Rediem.
 //
 // Rediem motions are defined in src/app/rediem/playbooks/page.tsx:
@@ -10,7 +10,7 @@
 //   - Community Activation
 //   - Retail-to-DTC Bridge
 //
-// TODO: Replace this file with rediemPlaybookExamples.ts defining Rediem-specific
+// Deferred replacement: rediemPlaybookExamples.ts should define Rediem-specific
 // playbooks that reference analyzeBrandForRediem, resolveRediemBuyingCommittee,
 // generateRediemActivationIdeas, and runCommunityFlywheelAnalysis.
 //

@@ -87,10 +87,9 @@ export type RediemScoreBreakdown = {
 };
 
 // Rediem ICP thesis:
-//   Rediem is not primarily for "Shopify brands doing $5M-$100M."
+//   Rediem is not primarily qualified by commerce platform, revenue, or size.
 //   The core fit is a community-driven consumer brand with high participation
-//   potential and an uncaptured community flywheel. Shopify, revenue, and size
-//   are useful filters, not the scoring center of gravity.
+//   potential and an uncaptured community flywheel.
 //
 // Weight rationale:
 //   communityEnergy (25%)              - customers already identify, advocate, review, share, or participate
