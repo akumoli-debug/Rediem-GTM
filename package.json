@@ -1,0 +1,48 @@
+{
+  "name": "gtm-engine",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Rediem GTM Intelligence: brand fit scoring, loyalty signals, activation ideas, and evidence-backed ecommerce account prioritization.",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "db:generate": "prisma generate",
+    "db:migrate": "prisma migrate dev",
+    "db:studio": "prisma studio",
+    "db:seed": "prisma db seed",
+    "workflow:research-account": "tsx scripts/research-account.ts",
+    "workflow:rediem-brand": "tsx scripts/rediem-brand.ts",
+    "workflow:buying-committee": "tsx scripts/buying-committee.ts",
+    "crm:dry-run": "tsx scripts/crm-dry-run.ts",
+    "eval": "tsx evals/runEval.ts",
+    "lint": "eslint . --max-warnings=0",
+    "test": "node --import tsx --test",
+    "postinstall": "prisma generate"
+  },
+  "dependencies": {
+    "@prisma/adapter-pg": "7.8.0",
+    "@prisma/client": "7.8.0",
+    "next": "16.2.6",
+    "pg": "^8.16.3",
+    "react": "19.2.6",
+    "react-dom": "19.2.6"
+  },
+  "devDependencies": {
+    "@types/node": "25.8.0",
+    "@types/pg": "^8.15.6",
+    "@types/react": "19.2.14",
+    "@types/react-dom": "19.2.3",
+    "eslint": "^9.39.2",
+    "eslint-config-next": "16.2.6",
+    "prisma": "7.8.0",
+    "tsx": "^4.21.0",
+    "typescript": "6.0.3"
+  },
+  "prisma": {
+    "seed": "tsx prisma/seed.ts"
+  },
+  "engines": {
+    "node": ">=22.0.0"
+  }
+}

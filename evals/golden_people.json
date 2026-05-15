@@ -1,0 +1,32 @@
+[
+  {
+    "domain": "linear.app",
+    "expectedPeople": [
+      {
+        "persona": "RevOps",
+        "titleKeywords": ["revenue operations", "revops"],
+        "expectedEmailStatus": "VERIFIED"
+      },
+      {
+        "persona": "CTO",
+        "titleKeywords": ["chief technology", "cto", "engineering"],
+        "expectedEmailStatus": "VERIFIED"
+      }
+    ]
+  },
+  {
+    "domain": "vercel.com",
+    "expectedPeople": [
+      {
+        "persona": "VP Engineering",
+        "titleKeywords": ["technology", "engineering", "cto"],
+        "expectedEmailStatus": "VERIFIED"
+      },
+      {
+        "persona": "Platform Engineering",
+        "titleKeywords": ["engineering", "platform", "infrastructure"],
+        "expectedEmailStatus": "VERIFIED"
+      }
+    ]
+  }
+]

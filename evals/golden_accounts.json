@@ -1,0 +1,18 @@
+[
+  {
+    "domain": "linear.app",
+    "expectedCompanyName": "Linear",
+    "expectedPersonas": ["RevOps", "CTO"],
+    "expectedSignalTypes": ["FUNDING"],
+    "mustNotClaim": ["acquisition", "layoffs"],
+    "motion": "AI GTM workflow software"
+  },
+  {
+    "domain": "vercel.com",
+    "expectedCompanyName": "Vercel",
+    "expectedPersonas": ["VP Engineering", "Platform Engineering"],
+    "expectedSignalTypes": ["FUNDING"],
+    "mustNotClaim": ["bankruptcy", "security breach"],
+    "motion": "developer infrastructure"
+  }
+]

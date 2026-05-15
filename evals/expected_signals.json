@@ -1,0 +1,12 @@
+[
+  {
+    "domain": "linear.app",
+    "expectedSignalTypes": ["FUNDING"],
+    "sourceCoverageRequired": true
+  },
+  {
+    "domain": "vercel.com",
+    "expectedSignalTypes": ["FUNDING"],
+    "sourceCoverageRequired": true
+  }
+]

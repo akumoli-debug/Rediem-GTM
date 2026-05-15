@@ -1,0 +1,75 @@
+{
+  "provider": "csv",
+  "dryRun": true,
+  "allowAlwaysOverwrite": false,
+  "company": [
+    {
+      "sourceField": "accountScore",
+      "crmField": "gtm_account_score",
+      "overwritePolicy": "BLANK_ONLY"
+    },
+    {
+      "sourceField": "signalSummary",
+      "crmField": "gtm_signal_summary",
+      "overwritePolicy": "BLANK_ONLY"
+    },
+    {
+      "sourceField": "latestSignalDate",
+      "crmField": "gtm_latest_signal_date",
+      "overwritePolicy": "HIGHER_CONFIDENCE"
+    },
+    {
+      "sourceField": "recommendedPersona",
+      "crmField": "gtm_recommended_persona",
+      "overwritePolicy": "BLANK_ONLY"
+    },
+    {
+      "sourceField": "lastEnrichedAt",
+      "crmField": "gtm_last_enriched_at",
+      "overwritePolicy": "HIGHER_CONFIDENCE"
+    },
+    {
+      "sourceField": "confidenceScore",
+      "crmField": "gtm_confidence_score",
+      "overwritePolicy": "HIGHER_CONFIDENCE"
+    },
+    {
+      "sourceField": "sourceUrls",
+      "crmField": "gtm_source_urls",
+      "overwritePolicy": "BLANK_ONLY"
+    }
+  ],
+  "contact": [
+    {
+      "sourceField": "roleScore",
+      "crmField": "gtm_role_score",
+      "overwritePolicy": "HIGHER_CONFIDENCE"
+    },
+    {
+      "sourceField": "personaType",
+      "crmField": "gtm_persona_type",
+      "overwritePolicy": "BLANK_ONLY"
+    },
+    {
+      "sourceField": "contactabilityScore",
+      "crmField": "gtm_contactability_score",
+      "overwritePolicy": "HIGHER_CONFIDENCE"
+    },
+    {
+      "sourceField": "emailStatus",
+      "crmField": "gtm_email_status",
+      "overwritePolicy": "BLANK_ONLY"
+    },
+    {
+      "sourceField": "sourceUrls",
+      "crmField": "gtm_source_urls",
+      "overwritePolicy": "BLANK_ONLY"
+    },
+    {
+      "sourceField": "lastEnrichedAt",
+      "crmField": "gtm_last_enriched_at",
+      "overwritePolicy": "HIGHER_CONFIDENCE"
+    }
+  ]
+}
+

@@ -1,0 +1,5 @@
+domain,company website,companyName,linkedinUrl,industry,notes
+linear.app,,Linear,https://www.linkedin.com/company/linear-app,Software,"High-fit product-led account for account intelligence workflow testing."
+vercel.com,,Vercel,https://www.linkedin.com/company/vercel,Developer Infrastructure,"Strong developer platform fit; watch enterprise and security signals."
+,https://www.hubspot.com,HubSpot,https://www.linkedin.com/company/hubspot,CRM,"Uses company website fallback when domain is blank."
+linear.app,,Linear Duplicate,https://www.linkedin.com/company/linear-app,Software,"Duplicate row included to verify CSV dedupe."

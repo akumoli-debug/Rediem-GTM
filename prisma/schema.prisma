@@ -1,0 +1,547 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum EmailStatus {
+  UNKNOWN
+  VERIFIED
+  RISKY
+  CATCH_ALL
+  INVALID
+  SUPPRESSED
+}
+
+enum PersonaType {
+  ECONOMIC_BUYER
+  TECHNICAL_BUYER
+  DAY_TO_DAY_OWNER
+  INFLUENCER
+  CHAMPION_CANDIDATE
+  BLOCKER_CANDIDATE
+  UNKNOWN
+}
+
+enum SignalType {
+  FUNDING
+  HIRING
+  PRODUCT_LAUNCH
+  PRICING_CHANGE
+  TECH_STACK
+  COMPLIANCE
+  EXPANSION
+  NEWS
+  FOUNDER_POST
+  OTHER
+}
+
+enum EvidenceEntityType {
+  ACCOUNT
+  PERSON
+  SIGNAL
+  FORMULA_RESULT
+}
+
+enum FormulaResultEntityType {
+  ACCOUNT
+  PERSON
+}
+
+enum WorkflowRunStatus {
+  QUEUED
+  RUNNING
+  COMPLETED
+  FAILED
+  CANCELED
+}
+
+enum ProviderResultStatus {
+  SUCCESS
+  PARTIAL
+  FAILED
+  CACHED
+}
+
+enum FormulaScope {
+  ACCOUNT
+  PERSON
+}
+
+enum ActivationIdeaType {
+  REVIEW_REWARD_SERIES
+  REFERRAL_CHALLENGE
+  SUBSCRIPTION_RENEWAL_SERIES
+  UGC_SOCIAL_CHALLENGE
+  RECEIPT_UPLOAD_CHALLENGE
+  PRODUCT_DROP_LOYALTY_CAMPAIGN
+  SUSTAINABILITY_OR_MISSION_CHALLENGE
+  VIP_TIER_MIGRATION
+  RETAIL_TO_DTC_BRIDGE
+  ZERO_PARTY_PREFERENCE_CHALLENGE
+  OTHER
+}
+
+enum ToolCategory {
+  LOYALTY
+  REVIEWS
+  SUBSCRIPTION
+  REFERRAL
+  EMAIL
+  SMS
+  OTHER
+}
+
+enum FormulaOutputType {
+  STRING
+  NUMBER
+  BOOLEAN
+  DATE
+  JSON
+}
+
+model Workspace {
+  id        String   @id @default(cuid())
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  accounts                 Account[]
+  people                   Person[]
+  signals                  Signal[]
+  evidence                 Evidence[]
+  workflowRuns             WorkflowRun[]
+  providerResults          ProviderResult[]
+  formulaColumns           FormulaColumn[]
+  formulaResults           FormulaResult[]
+  playbooks                Playbook[]
+  brandProfiles            BrandProfile[]
+  brandActivationIdeas     BrandActivationIdea[]
+  competitorToolDetections CompetitorToolDetection[]
+  communityFlywheelSnapshots CommunityFlywheelSnapshot[]
+  communityFlywheelLeaks     CommunityFlywheelLeak[]
+  communityFlywheelPlays     CommunityFlywheelPlay[]
+}
+
+model Account {
+  id              String    @id @default(cuid())
+  workspaceId     String
+  domain          String?
+  name            String
+  linkedinUrl     String?
+  industry        String?
+  employeeCount   Int?
+  hqLocation      String?
+  websiteSummary  String?
+  pricingSummary  String?
+  careersSummary  String?
+  blogSummary     String?
+  pressSummary    String?
+  accountScore    Float?
+  confidenceScore Float?
+  lastEnrichedAt  DateTime?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  workspace                Workspace                 @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  people                   Person[]
+  signals                  Signal[]
+  brandProfile             BrandProfile?
+  brandActivationIdeas     BrandActivationIdea[]
+  competitorToolDetections CompetitorToolDetection[]
+  communityFlywheelSnapshots CommunityFlywheelSnapshot[]
+  communityFlywheelLeaks     CommunityFlywheelLeak[]
+  communityFlywheelPlays     CommunityFlywheelPlay[]
+
+  @@unique([workspaceId, domain])
+  @@index([workspaceId])
+  @@index([linkedinUrl])
+  @@index([accountScore])
+}
+
+model Person {
+  id                  String      @id @default(cuid())
+  workspaceId         String
+  accountId           String?
+  fullName            String
+  title               String?
+  seniority           String?
+  department          String?
+  linkedinUrl         String?
+  email               String?
+  emailStatus         EmailStatus @default(UNKNOWN)
+  emailVerifiedAt     DateTime?
+  phone               String?
+  location            String?
+  personaType         PersonaType @default(UNKNOWN)
+  roleScore           Float?
+  contactabilityScore Float?
+  sourceConfidence    Float?
+  lastEnrichedAt      DateTime?
+  createdAt           DateTime    @default(now())
+  updatedAt           DateTime    @updatedAt
+
+  workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  account   Account?  @relation(fields: [accountId], references: [id], onDelete: SetNull)
+
+  @@index([workspaceId])
+  @@index([accountId])
+  @@index([linkedinUrl])
+  @@index([email])
+  @@index([personaType])
+}
+
+model Signal {
+  id                 String     @id @default(cuid())
+  workspaceId        String
+  accountId          String
+  type               SignalType
+  title              String
+  description        String?
+  signalDate         DateTime?
+  freshnessScore     Float?
+  relevanceScore     Float?
+  sourceQualityScore Float?
+  totalScore         Float?
+  sourceUrl          String?
+  capturedAt         DateTime   @default(now())
+  createdAt          DateTime   @default(now())
+
+  workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  account   Account   @relation(fields: [accountId], references: [id], onDelete: Cascade)
+
+  @@index([workspaceId])
+  @@index([accountId])
+  @@index([accountId, type, signalDate])
+}
+
+model Evidence {
+  id          String             @id @default(cuid())
+  workspaceId String
+  entityType  EvidenceEntityType
+  entityId    String
+  fieldName   String
+  value       String?
+  sourceUrl   String?
+  provider    String?
+  rawExcerpt  String?
+  confidence  Float?
+  capturedAt  DateTime           @default(now())
+  createdAt   DateTime           @default(now())
+
+  workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+
+  @@index([workspaceId])
+  @@index([entityType, entityId, fieldName])
+  @@index([provider])
+}
+
+model WorkflowRun {
+  id           String            @id @default(cuid())
+  workspaceId  String
+  workflowName String
+  status       WorkflowRunStatus @default(QUEUED)
+  inputCount   Int               @default(0)
+  successCount Int               @default(0)
+  failureCount Int               @default(0)
+  totalCostUsd Decimal?          @db.Decimal(12, 4)
+  startedAt    DateTime?
+  completedAt  DateTime?
+  errorMessage String?
+  createdAt    DateTime          @default(now())
+
+  workspace       Workspace        @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  providerResults ProviderResult[]
+
+  @@index([workspaceId])
+  @@index([status])
+  @@index([createdAt])
+}
+
+model ProviderResult {
+  id                 String               @id @default(cuid())
+  workspaceId        String
+  workflowRunId      String?
+  provider           String
+  toolName           String
+  inputHash          String
+  rawResponse        Json?
+  normalizedResponse Json?
+  costUsd            Decimal?             @db.Decimal(12, 4)
+  latencyMs          Int?
+  status             ProviderResultStatus
+  errorMessage       String?
+  createdAt          DateTime             @default(now())
+
+  workspace   Workspace    @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  workflowRun WorkflowRun? @relation(fields: [workflowRunId], references: [id], onDelete: SetNull)
+
+  @@index([workspaceId])
+  @@index([workflowRunId])
+  @@index([provider, toolName])
+  @@index([inputHash])
+  @@index([status])
+}
+
+model FormulaColumn {
+  id          String            @id @default(cuid())
+  workspaceId String
+  name        String
+  scope       FormulaScope
+  expression  String
+  outputType  FormulaOutputType
+  enabled     Boolean           @default(true)
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+
+  workspace Workspace       @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  results   FormulaResult[]
+
+  @@unique([workspaceId, name, scope])
+  @@index([workspaceId])
+  @@index([scope])
+}
+
+model FormulaTemplate {
+  id          String            @id @default(cuid())
+  key         String            @unique
+  name        String
+  description String
+  scope       FormulaScope
+  expression  String
+  outputType  FormulaOutputType
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+
+  @@index([scope])
+}
+
+model FormulaResult {
+  id              String                  @id @default(cuid())
+  workspaceId     String
+  formulaColumnId String
+  entityType      FormulaResultEntityType
+  entityId        String
+  value           Json?
+  error           String?
+  evaluatedAt     DateTime                @default(now())
+
+  workspace     Workspace     @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  formulaColumn FormulaColumn @relation(fields: [formulaColumnId], references: [id], onDelete: Cascade)
+
+  @@unique([formulaColumnId, entityType, entityId])
+  @@index([workspaceId])
+  @@index([formulaColumnId])
+  @@index([entityType, entityId])
+}
+
+model CacheEntry {
+  id        String    @id @default(cuid())
+  key       String
+  namespace String
+  value     Json
+  expiresAt DateTime?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  @@unique([namespace, key])
+  @@index([expiresAt])
+}
+
+model Playbook {
+  id              String   @id @default(cuid())
+  workspaceId     String
+  name            String
+  description     String
+  targetMotion    String
+  targetPersonas  Json
+  accountFitRules Json
+  signalTypes     Json
+  formulaColumns  Json
+  workflowSteps   Json
+  exportFields    Json
+  budgetDefaults  Json
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+
+  @@unique([workspaceId, name])
+  @@index([workspaceId])
+}
+
+model BrandProfile {
+  id                      String   @id @default(cuid())
+  workspaceId             String
+  accountId               String   @unique
+  ecommercePlatform       String?
+  ecommercePlatformScore  Float?
+  shopifyDetected         Boolean?
+  shopifyPlusLikely       Boolean?
+  productCategory         String?
+  brandCategory           String?
+  pricePoint              String?
+  targetCustomer          String?
+  hasSubscription         Boolean?
+  subscriptionProvider    String?
+  hasLoyaltyProgram       Boolean?
+  loyaltyProvider         String?
+  loyaltyProgramUrl       String?
+  loyaltyProgramType      String?
+  hasReferralProgram      Boolean?
+  hasReviews              Boolean?
+  reviewProvider          String?
+  hasUGC                  Boolean?
+  instagramUrl            String?
+  tiktokUrl               String?
+  socialCommunityScore    Float?
+  hasRetailPresence       Boolean?
+  retailSignals           Json?
+  sustainabilityAngle     String?
+  missionDrivenAngle      String?
+  rediemFitScore          Float?
+  loyaltyMaturityScore    Float?
+  communityReadinessScore Float?
+  migrationPainScore      Float?
+  agenticCommerceScore    Float?
+  lastScoredAt            DateTime?
+  createdAt               DateTime @default(now())
+  updatedAt               DateTime @updatedAt
+
+  workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  account   Account   @relation(fields: [accountId], references: [id], onDelete: Cascade)
+
+  @@index([workspaceId, rediemFitScore])
+  @@index([rediemFitScore])
+  @@index([brandCategory])
+  @@index([ecommercePlatform])
+}
+
+model BrandActivationIdea {
+  id             String              @id @default(cuid())
+  workspaceId    String
+  accountId      String
+  type           ActivationIdeaType
+  title          String
+  description    String
+  targetBehavior String?
+  expectedImpact String?
+  confidence     Float?
+  evidenceIds    Json?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  account   Account   @relation(fields: [accountId], references: [id], onDelete: Cascade)
+
+  @@index([workspaceId])
+  @@index([accountId])
+  @@index([type])
+}
+
+model CompetitorToolDetection {
+  id          String       @id @default(cuid())
+  workspaceId String
+  accountId   String
+  category    ToolCategory
+  vendor      String
+  confidence  Float?
+  sourceUrl   String?
+  evidence    String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  account   Account   @relation(fields: [accountId], references: [id], onDelete: Cascade)
+
+  @@index([workspaceId])
+  @@index([accountId])
+  @@index([category])
+  @@index([vendor])
+}
+
+model CommunityFlywheelSnapshot {
+  id                            String   @id @default(cuid())
+  workspaceId                   String
+  accountId                     String
+  snapshotDate                  DateTime
+  estimatedCfr                  Float
+  cfrConfidence                 Float
+  cfrTier                       String
+  verifiedParticipationValue    Float?
+  repeatParticipationRate       Float?
+  advocacyConversionRate        Float?
+  zeroPartyCompletionRate       Float?
+  retentionLiftValue            Float?
+  discountDependency            Float?
+  rewardCostRatio               Float?
+  paidCacDependency             Float?
+  churnRecoveryCost             Float?
+  earnedCommunityGrowth         Float
+  subsidizedTransactionalGrowth Float
+  primaryLeak                   String?
+  secondaryLeak                 String?
+  recommendedPlay               String?
+  explanation                   Json?
+  createdAt                     DateTime @default(now())
+
+  workspace Workspace                 @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  account   Account                   @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  leaks     CommunityFlywheelLeak[]
+
+  @@index([workspaceId])
+  @@index([accountId])
+  @@index([snapshotDate])
+  @@index([estimatedCfr])
+  @@index([cfrTier])
+}
+
+model CommunityFlywheelLeak {
+  id             String   @id @default(cuid())
+  workspaceId    String
+  accountId      String
+  snapshotId     String?
+  leakType       String
+  severity       Float
+  description    String
+  evidenceIds    Json?
+  sourceUrls     Json?
+  recommendedFix String?
+  createdAt      DateTime @default(now())
+
+  workspace Workspace                   @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  account   Account                     @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  snapshot  CommunityFlywheelSnapshot?  @relation(fields: [snapshotId], references: [id], onDelete: SetNull)
+
+  @@index([workspaceId])
+  @@index([accountId])
+  @@index([snapshotId])
+  @@index([leakType])
+  @@index([severity])
+}
+
+model CommunityFlywheelPlay {
+  id                   String   @id @default(cuid())
+  workspaceId          String
+  accountId            String
+  playType             String
+  title                String
+  description          String
+  targetBehavior       String?
+  expectedCfrImpact    Float?
+  expectedTimeToImpact String?
+  confidence           Float?
+  evidenceIds          Json?
+  createdAt            DateTime @default(now())
+
+  workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  account   Account   @relation(fields: [accountId], references: [id], onDelete: Cascade)
+
+  @@index([workspaceId])
+  @@index([accountId])
+  @@index([playType])
+  @@index([confidence])
+}
