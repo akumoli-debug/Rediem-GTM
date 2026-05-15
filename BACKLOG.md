@@ -26,10 +26,11 @@
 ## P1 Evidence and Quality
 
 1. Add CFR and loyalty maturity panels to the Rediem account detail UI.
-1. Make every BrandProfile field in `analyzeBrandForRediem` show source URL, provider, confidence, and excerpt when available.
-2. Add low-confidence handling in the Rediem UI so unsupported claims appear as unknown rather than positive/negative facts.
-3. Add Rediem eval fixtures for beauty, beverage, apparel, wellness, food, home, and pet brands.
-4. Track hallucination rate for brand category, loyalty provider, platform, and social/UGC claims.
+2. Add community archetype panels to the Rediem account detail UI, including community energy, participation capture gap, retail-to-owned-data opportunity, mission identity, ritual repeat-purchase fit, creator/ambassador fit, and confidence.
+3. Make every BrandProfile field in `analyzeBrandForRediem` show source URL, provider, confidence, and excerpt when available.
+4. Add low-confidence handling in the Rediem UI so unsupported claims appear as unknown rather than positive/negative facts.
+5. Add Rediem eval fixtures for beauty, beverage, apparel, wellness, food, home, and pet brands.
+6. Track hallucination rate for brand category, loyalty provider, platform, and social/UGC claims.
 
 ## P2 Rediem UI Completion
 

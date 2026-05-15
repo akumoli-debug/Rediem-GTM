@@ -1,3 +1,15 @@
+// ⚠️  GENERIC B2B MODULE — DO NOT EXTEND FOR REDIEM USE CASES
+//
+// This workflow was designed for generic B2B GTM research (SaaS, enterprise, compliance,
+// hiring signals). It is NOT the Rediem brand research path.
+//
+// For Rediem-specific brand analysis use analyzeBrandForRediem.ts instead:
+//   src/server/workflows/analyzeBrandForRediem.ts
+//
+// This file is preserved because resolveBuyingCommittee.ts (also generic) imports it.
+// If resolveBuyingCommittee.ts is archived, this file can be removed too.
+// Do not add DTC-specific logic here.
+
 import {
   createSignalWithEvidence,
   upsertAccountWithEvidence,

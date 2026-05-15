@@ -1,3 +1,14 @@
+import {
+  calculateCommunityEnergyScore,
+  calculateCommunityValueFitScore,
+  calculateMissionIdentityStrength,
+  calculateParticipationCaptureGap,
+  calculateRetailToOwnedDataOpportunity,
+  calculateRitualRepeatPurchaseFit,
+  calculateStackMigrationOpportunity,
+  calculateTimingSignal
+} from "./communityArchetypes";
+
 export type RediemBrandProfileInput = {
   ecommercePlatform?: string | null;
   ecommercePlatformScore?: number | null;
@@ -22,6 +33,7 @@ export type RediemBrandProfileInput = {
   socialCommunityScore?: number | null;
   loyaltyMaturityLevel?: number | null;
   hasRetailPresence?: boolean | null;
+  retailSignals?: unknown;
   sustainabilityAngle?: string | null;
   missionDrivenAngle?: string | null;
   rediemFitScore?: number | null;
@@ -53,6 +65,15 @@ export type RediemScoreBreakdown = {
   score: number;
   tier: RediemTier;
   components: {
+    communityEnergy: number;
+    participationCaptureGap: number;
+    ritualRepeatPurchaseFit: number;
+    retailToOwnedDataOpportunity: number;
+    missionIdentityStrength: number;
+    stackMigrationOpportunity: number;
+    timingSignal: number;
+    communityValueFit: number;
+    // Compatibility aliases used by existing history writes and UI surfaces.
     ecommerceFit: number;
     communityReadiness: number;
     loyaltyPain: number;
@@ -60,46 +81,64 @@ export type RediemScoreBreakdown = {
     socialUGCPotential: number;
     subscriptionRepeatPurchaseFit: number;
     migrationOpportunity: number;
-    timingSignal: number;
   };
   // Human-readable explanations of what drove the score, suitable for sales context.
   reasons: string[];
 };
 
+// Rediem ICP thesis:
+//   Rediem is not primarily for "Shopify brands doing $5M-$100M."
+//   The core fit is a community-driven consumer brand with high participation
+//   potential and an uncaptured community flywheel. Shopify, revenue, and size
+//   are useful filters, not the scoring center of gravity.
+//
 // Weight rationale:
-//   ecommerceFit (20%)             — hard gating signal; non-Shopify stacks rarely support Rediem integrations
-//   communityReadiness (15%)       — participation loops only convert in brands with existing community motion
-//   loyaltyPain (15%)              — inadequate loyalty infrastructure is the core buying trigger
-//   retentionNeed (15%)            — high-repurchase categories justify the platform investment
-//   socialUGCPotential (10%)       — UGC is the content flywheel Rediem's activation ideas depend on
-//   subscriptionRepeatPurchase (10%) — subscription brands already understand recurring value; easier sell
-//   migrationOpportunity (10%)     — confirmed legacy tool gives a concrete displacement story for AEs
-//   timingSignal (5%)              — recency boost only; not a primary qualifier on its own
+//   communityEnergy (25%)              - customers already identify, advocate, review, share, or participate
+//   participationCaptureGap (20%)      - participation is fragmented across tools/channels
+//   ritualRepeatPurchaseFit (15%)      - category can support repeat behavioral loops
+//   retailToOwnedDataOpportunity (15%) - retail/social customers can be brought into owned profiles
+//   missionIdentityStrength (10%)      - identity, mission, trust, education, or cultural hooks
+//   stackMigrationOpportunity (10%)    - disconnected loyalty/reviews/subscription/SMS/email tools
+//   timingSignal (5%)                  - launches, drops, retail expansion, subscription, loyalty activity
 export function scoreRediemFit(
   profile: RediemBrandProfileInput,
   signals: RediemSignalInput[] = [],
   detections: RediemCompetitorToolDetectionInput[] = []
 ): RediemScoreBreakdown {
+  const communityEnergy = calculateCommunityEnergyScore(profile, signals, detections).score;
+  const participationCaptureGap = calculateParticipationCaptureGap(profile, signals, detections).score;
+  const ritualRepeatPurchaseFit = calculateRitualRepeatPurchaseFit(profile, signals, detections).score;
+  const retailToOwnedDataOpportunity = calculateRetailToOwnedDataOpportunity(profile, signals, detections).score;
+  const missionIdentityStrength = calculateMissionIdentityStrength(profile, signals, detections).score;
+  const stackMigrationOpportunity = calculateStackMigrationOpportunity(profile, detections).score;
+  const timingSignal = calculateTimingSignal(signals).score;
+  const communityValueFit = calculateCommunityValueFitScore(profile, signals, detections).score;
   const components = {
-    ecommerceFit: calculateEcommerceFit(profile),
-    communityReadiness: calculateCommunityReadinessScore(profile, signals),
-    loyaltyPain: calculateLoyaltyPainScore(profile, detections),
-    retentionNeed: calculateRetentionNeedScore(profile),
+    communityEnergy,
+    participationCaptureGap,
+    ritualRepeatPurchaseFit,
+    retailToOwnedDataOpportunity,
+    missionIdentityStrength,
+    stackMigrationOpportunity,
+    timingSignal,
+    communityValueFit,
+    ecommerceFit: communityValueFit,
+    communityReadiness: communityEnergy,
+    loyaltyPain: participationCaptureGap,
+    retentionNeed: ritualRepeatPurchaseFit,
     socialUGCPotential: calculateSocialUGCPotential(profile, signals),
-    subscriptionRepeatPurchaseFit: calculateSubscriptionRepeatPurchaseFit(profile),
-    migrationOpportunity: calculateMigrationPainScore(profile, detections),
-    timingSignal: calculateTimingSignalScore(signals),
+    subscriptionRepeatPurchaseFit: ritualRepeatPurchaseFit,
+    migrationOpportunity: stackMigrationOpportunity
   };
 
   const score = clampScore(
     Math.round(
-      0.2 * components.ecommerceFit +
-        0.15 * components.communityReadiness +
-        0.15 * components.loyaltyPain +
-        0.15 * components.retentionNeed +
-        0.1 * components.socialUGCPotential +
-        0.1 * components.subscriptionRepeatPurchaseFit +
-        0.1 * components.migrationOpportunity +
+      0.25 * components.communityEnergy +
+        0.2 * components.participationCaptureGap +
+        0.15 * components.ritualRepeatPurchaseFit +
+        0.15 * components.retailToOwnedDataOpportunity +
+        0.1 * components.missionIdentityStrength +
+        0.1 * components.stackMigrationOpportunity +
         0.05 * components.timingSignal
     )
   );
@@ -506,18 +545,27 @@ function buildReasons(
   detections: RediemCompetitorToolDetectionInput[]
 ): string[] {
   const reasons: string[] = [];
+  const communityEnergy = calculateCommunityEnergyScore(profile, signals, detections);
+  const captureGap = calculateParticipationCaptureGap(profile, signals, detections);
+  const ritualFit = calculateRitualRepeatPurchaseFit(profile, signals, detections);
+  const retailOpportunity = calculateRetailToOwnedDataOpportunity(profile, signals, detections);
 
-  if (!hasEcommerce(profile)) {
-    reasons.push("No ecommerce platform detected — not a fit for Rediem.");
-    return reasons;
+  if (communityEnergy.score >= 70) {
+    reasons.push("High community energy — customers already show signs of identifying with, sharing, reviewing, or participating in the brand.");
+  } else if (communityEnergy.score < 40) {
+    reasons.push("Low visible community energy — Rediem fit is conservative until stronger participation evidence appears.");
   }
 
-  if (profile.shopifyPlusLikely) {
-    reasons.push("Shopify Plus detected — strong ecommerce fit and migration readiness.");
-  } else if (profile.shopifyDetected) {
-    reasons.push("Shopify detected — solid ecommerce fit.");
-  } else if (profile.ecommercePlatform) {
-    reasons.push(`Ecommerce platform detected: ${profile.ecommercePlatform}.`);
+  if (captureGap.score >= 65) {
+    reasons.push("Participation capture gap — customer activity appears fragmented across social, reviews, referrals, loyalty, subscriptions, SMS/email, or paid channels.");
+  }
+
+  if (ritualFit.score >= 70) {
+    reasons.push("Repeat-use ritual fit — category or subscription signals can support recurring community behaviors.");
+  }
+
+  if (retailOpportunity.score >= 65) {
+    reasons.push("Retail-to-owned-data opportunity — retail or marketplace demand can be converted into owned profiles and participation loops.");
   }
 
   if (profile.hasLoyaltyProgram) {
@@ -525,18 +573,18 @@ function buildReasons(
     const hasPoints = loyaltyText.includes("points");
     const hasTiers = loyaltyText.includes("tier") || loyaltyText.includes("vip");
     if (hasPoints && hasTiers) {
-      reasons.push("Points + tiered loyalty program — strong migration candidate for Rediem.");
+      reasons.push("Points + tiered loyalty program — migration opportunity from transactional loyalty toward community participation.");
     } else if (hasPoints) {
-      reasons.push("Points-based loyalty program — migration candidate.");
+      reasons.push("Points-based loyalty program — possible transactional loyalty gap.");
     } else {
-      reasons.push("Existing loyalty program — migration or optimization opportunity.");
+      reasons.push("Existing loyalty program — optimization opportunity if participation is not connected.");
     }
   } else {
-    reasons.push("No loyalty program — greenfield opportunity for Rediem.");
+    reasons.push("No loyalty program — greenfield participation-capture opportunity.");
   }
 
   if (detectsCategory(detections, "loyalty")) {
-    reasons.push("Third-party loyalty tool confirmed by detection — concrete displacement story for AEs.");
+    reasons.push("Third-party loyalty tool confirmed by detection — concrete consolidation or migration story for AEs.");
   }
 
   if (profile.hasSubscription) {
@@ -560,6 +608,18 @@ function buildReasons(
 
   if (profile.hasRetailPresence) {
     reasons.push("Retail presence — online-to-offline community activation opportunity.");
+  }
+
+  if (profile.shopifyPlusLikely) {
+    reasons.push("Shopify Plus detected as a supporting implementation signal, not the core ICP reason.");
+  } else if (profile.shopifyDetected) {
+    reasons.push("Shopify detected as a supporting commerce signal.");
+  } else if (profile.ecommercePlatform) {
+    reasons.push(`Commerce platform detected as a supporting signal: ${profile.ecommercePlatform}.`);
+  }
+
+  if (!hasEcommerce(profile) && !profile.hasRetailPresence) {
+    reasons.push("No owned ecommerce or retail signal detected — score remains conservative.");
   }
 
   const signalText = normalizedSignalText(signals);

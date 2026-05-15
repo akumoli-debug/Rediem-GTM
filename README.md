@@ -1,6 +1,8 @@
 # Rediem GTM Intelligence
 
-Rediem GTM Intelligence helps prioritize ecommerce and DTC brands for community-driven loyalty, referrals, reviews, social challenges, subscriptions, receipt rewards, zero-party data, and AI discoverability.
+Rediem GTM Intelligence helps prioritize community-driven consumer brands with high participation potential and an uncaptured community flywheel. The focus is not primarily Shopify, revenue, or company size; those are useful filters, while the core thesis is whether customers already identify with, advocate for, review, subscribe to, share, or culturally participate in the brand.
+
+It is built for community-driven loyalty, referrals, reviews, social challenges, subscriptions, receipt rewards, zero-party data, and AI discoverability.
 
 The workspace imports brand accounts, analyzes commerce and loyalty readiness, preserves evidence for every claim, estimates Community Flywheel Ratio, scores Rediem fit, generates activation ideas, resolves Rediem-specific buyer committees, and exports CRM-ready account context.
 
@@ -9,10 +11,11 @@ Community Flywheel Ratio, or CFR, estimates how much growth a brand can create f
 ## Core Features
 
 - Rediem brand profile model for ecommerce platform, loyalty, subscriptions, reviews, UGC/social, retail, sustainability, mission, migration pain, and agentic commerce signals.
+- Community archetype classification for cult consumer, mission-led, ritual repeat-use, retail-to-DTC bridge, creator/ambassador-led, product drop, education/trust-led, and low-community commodity brands.
 - Evidence-backed brand analysis with source URL, provider, confidence, capturedAt, and raw excerpts where available.
 - Community Flywheel Ratio snapshots, leak detection, and recommended CFR plays.
 - Loyalty maturity levels from no program through behavioral and agentic loyalty.
-- Explainable Rediem scoring for fit, loyalty pain, community readiness, migration pain, agentic commerce, and tiering.
+- Explainable Rediem scoring weighted toward community energy, participation capture gap, repeat-purchase ritual fit, retail-to-owned-data opportunity, mission identity strength, stack migration opportunity, and timing signals.
 - Rediem activation idea generation for review rewards, referrals, subscription retention, UGC challenges, receipt rewards, product drops, mission challenges, VIP migration, retail-to-DTC, and zero-party preference collection.
 - Rediem buyer committee resolution for ecommerce, retention, lifecycle, loyalty, community, CRM, CMO, founder, and technical integration buyers.
 - Safe formula columns with Rediem templates and `{brand.*}` references. Formula evaluation uses a parser/AST evaluator, not JavaScript execution.

@@ -1,3 +1,17 @@
+// ⚠️  GENERIC B2B MODULE — DO NOT EXTEND FOR REDIEM USE CASES
+//
+// This workflow resolves a B2B SaaS buying committee: CRO, RevOps, VP Engineering,
+// CISO, CFO. Its persona model and title taxonomy target enterprise software buyers.
+//
+// For Rediem use cases, the buying committee is DTC brand leadership:
+// CMO, VP Retention, Head of Loyalty, Director of CX, Head of Digital.
+// These titles do not exist in the generic titleTaxonomy.ts used here.
+//
+// Rediem-specific version: src/server/workflows/resolveRediemBuyingCommittee.ts
+// Rediem-specific taxonomy: src/server/scoring/rediemTitleTaxonomy.ts
+//
+// Do not add DTC brand titles, loyalty roles, or Rediem scoring here.
+
 import {
   upsertPersonWithEvidence,
   type EvidenceClient,

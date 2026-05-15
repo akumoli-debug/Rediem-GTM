@@ -9,7 +9,7 @@ Last reviewed: 2026-05-15
 | `npm run db:generate` | Passed | Prisma Client generated to `src/generated/prisma`. |
 | `npm run lint` | Passed | ESLint completed with `--max-warnings=0`. |
 | `npm run build` | Passed | Next.js production build and TypeScript checks completed successfully. |
-| `npm run test` | Passed | 182 tests passed. |
+| `npm run test` | Passed | Full mock-first suite passes. |
 | `npx prisma migrate status` | Not rerun in this pass | Requires a reachable Postgres database matching `DATABASE_URL`. Earlier stabilization noted local Postgres was unavailable. |
 
 ## Repo Structure
@@ -32,6 +32,7 @@ Last reviewed: 2026-05-15
 | Prisma schema | Complete | `BrandProfile`, `BrandActivationIdea`, and `CompetitorToolDetection` exist with relationships from `Workspace` and `Account`. |
 | Seed script | Complete | Seed creates sample beauty, beverage, and apparel consumer brands with BrandProfile, detections, evidence, signals, and activation ideas. |
 | Rediem scoring | Complete | `src/server/scoring/rediem.ts` implements fit, loyalty pain, community readiness, migration pain, agentic commerce, tiering, component breakdowns, and reasons. |
+| Community archetypes | Complete | `src/server/scoring/communityArchetypes.ts` classifies community-driven consumer brand archetypes and scores community energy, participation capture gap, retail-to-owned-data opportunity, mission identity, ritual repeat-purchase fit, creator/ambassador fit, and community value fit. |
 | Rediem formula templates | Complete | Rediem Tier, Points Loyalty Migration, Community Gap, Review Activation Fit, Subscription Retention Fit, Retail-to-DTC Fit, Agentic Commerce Angle, and AE Priority are installed as templates. |
 | Community Flywheel Ratio | Complete | Prisma models, scoring heuristics, CFR tiers, leak detection, play recommendations, explanations, formula templates, and Rediem analysis snapshot writes are implemented. Estimates are conservative and confidence-scored. |
 | Loyalty maturity | Complete | `analyzeBrandForRediem` computes Rediem loyalty maturity level 0-4 and stores it on BrandProfile. |
@@ -50,6 +51,7 @@ Last reviewed: 2026-05-15
 
 - Rediem-specific data model and seed examples.
 - Rediem scoring with explainable component scores and tier classification.
+- Community-first ICP scoring for consumer brands with high participation potential and an uncaptured community flywheel; Shopify, revenue, and size are treated as filters rather than the core thesis.
 - Rediem loyalty maturity ladder, from no loyalty to behavioral/agentic loyalty.
 - Rediem formula templates using safe formula syntax and `{brand.*}` references.
 - Community Flywheel Ratio scoring, leak detection, recommended plays, snapshot data models, and workflow persistence.

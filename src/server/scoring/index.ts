@@ -35,3 +35,4 @@ export * from "./signals";
 export * from "./rediem";
 export * from "./rediemTitleTaxonomy";
 export * from "./communityFlywheel";
+export * from "./communityArchetypes";

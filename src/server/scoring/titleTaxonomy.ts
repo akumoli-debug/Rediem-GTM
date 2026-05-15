@@ -1,3 +1,16 @@
+// ⚠️  GENERIC B2B MODULE — DO NOT EXTEND FOR REDIEM USE CASES
+//
+// This title taxonomy is built for B2B SaaS buying committees: RevOps, Engineering,
+// Security, Finance, Product, CRO. Its role families and motion keywords target
+// enterprise software buyers and are irrelevant to DTC brand teams.
+//
+// Rediem-specific taxonomy: src/server/scoring/rediemTitleTaxonomy.ts
+// Covers: CMO, VP Retention, Head of Loyalty, Director of CX, Head of Digital,
+//         Ecommerce Manager, Head of Subscriptions, Brand President, etc.
+//
+// This file is imported by resolveBuyingCommittee.ts (also generic) and its tests.
+// If both are archived, this file can be removed. Do not add DTC roles here.
+
 export type PersonaType =
   | "ECONOMIC_BUYER"
   | "TECHNICAL_BUYER"

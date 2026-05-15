@@ -505,7 +505,7 @@ test("formula templates evaluate on the sample context", () => {
     "founder-led": false,
     "revops-buyer": true,
     "days-since-signal": 13,
-    "rediem-fit-score": 86,
+    "rediem-fit-score": 93,
     "rediem-loyalty-pain-score": 95,
     "rediem-community-readiness-score": 100,
     "rediem-migration-pain-score": 100,

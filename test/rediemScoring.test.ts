@@ -77,7 +77,7 @@ test("B2B SaaS company is low fit", () => {
   assert.ok(score < 40);
 });
 
-test("brand with no ecommerce detected is low fit", () => {
+test("brand with social participation but no commerce or retail is low-priority, not core ICP", () => {
   const profile: RediemBrandProfileInput = {
     productCategory: "Apparel",
     brandCategory: "Consumer apparel",
@@ -87,11 +87,11 @@ test("brand with no ecommerce detected is low fit", () => {
   };
   const score = calculateRediemFitScore(profile, [launchSignal], []);
 
-  assert.equal(classifyRediemTier(score), "Disqualify");
-  assert.ok(score < 50);
+  assert.equal(classifyRediemTier(score), "Tier 3");
+  assert.ok(score < 60);
 });
 
-test("subscription brand with reviews but no community is medium or high fit", () => {
+test("subscription brand with reviews but no community is a nurture fit", () => {
   const profile: RediemBrandProfileInput = {
     ecommercePlatform: "Shopify",
     ecommercePlatformScore: 84,
@@ -112,7 +112,7 @@ test("subscription brand with reviews but no community is medium or high fit", (
     []
   );
 
-  assert.ok(score >= 65);
+  assert.ok(score >= 50);
   assert.notEqual(classifyRediemTier(score), "Disqualify");
 });
 
@@ -260,18 +260,17 @@ test("near-zero ecommercePlatformScore does not pass the ecommerce guard", () =>
   assert.equal(classifyRediemTier(score), "Disqualify");
 });
 
-test("ecommercePlatformScore at threshold (50) passes the ecommerce guard", () => {
+test("ecommercePlatformScore at threshold is only a filter, not enough for fit", () => {
   const profile: RediemBrandProfileInput = {
     ecommercePlatformScore: 50,
     productCategory: "Skincare",
     brandCategory: "Beauty",
     hasLoyaltyProgram: true
   };
-  // Should compute a real score (not the non-ecommerce floor), which will be
-  // above the disqualify threshold for a beauty brand with loyalty.
   const score = calculateRediemFitScore(profile, [], []);
 
-  assert.notEqual(classifyRediemTier(score), "Disqualify");
+  assert.equal(classifyRediemTier(score), "Disqualify");
+  assert.ok(score < 50);
 });
 
 // --- Timing signal edge cases ---
@@ -358,16 +357,16 @@ test("scoreRediemFit returns all component scores and a reasons array", () => {
     "score in breakdown must match calculateRediemFitScore"
   );
 
-  // All eight components must be present and in range.
+  // The new Rediem ICP components must be present and in range.
   const keys = [
-    "ecommerceFit",
-    "communityReadiness",
-    "loyaltyPain",
-    "retentionNeed",
-    "socialUGCPotential",
-    "subscriptionRepeatPurchaseFit",
-    "migrationOpportunity",
-    "timingSignal"
+    "communityEnergy",
+    "participationCaptureGap",
+    "ritualRepeatPurchaseFit",
+    "retailToOwnedDataOpportunity",
+    "missionIdentityStrength",
+    "stackMigrationOpportunity",
+    "timingSignal",
+    "communityValueFit"
   ] as const;
   for (const key of keys) {
     assert.ok(
@@ -380,7 +379,7 @@ test("scoreRediemFit returns all component scores and a reasons array", () => {
   assert.ok(result.reasons.length > 0, "should produce at least one reason for a Shopify Plus brand");
 });
 
-test("scoreRediemFit reasons mention Shopify Plus for a Shopify Plus brand", () => {
+test("scoreRediemFit reasons frame Shopify Plus as supporting evidence only", () => {
   const profile: RediemBrandProfileInput = {
     shopifyDetected: true,
     shopifyPlusLikely: true,
@@ -391,6 +390,7 @@ test("scoreRediemFit reasons mention Shopify Plus for a Shopify Plus brand", () 
   const combined = reasons.join(" ").toLowerCase();
 
   assert.ok(combined.includes("shopify plus"), "reasons should name Shopify Plus");
+  assert.ok(combined.includes("supporting"), "Shopify should be framed as a supporting signal");
 });
 
 test("scoreRediemFit reasons mention greenfield when no loyalty program exists", () => {
@@ -405,7 +405,7 @@ test("scoreRediemFit reasons mention greenfield when no loyalty program exists",
   assert.ok(combined.includes("greenfield"), "reasons should call out greenfield when no loyalty program");
 });
 
-test("scoreRediemFit reasons include no-ecommerce explanation for undetected brands", () => {
+test("scoreRediemFit reasons keep no-commerce brands conservative", () => {
   const profile: RediemBrandProfileInput = {
     productCategory: "Apparel",
     hasUGC: true
@@ -413,6 +413,5 @@ test("scoreRediemFit reasons include no-ecommerce explanation for undetected bra
 
   const { reasons } = scoreRediemFit(profile, [], []);
 
-  assert.ok(reasons.length === 1, "should return exactly one reason for a non-ecommerce brand");
-  assert.ok(reasons[0].toLowerCase().includes("no ecommerce"));
+  assert.ok(reasons.some((reason) => reason.toLowerCase().includes("conservative")));
 });

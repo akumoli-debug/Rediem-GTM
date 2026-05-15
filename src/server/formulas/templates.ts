@@ -9,7 +9,17 @@ export type FormulaTemplateDefinition = {
   outputType: FormulaOutputType;
 };
 
+// Templates are divided into two groups:
+//   1. Generic B2B templates (account-tier through days-since-signal) — not shown in the
+//      Rediem UI (getRediemFormulaData filters them out). Do not add new generic templates.
+//   2. Rediem-specific templates (rediem-fit-score onward) — these are the active product.
+//      CFR-related templates reference CommunityFlywheelSnapshot DB column names
+//      (verifiedParticipationValue, rewardCostRatio, churnRecoveryCost) which match the
+//      current Prisma schema. If those columns are renamed in a migration, update here too.
 export const formulaTemplates: FormulaTemplateDefinition[] = [
+  // ── Generic B2B templates (not shown in Rediem UI) ───────────────────────
+  // These target enterprise SaaS motions and are not relevant to DTC brands.
+  // TODO: Move to a separate genericTemplates export once the B2B path is archived.
   {
     key: "account-tier",
     name: "Account Tier",
@@ -80,13 +90,14 @@ export const formulaTemplates: FormulaTemplateDefinition[] = [
     expression: "DAYS_SINCE({signal.latestSignalDate})",
     outputType: "NUMBER"
   },
+  // ── Rediem-specific templates ─────────────────────────────────────────────
   {
     key: "rediem-fit-score",
     name: "Rediem Fit Score",
-    description: "Scores consumer brand fit from commerce, community, retention, migration, and timing signals.",
+    description: "Scores community-driven consumer brand fit from participation potential, capture gap, ritual fit, retail bridge, mission identity, stack migration, and timing.",
     scope: "ACCOUNT",
     expression:
-      "ROUND((COALESCE({account.ecommercePlatformScore}, 0) * 0.20) + (COALESCE({account.communityReadinessScore}, 0) * 0.15) + (COALESCE({account.loyaltyMaturityScore}, 0) * 0.15) + (IF({account.hasSubscription}, 80, 45) * 0.15) + (COALESCE({account.socialCommunityScore}, 0) * 0.10) + (IF(OR({account.hasSubscription}, CONTAINS(LOWER({account.brandCategory}), \"beauty\"), CONTAINS(LOWER({account.brandCategory}), \"beverage\")), 85, 45) * 0.10) + (COALESCE({account.migrationPainScore}, 0) * 0.10) + (COALESCE({signal.maxScore}, 0) * 0.05), 0)",
+      "ROUND(COALESCE({brand.rediemFitScore}, COALESCE({account.accountScore}, 0)), 0)",
     outputType: "NUMBER"
   },
   {

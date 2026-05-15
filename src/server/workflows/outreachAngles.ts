@@ -1,3 +1,18 @@
+// ⚠️  GENERIC B2B MODULE — DO NOT EXTEND FOR REDIEM USE CASES
+//
+// This workflow generates outreach angles for generic B2B SaaS motions:
+// RevOps, GTM systems, developer infrastructure, enterprise deals.
+// Its vocabulary (enterprise, compliance, RevOps, platform) is wrong for Rediem AEs
+// who sell to DTC brand retention/loyalty/marketing teams.
+//
+// Rediem AEs need brand-specific angles: loyalty migration pain, subscription loops,
+// community readiness, receipt-upload retail-to-DTC bridges.
+//
+// TODO: Replace this with generateRediemOutreachAngles.ts — a DTC-specific AE angle
+// generator that pulls from BrandProfile, communityFlywheelSnapshot, and BrandActivationIdea.
+//
+// Do not add DTC brand logic here. Do not reference this from Rediem workflows.
+
 type EvidenceEntityType = "ACCOUNT" | "PERSON" | "SIGNAL" | "FORMULA_RESULT";
 
 type AccountRecord = {
