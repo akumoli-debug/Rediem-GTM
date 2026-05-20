@@ -3,6 +3,11 @@
 import { useState } from "react";
 import { EvidenceDrawer } from "@/components/workspace/EvidenceDrawer";
 import { FormulaValue } from "@/components/workspace/FormulaValue";
+import { CommunityFlywheelPanel } from "./CommunityFlywheelPanel";
+import { DisplacementWedgePanel } from "./DisplacementWedgePanel";
+import { GtmDiagnosticsPanel } from "./GtmDiagnosticsPanel";
+import { ParticipationLeakPanel } from "./ParticipationLeakPanel";
+import { RecommendedPlaybookPanel } from "./RecommendedPlaybookPanel";
 import { ScoreBar } from "./ScoreBar";
 import type { RediemAccountDetail } from "./types";
 
@@ -45,10 +50,22 @@ export function RediemAccountDetailView({ detail }: { detail: RediemAccountDetai
 
       <section className="rediem-cockpit-grid">
         <div className="rediem-cockpit-main">
+          <CommunityFlywheelPanel detail={detail} />
+
+          <div className="rediem-priority-grid">
+            <GtmDiagnosticsPanel diagnostics={detail.topDiagnostics} />
+            <ParticipationLeakPanel leak={detail.primaryParticipationLeak} />
+          </div>
+
+          <RecommendedPlaybookPanel
+            fallbackAngle={detail.suggestedOutboundAngle}
+            playbook={detail.recommendedPlaybook}
+          />
+
           <section className="data-panel rediem-card">
             <div className="panel-header">
-              <h2>Rediem Fit Breakdown</h2>
-              <p>Weighted fit across commerce stack, retention motion, migration opportunity, and activation readiness.</p>
+              <h2>Supporting Fit Breakdown</h2>
+              <p>Weighted fit across community energy, participation capture, retail bridge, mission strength, and stack opportunity.</p>
             </div>
             <div className="rediem-breakdown">
               <div className="rediem-fit-gauge">
@@ -121,13 +138,10 @@ export function RediemAccountDetailView({ detail }: { detail: RediemAccountDetai
         </div>
 
         <aside className="rediem-cockpit-side">
-          <section className="data-panel rediem-card">
-            <div className="panel-header">
-              <h2>Suggested Outbound Angle</h2>
-              <p>Use only when the evidence below supports the claim.</p>
-            </div>
-            <p className="rediem-angle">{detail.suggestedOutboundAngle}</p>
-          </section>
+          <DisplacementWedgePanel
+            evidenceUrls={detail.evidenceUrls}
+            wedge={detail.displacementWedge}
+          />
 
           <section className="data-panel rediem-card">
             <div className="panel-header">

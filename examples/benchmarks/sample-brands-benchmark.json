@@ -1,0 +1,342 @@
+{
+  "title": "Community Flywheel Benchmark 2026",
+  "reportDate": "2026-05-20",
+  "isSampleData": true,
+  "methodologyNote": "Demo panel of fictional brand records used to illustrate category-level Rediem thought leadership. Category medians are computed only from the records in this JSON file.",
+  "brands": [
+    {
+      "brandName": "Sample Beverage Co.",
+      "domain": "sample-beverage.test",
+      "category": "Functional Beverage",
+      "estimatedCfr": 0.82,
+      "cfrConfidence": 0.61,
+      "cfrTier": "Emerging Community Loop",
+      "gtmDiagnostics": [
+        { "metricId": "PCG", "label": "Participation Capture Gap", "score": 85, "confidence": 0.72 },
+        { "metricId": "RCBI", "label": "Retail-to-Community Bridge Index", "score": 83, "confidence": 0.68 },
+        { "metricId": "SFI", "label": "Stack Fragmentation Index", "score": 72, "confidence": 0.66 }
+      ],
+      "participationLeaks": [
+        { "leakType": "POINTS_ONLY_LOYALTY", "severity": 84 },
+        { "leakType": "RETAIL_NOT_CONNECTED_TO_DTC", "severity": 80 }
+      ],
+      "stackTools": [
+        { "vendor": "Shopify", "category": "ecommerce" },
+        { "vendor": "Recharge", "category": "subscriptions" },
+        { "vendor": "Okendo", "category": "reviews" },
+        { "vendor": "Klaviyo", "category": "email_sms" }
+      ],
+      "recommendedPlaybooks": [
+        { "id": "RETAIL_TO_OWNED_DATA_BRIDGE", "title": "Retail-to-owned data bridge" },
+        { "id": "POINTS_TO_PARTICIPATION_MIGRATION", "title": "Points-to-participation migration" }
+      ],
+      "outboundAngle": "Retail buyers appear disconnected from owned community. Rediem can turn receipt verification into reviews, referrals, and subscription follow-on actions.",
+      "sourceUrls": ["https://sample-beverage.test/rewards", "https://sample-beverage.test/store-locator"]
+    },
+    {
+      "brandName": "Bright Fizz Labs",
+      "domain": "bright-fizz.test",
+      "category": "Functional Beverage",
+      "estimatedCfr": 0.94,
+      "cfrConfidence": 0.64,
+      "cfrTier": "Emerging Community Loop",
+      "gtmDiagnostics": [
+        { "metricId": "PCG", "score": 78, "confidence": 0.67 },
+        { "metricId": "RCBI", "score": 88, "confidence": 0.7 },
+        { "metricId": "OCCS", "score": 76, "confidence": 0.62 }
+      ],
+      "participationLeaks": [
+        { "leakType": "RETAIL_NOT_CONNECTED_TO_DTC", "severity": 86 },
+        { "leakType": "REVIEWS_ISOLATED_FROM_REWARDS", "severity": 67 }
+      ],
+      "stackTools": [
+        { "vendor": "Shopify", "category": "ecommerce" },
+        { "vendor": "Yotpo", "category": "reviews" },
+        { "vendor": "Attentive", "category": "sms" },
+        { "vendor": "Klaviyo", "category": "email_sms" }
+      ],
+      "recommendedPlaybooks": [
+        { "id": "RETAIL_TO_OWNED_DATA_BRIDGE", "title": "Retail-to-owned data bridge" },
+        { "id": "REVIEW_TO_REFERRAL_LOOP", "title": "Review-to-referral loop" }
+      ],
+      "outboundAngle": "The brand has retail reach and review proof, but the public path does not clearly convert retail buyers into owned members."
+    },
+    {
+      "brandName": "Ritual Soda Works",
+      "domain": "ritual-soda.test",
+      "category": "Functional Beverage",
+      "estimatedCfr": 0.76,
+      "cfrConfidence": 0.57,
+      "cfrTier": "Transactional Trap",
+      "gtmDiagnostics": [
+        { "metricId": "PCG", "score": 82, "confidence": 0.6 },
+        { "metricId": "RCBI", "score": 79, "confidence": 0.58 },
+        { "metricId": "DDR", "score": 74, "confidence": 0.56 }
+      ],
+      "participationLeaks": [
+        { "leakType": "POINTS_ONLY_LOYALTY", "severity": 76 },
+        { "leakType": "RETAIL_NOT_CONNECTED_TO_DTC", "severity": 78 }
+      ],
+      "stackTools": [
+        { "vendor": "Shopify", "category": "ecommerce" },
+        { "vendor": "Smile", "category": "loyalty" },
+        { "vendor": "Stamped", "category": "reviews" },
+        { "vendor": "Postscript", "category": "sms" }
+      ],
+      "recommendedPlaybooks": [
+        { "id": "POINTS_TO_PARTICIPATION_MIGRATION", "title": "Points-to-participation migration" },
+        { "id": "RETAIL_TO_OWNED_DATA_BRIDGE", "title": "Retail-to-owned data bridge" }
+      ],
+      "outboundAngle": "The visible rewards motion looks purchase-led. Rediem can expand it into retail proof, reviews, and referral participation."
+    },
+    {
+      "brandName": "Aurora Beauty",
+      "domain": "aurora-beauty.test",
+      "category": "Beauty",
+      "estimatedCfr": 1.18,
+      "cfrConfidence": 0.66,
+      "cfrTier": "Emerging Community Loop",
+      "gtmDiagnostics": [
+        { "metricId": "PCG", "score": 88, "confidence": 0.73 },
+        { "metricId": "UVG", "score": 91, "confidence": 0.71 },
+        { "metricId": "SFI", "score": 69, "confidence": 0.62 }
+      ],
+      "participationLeaks": [
+        { "leakType": "UGC_NOT_VERIFIED", "severity": 88 },
+        { "leakType": "REVIEWS_ISOLATED_FROM_REWARDS", "severity": 76 }
+      ],
+      "stackTools": [
+        { "vendor": "Shopify", "category": "ecommerce" },
+        { "vendor": "LoyaltyLion", "category": "loyalty" },
+        { "vendor": "Okendo", "category": "reviews" },
+        { "vendor": "Klaviyo", "category": "email_sms" }
+      ],
+      "recommendedPlaybooks": [
+        { "id": "UGC_TO_OWNED_COMMUNITY", "title": "UGC-to-owned community" },
+        { "id": "REVIEW_TO_REFERRAL_LOOP", "title": "Review-to-referral loop" }
+      ],
+      "outboundAngle": "Creator and review energy is visible, but Rediem can make those actions verified, owned, and rewardable."
+    },
+    {
+      "brandName": "Bare Bloom Skincare",
+      "domain": "bare-bloom.test",
+      "category": "Beauty",
+      "estimatedCfr": 1.04,
+      "cfrConfidence": 0.59,
+      "cfrTier": "Emerging Community Loop",
+      "gtmDiagnostics": [
+        { "metricId": "PCG", "score": 84, "confidence": 0.65 },
+        { "metricId": "MAR", "score": 79, "confidence": 0.62 },
+        { "metricId": "UVG", "score": 86, "confidence": 0.64 }
+      ],
+      "participationLeaks": [
+        { "leakType": "MISSION_NOT_ACTIONABLE", "severity": 72 },
+        { "leakType": "UGC_NOT_VERIFIED", "severity": 84 }
+      ],
+      "stackTools": [
+        { "vendor": "Shopify", "category": "ecommerce" },
+        { "vendor": "Yotpo", "category": "reviews" },
+        { "vendor": "Attentive", "category": "sms" }
+      ],
+      "recommendedPlaybooks": [
+        { "id": "UGC_TO_OWNED_COMMUNITY", "title": "UGC-to-owned community" },
+        { "id": "MISSION_CHALLENGE_ACTIVATION", "title": "Mission challenge activation" }
+      ],
+      "outboundAngle": "The mission story and UGC calls are visible. Rediem can turn that public energy into verified challenges and member profiles."
+    },
+    {
+      "brandName": "Glow Routine",
+      "domain": "glow-routine.test",
+      "category": "Beauty",
+      "estimatedCfr": 0.98,
+      "cfrConfidence": 0.55,
+      "cfrTier": "Emerging Community Loop",
+      "gtmDiagnostics": [
+        { "metricId": "PCG", "score": 80, "confidence": 0.58 },
+        { "metricId": "ZPDD", "score": 73, "confidence": 0.54 },
+        { "metricId": "SFI", "score": 71, "confidence": 0.57 }
+      ],
+      "participationLeaks": [
+        { "leakType": "ZERO_PARTY_DATA_UNDERUSED", "severity": 70 },
+        { "leakType": "REVIEWS_ISOLATED_FROM_REWARDS", "severity": 68 }
+      ],
+      "stackTools": [
+        { "vendor": "Shopify", "category": "ecommerce" },
+        { "vendor": "Reviews.io", "category": "reviews" },
+        { "vendor": "Klaviyo", "category": "email_sms" },
+        { "vendor": "Recharge", "category": "subscriptions" }
+      ],
+      "recommendedPlaybooks": [
+        { "id": "ZERO_PARTY_PERSONALIZATION_LOOP", "title": "Zero-party personalization loop" },
+        { "id": "SUBSCRIPTION_RETENTION_LOOP", "title": "Subscription retention loop" }
+      ],
+      "outboundAngle": "Routine and preference data can become a rewarded participation loop instead of sitting apart from lifecycle programs."
+    },
+    {
+      "brandName": "Trail Thread",
+      "domain": "trail-thread.test",
+      "category": "Apparel",
+      "estimatedCfr": 1.06,
+      "cfrConfidence": 0.62,
+      "cfrTier": "Emerging Community Loop",
+      "gtmDiagnostics": [
+        { "metricId": "PCG", "score": 81, "confidence": 0.63 },
+        { "metricId": "PDPS", "score": 84, "confidence": 0.66 },
+        { "metricId": "OCCS", "score": 78, "confidence": 0.61 }
+      ],
+      "participationLeaks": [
+        { "leakType": "DROP_ATTENTION_NOT_OWNED", "severity": 82 },
+        { "leakType": "UGC_NOT_VERIFIED", "severity": 74 }
+      ],
+      "stackTools": [
+        { "vendor": "Shopify", "category": "ecommerce" },
+        { "vendor": "Tapcart", "category": "mobile_app" },
+        { "vendor": "Postscript", "category": "sms" },
+        { "vendor": "Klaviyo", "category": "email_sms" }
+      ],
+      "recommendedPlaybooks": [
+        { "id": "PRODUCT_DROP_PARTICIPATION", "title": "Product drop participation" },
+        { "id": "OWNED_COMMUNITY_CONVERSION", "title": "Owned community conversion" }
+      ],
+      "outboundAngle": "Launch attention can become more than checkout urgency. Rediem can turn drops into owned member actions before and after purchase."
+    },
+    {
+      "brandName": "Studio Layers",
+      "domain": "studio-layers.test",
+      "category": "Apparel",
+      "estimatedCfr": 0.9,
+      "cfrConfidence": 0.52,
+      "cfrTier": "Transactional Trap",
+      "gtmDiagnostics": [
+        { "metricId": "PCG", "score": 76, "confidence": 0.55 },
+        { "metricId": "SFI", "score": 75, "confidence": 0.59 },
+        { "metricId": "UVG", "score": 77, "confidence": 0.56 }
+      ],
+      "participationLeaks": [
+        { "leakType": "UGC_NOT_VERIFIED", "severity": 77 },
+        { "leakType": "POINTS_ONLY_LOYALTY", "severity": 69 }
+      ],
+      "stackTools": [
+        { "vendor": "Shopify", "category": "ecommerce" },
+        { "vendor": "Smile", "category": "loyalty" },
+        { "vendor": "Stamped", "category": "reviews" },
+        { "vendor": "Attentive", "category": "sms" }
+      ],
+      "recommendedPlaybooks": [
+        { "id": "STACK_FRAGMENTATION_CONSOLIDATION", "title": "Stack fragmentation consolidation" },
+        { "id": "UGC_TO_OWNED_COMMUNITY", "title": "UGC-to-owned community" }
+      ],
+      "outboundAngle": "Participation appears split across loyalty, reviews, and messaging. Rediem can unify those actions into member profiles."
+    },
+    {
+      "brandName": "Fit Form",
+      "domain": "fit-form.test",
+      "category": "Apparel",
+      "estimatedCfr": 0.86,
+      "cfrConfidence": 0.49,
+      "cfrTier": "Transactional Trap",
+      "gtmDiagnostics": [
+        { "metricId": "PCG", "score": 70, "confidence": 0.51 },
+        { "metricId": "PDPS", "score": 79, "confidence": 0.53 },
+        { "metricId": "ZPDD", "score": 64, "confidence": 0.48 }
+      ],
+      "participationLeaks": [
+        { "leakType": "DROP_ATTENTION_NOT_OWNED", "severity": 78 },
+        { "leakType": "ZERO_PARTY_DATA_UNDERUSED", "severity": 62 }
+      ],
+      "stackTools": [
+        { "vendor": "Shopify", "category": "ecommerce" },
+        { "vendor": "Reviews.io", "category": "reviews" },
+        { "vendor": "Klaviyo", "category": "email_sms" }
+      ],
+      "recommendedPlaybooks": [
+        { "id": "PRODUCT_DROP_PARTICIPATION", "title": "Product drop participation" },
+        { "id": "ZERO_PARTY_PERSONALIZATION_LOOP", "title": "Zero-party personalization loop" }
+      ],
+      "outboundAngle": "Fit and launch interest can become declared preferences, waitlist actions, reviews, and referrals."
+    },
+    {
+      "brandName": "Daily Dose Wellness",
+      "domain": "daily-dose.test",
+      "category": "Wellness",
+      "estimatedCfr": 0.88,
+      "cfrConfidence": 0.58,
+      "cfrTier": "Transactional Trap",
+      "gtmDiagnostics": [
+        { "metricId": "PCG", "score": 79, "confidence": 0.6 },
+        { "metricId": "ZPDD", "score": 85, "confidence": 0.64 },
+        { "metricId": "DDR", "score": 76, "confidence": 0.56 }
+      ],
+      "participationLeaks": [
+        { "leakType": "ZERO_PARTY_DATA_UNDERUSED", "severity": 82 },
+        { "leakType": "SUBSCRIBER_BEHAVIOR_NOT_REWARDED", "severity": 79 }
+      ],
+      "stackTools": [
+        { "vendor": "Shopify", "category": "ecommerce" },
+        { "vendor": "Recharge", "category": "subscriptions" },
+        { "vendor": "Klaviyo", "category": "email_sms" },
+        { "vendor": "Gorgias", "category": "support" }
+      ],
+      "recommendedPlaybooks": [
+        { "id": "SUBSCRIPTION_RETENTION_LOOP", "title": "Subscription retention loop" },
+        { "id": "ZERO_PARTY_PERSONALIZATION_LOOP", "title": "Zero-party personalization loop" }
+      ],
+      "outboundAngle": "Subscribers already have routine behavior. Rediem can reward renewal streaks, profile completion, reviews, and referrals."
+    },
+    {
+      "brandName": "Calm Core",
+      "domain": "calm-core.test",
+      "category": "Wellness",
+      "estimatedCfr": 0.72,
+      "cfrConfidence": 0.44,
+      "cfrTier": "Transactional Trap",
+      "gtmDiagnostics": [
+        { "metricId": "PCG", "score": 75, "confidence": 0.46 },
+        { "metricId": "MAR", "score": 82, "confidence": 0.5 },
+        { "metricId": "ZPDD", "score": 77, "confidence": 0.47 }
+      ],
+      "participationLeaks": [
+        { "leakType": "MISSION_NOT_ACTIONABLE", "severity": 80 },
+        { "leakType": "ZERO_PARTY_DATA_UNDERUSED", "severity": 75 }
+      ],
+      "stackTools": [
+        { "vendor": "Shopify", "category": "ecommerce" },
+        { "vendor": "Okendo", "category": "reviews" },
+        { "vendor": "Klaviyo", "category": "email_sms" }
+      ],
+      "recommendedPlaybooks": [
+        { "id": "MISSION_CHALLENGE_ACTIVATION", "title": "Mission challenge activation" },
+        { "id": "ZERO_PARTY_PERSONALIZATION_LOOP", "title": "Zero-party personalization loop" }
+      ],
+      "outboundAngle": "The education story is visible, but Rediem can turn it into progress challenges, declared goals, and rewardable actions."
+    },
+    {
+      "brandName": "Nourish Loop",
+      "domain": "nourish-loop.test",
+      "category": "Wellness",
+      "estimatedCfr": 0.81,
+      "cfrConfidence": 0.5,
+      "cfrTier": "Transactional Trap",
+      "gtmDiagnostics": [
+        { "metricId": "PCG", "score": 73, "confidence": 0.52 },
+        { "metricId": "RCBI", "score": 68, "confidence": 0.49 },
+        { "metricId": "DDR", "score": 72, "confidence": 0.51 }
+      ],
+      "participationLeaks": [
+        { "leakType": "SUBSCRIBER_BEHAVIOR_NOT_REWARDED", "severity": 74 },
+        { "leakType": "RETAIL_NOT_CONNECTED_TO_DTC", "severity": 68 }
+      ],
+      "stackTools": [
+        { "vendor": "Shopify", "category": "ecommerce" },
+        { "vendor": "Recharge", "category": "subscriptions" },
+        { "vendor": "Yotpo", "category": "reviews" },
+        { "vendor": "Attentive", "category": "sms" }
+      ],
+      "recommendedPlaybooks": [
+        { "id": "SUBSCRIPTION_RETENTION_LOOP", "title": "Subscription retention loop" },
+        { "id": "RETAIL_TO_OWNED_DATA_BRIDGE", "title": "Retail-to-owned data bridge" }
+      ],
+      "outboundAngle": "Routine and replenishment behavior can be turned into subscriber milestones and retail-to-owned participation."
+    }
+  ]
+}

@@ -1001,6 +1001,326 @@ code {
   border-color: var(--rediem-border);
 }
 
+.rediem-priority-panel {
+  overflow: hidden;
+}
+
+.rediem-priority-header {
+  align-items: flex-start;
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.rediem-warning-pill,
+.rediem-low-confidence {
+  background: var(--warning-bg);
+  border: 1px solid #f2d58a;
+  border-radius: 999px;
+  color: var(--warning);
+  display: inline-flex;
+  font-size: 12px;
+  font-weight: 800;
+  line-height: 1.2;
+  padding: 6px 9px;
+  white-space: nowrap;
+}
+
+.rediem-low-confidence {
+  border-radius: 6px;
+  margin-top: 8px;
+  width: fit-content;
+}
+
+.rediem-cfr-layout {
+  display: grid;
+  gap: 18px;
+  grid-template-columns: 260px minmax(0, 1fr);
+  padding: 18px;
+}
+
+.rediem-cfr-score {
+  align-items: center;
+  background: #eef8f5;
+  border: 1px solid #b8dcd3;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 240px;
+  padding: 18px;
+  text-align: center;
+}
+
+.rediem-cfr-score span,
+.rediem-fit-strip span,
+.rediem-mini-metric span,
+.rediem-next-action-grid span,
+.rediem-wedge-warning span,
+.rediem-evidence-block span {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.rediem-cfr-score strong {
+  color: var(--rediem-accent-dark);
+  font-size: 68px;
+  line-height: 1;
+  margin-top: 10px;
+}
+
+.rediem-cfr-score em {
+  color: var(--rediem-blue);
+  font-style: normal;
+  font-weight: 800;
+  line-height: 1.25;
+  margin-top: 10px;
+}
+
+.rediem-cfr-context {
+  display: grid;
+  gap: 12px;
+}
+
+.rediem-fit-strip,
+.rediem-cfr-comparison,
+.rediem-next-action-grid {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.rediem-fit-strip > div,
+.rediem-mini-metric,
+.rediem-next-action-grid > div {
+  background: #fbfcfd;
+  border: 1px solid var(--rediem-border);
+  border-radius: 8px;
+  display: grid;
+  gap: 6px;
+  min-height: 76px;
+  padding: 12px;
+}
+
+.rediem-fit-strip strong,
+.rediem-mini-metric strong,
+.rediem-next-action-grid strong {
+  color: var(--rediem-ink);
+  line-height: 1.3;
+}
+
+.rediem-cfr-comparison {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.rediem-plain-list {
+  color: var(--muted);
+  display: grid;
+  gap: 8px;
+  line-height: 1.45;
+  margin: 0;
+  padding-left: 18px;
+}
+
+.rediem-priority-grid {
+  align-items: stretch;
+  display: grid;
+  gap: 14px;
+  grid-template-columns: minmax(0, 1.2fr) minmax(320px, 0.8fr);
+}
+
+.rediem-diagnostic-list {
+  display: grid;
+  gap: 12px;
+  padding: 16px;
+}
+
+.rediem-diagnostic-card {
+  border: 1px solid var(--rediem-border);
+  border-radius: 8px;
+  display: grid;
+  gap: 12px;
+  grid-template-columns: 84px minmax(0, 1fr);
+  padding: 12px;
+}
+
+.rediem-diagnostic-score {
+  align-items: center;
+  background: #f4f7fb;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 78px;
+}
+
+.rediem-diagnostic-score span {
+  color: var(--rediem-blue);
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.rediem-diagnostic-score strong {
+  font-size: 30px;
+  line-height: 1;
+  margin-top: 6px;
+}
+
+.rediem-diagnostic-title {
+  align-items: flex-start;
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.rediem-diagnostic-title strong {
+  font-size: 15px;
+  line-height: 1.3;
+}
+
+.rediem-diagnostic-card p,
+.rediem-wedge-body p,
+.rediem-muted-copy {
+  color: var(--muted);
+  line-height: 1.48;
+  margin: 8px 0 0;
+}
+
+.rediem-evidence-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.rediem-evidence-links a {
+  background: #eef4ff;
+  border: 1px solid #c9d8f2;
+  border-radius: 999px;
+  color: var(--rediem-blue);
+  font-size: 12px;
+  font-weight: 800;
+  padding: 5px 8px;
+}
+
+.rediem-leak-body {
+  display: grid;
+  gap: 14px;
+  grid-template-columns: 96px minmax(0, 1fr);
+  padding: 16px;
+}
+
+.rediem-leak-score {
+  align-items: center;
+  background: var(--warning-bg);
+  border: 1px solid #f2d58a;
+  border-radius: 8px;
+  color: var(--warning);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 96px;
+}
+
+.rediem-leak-score span {
+  font-size: 12px;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.rediem-leak-score strong {
+  font-size: 34px;
+  line-height: 1;
+  margin-top: 6px;
+}
+
+.rediem-leak-copy {
+  display: grid;
+  gap: 9px;
+}
+
+.rediem-leak-copy p {
+  color: var(--muted);
+  line-height: 1.48;
+  margin: 0;
+}
+
+.rediem-leak-copy strong {
+  line-height: 1.4;
+}
+
+.rediem-panel-empty {
+  padding: 16px;
+}
+
+.rediem-action-panel {
+  border-color: #b8dcd3;
+}
+
+.rediem-playbook-focus,
+.rediem-wedge-body {
+  display: grid;
+  gap: 14px;
+  padding: 16px;
+}
+
+.rediem-playbook-title {
+  display: grid;
+  gap: 8px;
+}
+
+.rediem-playbook-title h3 {
+  font-size: 22px;
+  line-height: 1.2;
+  margin: 0;
+}
+
+.rediem-playbook-title p {
+  color: var(--muted);
+  line-height: 1.5;
+  margin: 0;
+}
+
+.rediem-playbook-focus blockquote {
+  background: #f6fbf9;
+  border-left: 4px solid var(--rediem-accent);
+  color: var(--rediem-ink);
+  line-height: 1.55;
+  margin: 0;
+  padding: 12px 14px;
+}
+
+.rediem-wedge-heading {
+  display: grid;
+  gap: 8px;
+}
+
+.rediem-wedge-heading strong {
+  font-size: 18px;
+  line-height: 1.3;
+}
+
+.rediem-wedge-warning {
+  background: var(--warning-bg);
+  border: 1px solid #f2d58a;
+  border-radius: 8px;
+  display: grid;
+  gap: 6px;
+  padding: 10px;
+}
+
+.rediem-wedge-warning strong {
+  color: var(--warning);
+  line-height: 1.35;
+}
+
+.rediem-evidence-block {
+  border-top: 1px solid var(--rediem-border);
+  padding-top: 12px;
+}
+
 .rediem-breakdown {
   display: grid;
   gap: 16px;
@@ -1218,7 +1538,14 @@ code {
   .settings-grid,
   .template-grid,
   .rediem-cockpit-grid,
+  .rediem-cfr-layout,
+  .rediem-priority-grid,
   .rediem-breakdown,
+  .rediem-fit-strip,
+  .rediem-cfr-comparison,
+  .rediem-diagnostic-card,
+  .rediem-leak-body,
+  .rediem-next-action-grid,
   .rediem-fact-grid,
   .rediem-buyer-grid {
     grid-template-columns: 1fr;

@@ -60,6 +60,195 @@
       "Retail buyers appear disconnected from owned DTC profiles, making receipt upload a strong first loop."
     ]
   },
+  "gtmDiagnostics": [
+    {
+      "metricId": "PCG",
+      "label": "Participation Capture Gap",
+      "score": 85,
+      "confidence": 0.72,
+      "tier": "Priority",
+      "explanation": "Visible participation demand is estimated at 100 while owned participation capture is estimated at 73. This is a public-signal estimate, not a measured customer conversion gap.",
+      "sourceEvidenceIds": ["ev_rewards_points", "ev_reviews", "ev_store_locator", "ev_ugc", "ev_mission", "ev_drop"],
+      "sourceUrls": [
+        "https://sample-beverage.test/rewards",
+        "https://sample-beverage.test/reviews",
+        "https://sample-beverage.test/store-locator",
+        "https://sample-beverage.test/community",
+        "https://sample-beverage.test/about",
+        "https://sample-beverage.test/blog",
+        "https://sample-beverage.test/subscriptions"
+      ],
+      "recommendedPlayTypes": ["VIP_TIER_MIGRATION", "REVIEW_TO_REFERRAL_CHALLENGE", "ZERO_PARTY_PREFERENCE_CHALLENGE", "UGC_SOCIAL_CHALLENGE"],
+      "buyerPersonas": ["Director of Retention", "Loyalty Manager", "Head of Community", "VP Customer Experience", "CRM Lead"],
+      "outboundAngle": "Customers appear to be participating across reviews, social, retail, or subscriptions, but the owned capture path looks thinner than the participation surface. Rediem can turn those behaviors into verified member actions and rewards."
+    },
+    {
+      "metricId": "RCBI",
+      "label": "Retail-to-Community Bridge Index",
+      "score": 67,
+      "confidence": 0.72,
+      "tier": "High",
+      "explanation": "Retail bridge readiness is estimated from retail presence (90), owned commerce surface (66), participation proof (58), and receipt bridge evidence (40). No retail volume is inferred.",
+      "sourceEvidenceIds": ["ev_store_locator"],
+      "sourceUrls": ["https://sample-beverage.test/store-locator"],
+      "recommendedPlayTypes": ["RECEIPT_UPLOAD_RETAIL_TO_DTC", "SUBSCRIPTION_REWARD_SERIES", "REVIEW_TO_REFERRAL_CHALLENGE", "ZERO_PARTY_PREFERENCE_CHALLENGE"],
+      "buyerPersonas": ["VP Ecommerce", "Chief Digital Officer", "Director of Retail Marketing", "CRM Lead", "Head of Omnichannel"],
+      "outboundAngle": "Retail appears to create reach, but the public journey may not fully pull buyers into owned community. Rediem can use receipt verification to connect retail purchases to member profiles, rewards, and follow-on DTC actions."
+    },
+    {
+      "metricId": "MAR",
+      "label": "Mission-to-Action Ratio",
+      "score": 57,
+      "confidence": 0.72,
+      "tier": "High",
+      "explanation": "Mission narrative intensity is estimated at 81; visible mission-linked action depth is estimated at 62. The score rises when the mission is visible but customer action paths are weaker.",
+      "sourceEvidenceIds": ["ev_reviews", "ev_ugc", "ev_mission"],
+      "sourceUrls": [
+        "https://sample-beverage.test/reviews",
+        "https://sample-beverage.test/community",
+        "https://sample-beverage.test/about",
+        "https://sample-beverage.test/store-locator"
+      ],
+      "recommendedPlayTypes": ["SUSTAINABILITY_OR_MISSION_CHALLENGE", "ZERO_PARTY_PREFERENCE_CHALLENGE", "UGC_SOCIAL_CHALLENGE", "REVIEW_TO_REFERRAL_CHALLENGE"],
+      "buyerPersonas": ["CMO", "Brand Manager", "Head of Community", "VP Customer Experience", "Founder"],
+      "outboundAngle": "The brand has visible mission or identity language, but the public customer journey gives people limited ways to act on it. Rediem can turn the mission into verified challenges, stories, preferences, and rewards."
+    },
+    {
+      "metricId": "UVG",
+      "label": "UGC Verification Gap",
+      "score": 100,
+      "confidence": 0.72,
+      "tier": "Priority",
+      "explanation": "Public UGC energy is estimated at 100; verified member or purchase capture is estimated at 29. Use this as a verification opportunity, not a claim about actual UGC volume.",
+      "sourceEvidenceIds": ["ev_ugc"],
+      "sourceUrls": ["https://sample-beverage.test/community", "https://sample-beverage.test/store-locator"],
+      "recommendedPlayTypes": ["UGC_SOCIAL_CHALLENGE", "REVIEW_TO_REFERRAL_CHALLENGE", "VIP_TIER_MIGRATION", "RECEIPT_UPLOAD_RETAIL_TO_DTC"],
+      "buyerPersonas": ["Head of Community", "Social Media Manager", "Influencer Manager", "VP Growth", "Director of Retention"],
+      "outboundAngle": "The brand has visible social or creator energy, but public evidence does not clearly show that content being verified against customer identity. Rediem can make UGC a verified participation loop."
+    },
+    {
+      "metricId": "DDR",
+      "label": "Discount Dependence Ratio",
+      "score": 10,
+      "confidence": 0.72,
+      "tier": "Low",
+      "explanation": "Visible discount pressure is estimated at 18; participation reward depth is estimated at 71. This does not infer margin, CAC, promo spend, or actual retention performance.",
+      "sourceEvidenceIds": ["ev_rewards_points", "ev_reviews", "ev_ugc", "ev_mission", "ev_drop"],
+      "sourceUrls": [
+        "https://sample-beverage.test/rewards",
+        "https://sample-beverage.test/reviews",
+        "https://sample-beverage.test/community",
+        "https://sample-beverage.test/about",
+        "https://sample-beverage.test/blog",
+        "https://sample-beverage.test/store-locator"
+      ],
+      "recommendedPlayTypes": ["VIP_TIER_MIGRATION", "SUBSCRIPTION_REWARD_SERIES", "REVIEW_TO_REFERRAL_CHALLENGE", "PRODUCT_DROP_PARTICIPATION_CAMPAIGN"],
+      "buyerPersonas": ["Director of Retention", "VP Growth", "CMO", "Loyalty Manager", "Lifecycle Marketing Lead"],
+      "outboundAngle": "The public retention motion appears more discount-led than participation-led. Rediem can keep incentives in the journey while moving more value behind verified reviews, referrals, preferences, status, and access."
+    },
+    {
+      "metricId": "ZPDD",
+      "label": "Zero-Party Data Depth",
+      "score": 26,
+      "confidence": 0.72,
+      "tier": "Low",
+      "explanation": "Preference capture breadth is estimated at 14, specificity at 20, and reward or personalization connection at 44. The score reflects visible declared-data depth, not internal data storage.",
+      "sourceEvidenceIds": ["ev_drop"],
+      "sourceUrls": ["https://sample-beverage.test/blog"],
+      "recommendedPlayTypes": ["ZERO_PARTY_PREFERENCE_CHALLENGE", "SUBSCRIPTION_REWARD_SERIES", "SUSTAINABILITY_OR_MISSION_CHALLENGE", "VIP_TIER_MIGRATION"],
+      "buyerPersonas": ["CRM Lead", "Lifecycle Marketing Lead", "Director of Retention", "VP Customer Experience", "Ecommerce Manager"],
+      "outboundAngle": "The brand has a natural preference story. Rediem can make preference capture a rewarded community action and use declared intent to personalize participation, rewards, referrals, and subscriptions."
+    },
+    {
+      "metricId": "PDPS",
+      "label": "Product Drop Participation Score",
+      "score": 66,
+      "confidence": 0.72,
+      "tier": "High",
+      "explanation": "Drop attention is estimated at 100; owned signup at 54; participation mechanics at 60; post-drop loop at 35. No sell-through, waitlist size, or launch revenue is inferred.",
+      "sourceEvidenceIds": ["ev_drop"],
+      "sourceUrls": ["https://sample-beverage.test/blog"],
+      "recommendedPlayTypes": ["PRODUCT_DROP_PARTICIPATION_CAMPAIGN", "UGC_SOCIAL_CHALLENGE", "VIP_TIER_MIGRATION", "REVIEW_TO_REFERRAL_CHALLENGE"],
+      "buyerPersonas": ["VP Ecommerce", "VP Growth", "Brand Manager", "Head of Community", "CMO"],
+      "outboundAngle": "Launch attention appears available. Rediem can make each product drop a participation campaign by rewarding join, share, review, referral, vote, UGC, and preference actions."
+    },
+    {
+      "metricId": "SFI",
+      "label": "Stack Fragmentation Index",
+      "score": 72,
+      "confidence": 0.72,
+      "tier": "High",
+      "explanation": "4 public participation stack categories were detected. The score reflects apparent fragmentation from public detections and does not claim exact internal architecture.",
+      "sourceEvidenceIds": ["ev_rewards_points", "ev_reviews"],
+      "sourceUrls": [
+        "https://sample-beverage.test/rewards",
+        "https://sample-beverage.test/reviews",
+        "https://sample-beverage.test/subscriptions"
+      ],
+      "recommendedPlayTypes": ["VIP_TIER_MIGRATION", "ZERO_PARTY_PREFERENCE_CHALLENGE", "RECEIPT_UPLOAD_RETAIL_TO_DTC", "REVIEW_TO_REFERRAL_CHALLENGE"],
+      "buyerPersonas": ["Chief Digital Officer", "VP Ecommerce", "Martech Lead", "Director of Digital Product", "CRM Lead"],
+      "outboundAngle": "The stack appears to capture useful behaviors in separate places: reviews, loyalty, subscriptions, messages, or referrals. Rediem can sit across those surfaces as the participation layer that makes the customer profile usable."
+    },
+    {
+      "metricId": "OCCS",
+      "label": "Owned Community Conversion Score",
+      "score": 73,
+      "confidence": 0.72,
+      "tier": "High",
+      "explanation": "Public community demand is estimated at 100 while owned conversion surface is estimated at 73. The score reflects visible conversion readiness, not actual conversion rate.",
+      "sourceEvidenceIds": ["ev_rewards_points", "ev_reviews", "ev_store_locator", "ev_ugc", "ev_mission", "ev_drop"],
+      "sourceUrls": [
+        "https://sample-beverage.test/rewards",
+        "https://sample-beverage.test/reviews",
+        "https://sample-beverage.test/store-locator",
+        "https://sample-beverage.test/community",
+        "https://sample-beverage.test/about",
+        "https://sample-beverage.test/blog",
+        "https://sample-beverage.test/subscriptions"
+      ],
+      "recommendedPlayTypes": ["UGC_SOCIAL_CHALLENGE", "RECEIPT_UPLOAD_RETAIL_TO_DTC", "REVIEW_TO_REFERRAL_CHALLENGE", "ZERO_PARTY_PREFERENCE_CHALLENGE", "PRODUCT_DROP_PARTICIPATION_CAMPAIGN"],
+      "buyerPersonas": ["VP Growth", "Head of Community", "Director of Retention", "CRM Lead", "VP Customer Experience"],
+      "outboundAngle": "The brand has public community energy, but the owned conversion path looks thinner than demand. Rediem can turn that attention into member profiles, verified actions, and repeatable participation."
+    }
+  ],
+  "topDiagnostics": [
+    {
+      "metricId": "UVG",
+      "label": "UGC Verification Gap",
+      "score": 100,
+      "confidence": 0.72,
+      "tier": "Priority"
+    },
+    {
+      "metricId": "PCG",
+      "label": "Participation Capture Gap",
+      "score": 85,
+      "confidence": 0.72,
+      "tier": "Priority"
+    },
+    {
+      "metricId": "OCCS",
+      "label": "Owned Community Conversion Score",
+      "score": 73,
+      "confidence": 0.72,
+      "tier": "High"
+    }
+  ],
+  "primaryGtmDiagnosis": {
+    "metricId": "UVG",
+    "label": "UGC Verification Gap",
+    "score": 100,
+    "confidence": 0.72,
+    "tier": "Priority",
+    "outboundAngle": "The brand has visible social or creator energy, but public evidence does not clearly show that content being verified against customer identity. Rediem can make UGC a verified participation loop."
+  },
+  "recommendedPlayTypes": [
+    "UGC_SOCIAL_CHALLENGE",
+    "REVIEW_TO_REFERRAL_CHALLENGE",
+    "VIP_TIER_MIGRATION",
+    "RECEIPT_UPLOAD_RETAIL_TO_DTC",
+    "ZERO_PARTY_PREFERENCE_CHALLENGE"
+  ],
   "flywheelLeaks": [
     {
       "leakType": "POINTS_ONLY_LOYALTY",
@@ -170,6 +359,9 @@
     "cfrTier": "Emerging Community Loop",
     "primaryFlywheelLeak": "POINTS_ONLY_LOYALTY",
     "recommendedPlay": "VIP_TIER_MIGRATION",
+    "topGtmDiagnostic": "UGC Verification Gap",
+    "primaryGtmDiagnosis": "UGC Verification Gap",
+    "recommendedGtmPlaybook": "UGC_SOCIAL_CHALLENGE",
     "recommendedFirstContactTitle": "Director of Retention",
     "sequencerEligible": false,
     "sequencerEligibilityReason": "Sample dossier does not include a verified email."
@@ -179,7 +371,18 @@
     "rediem_tier": "Tier 1",
     "community_archetypes": "CULT_CONSUMER_BRAND,RITUAL_REPEAT_USE_BRAND,RETAIL_TO_DTC_BRIDGE_BRAND",
     "community_energy_score": 91,
-    "participation_capture_gap": 82,
+    "participation_capture_gap": 85,
+    "top_gtm_diagnostic": "UGC Verification Gap",
+    "retail_to_community_bridge_index": 67,
+    "mission_to_action_ratio": 57,
+    "ugc_verification_gap": 100,
+    "discount_dependence_ratio": 10,
+    "zero_party_data_depth": 26,
+    "product_drop_participation_score": 66,
+    "stack_fragmentation_index": 72,
+    "owned_community_conversion_score": 73,
+    "primary_gtm_diagnosis": "UGC Verification Gap",
+    "recommended_gtm_playbook": "UGC_SOCIAL_CHALLENGE",
     "loyalty_maturity_level": 2,
     "estimated_cfr": 0.82,
     "cfr_tier": "Emerging Community Loop",
@@ -223,6 +426,24 @@
       "provider": "mock",
       "confidence": 0.63,
       "rawExcerpt": "Join our creator community and share your daily ritual."
+    },
+    {
+      "id": "ev_mission",
+      "fieldName": "missionDrivenAngle",
+      "value": "better-for-you soda alternative with gut health education",
+      "sourceUrl": "https://sample-beverage.test/about",
+      "provider": "mock",
+      "confidence": 0.66,
+      "rawExcerpt": "Better-for-you soda alternative with gut health education and recyclable packaging."
+    },
+    {
+      "id": "ev_drop",
+      "fieldName": "productLaunch",
+      "value": "limited seasonal flavor drop early access",
+      "sourceUrl": "https://sample-beverage.test/blog",
+      "provider": "mock",
+      "confidence": 0.62,
+      "rawExcerpt": "New limited seasonal flavor drop with early access for VIP members."
     }
   ]
 }

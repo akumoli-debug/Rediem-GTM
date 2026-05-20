@@ -18,8 +18,19 @@ import {
 } from "@/server/scoring/rediem";
 import {
   calculateCommunityFlywheelRatio,
+  type CommunityFlywheelPlayType,
   type CommunityFlywheelSnapshotEstimate
 } from "@/server/scoring/communityFlywheel";
+import {
+  calculateGtmDiagnostics,
+  type GtmDiagnosticScore
+} from "@/server/scoring/gtmDiagnostics";
+import {
+  detectedCurrentStack,
+  generateDisplacementWedges,
+  selectPrimaryDisplacementWedge,
+  type RediemDisplacementWedge
+} from "@/server/scoring/displacementWedges";
 import { canonicalizeDomain } from "./researchAccount";
 
 type ProviderResultStatus = "SUCCESS" | "PARTIAL" | "FAILED" | "CACHED";
@@ -243,6 +254,18 @@ export type RediemAccountDossier = {
     rawExcerpt?: string | null;
   }>;
   sourceUrls: string[];
+  communityFlywheelRatio: CommunityFlywheelSnapshotEstimate;
+  gtmDiagnostics: GtmDiagnosticScore[];
+  topDiagnostics: GtmDiagnosticScore[];
+  primaryGtmDiagnosis: GtmDiagnosticScore | null;
+  recommendedPlayTypes: CommunityFlywheelPlayType[];
+  displacementWedges: RediemDisplacementWedge[];
+  primaryDisplacementWedge: RediemDisplacementWedge | null;
+  detectedCurrentStack: string;
+  whatNotToSay: string | null;
+  rediemWedge: string | null;
+  crmFields: Record<string, unknown>;
+  n8nExport: Record<string, unknown>;
   providerCalls: number;
   cachedProviderCalls: number;
 };
@@ -271,11 +294,17 @@ const STACK_PATTERNS = [
   { category: "loyalty", vendor: "Yotpo Loyalty", patterns: ["yotpo loyalty", "swell rewards"] },
   { category: "loyalty", vendor: "Smile.io", patterns: ["smile.io", "smile-ui", "smile rewards"] },
   { category: "loyalty", vendor: "LoyaltyLion", patterns: ["loyaltylion"] },
+  { category: "referral", vendor: "ReferralCandy", patterns: ["referralcandy", "referral candy"] },
   { category: "reviews", vendor: "Okendo", patterns: ["okendo"] },
-  { category: "reviews", vendor: "Yotpo Reviews", patterns: ["yotpo reviews", "yotpo-widget"] },
+  { category: "reviews", vendor: "Yotpo Reviews", patterns: ["yotpo reviews", "yotpo-widget", "yotpo"] },
+  { category: "reviews", vendor: "Reviews.io", patterns: ["reviews.io", "reviewsio"] },
+  { category: "reviews", vendor: "Stamped", patterns: ["stamped.io", "stamped reviews", "stampedugc"] },
   { category: "reviews", vendor: "Judge.me", patterns: ["judge.me", "judgeme"] },
   { category: "email_sms", vendor: "Klaviyo", patterns: ["klaviyo"] },
-  { category: "email_sms", vendor: "Attentive", patterns: ["attentive"] }
+  { category: "sms", vendor: "Attentive", patterns: ["attentive"] },
+  { category: "sms", vendor: "Postscript", patterns: ["postscript"] },
+  { category: "support", vendor: "Gorgias", patterns: ["gorgias"] },
+  { category: "mobile_app", vendor: "Tapcart", patterns: ["tapcart"] }
 ];
 
 export async function analyzeBrandForRediem(
@@ -408,20 +437,41 @@ export async function analyzeBrandForRediem(
     detections: analysis.detections,
     signals: analysis.signals
   });
+  const evidenceForScoring = evidence.map((item) => ({
+    id: item.id,
+    fieldName: item.fieldName,
+    value: item.value,
+    sourceUrl: item.sourceUrl,
+    provider: item.provider,
+    rawExcerpt: item.rawExcerpt,
+    confidence: item.confidence
+  }));
   const cfrSnapshot = calculateCommunityFlywheelRatio({
     profile: scoredProfileData as RediemBrandProfileInput,
     signals: analysis.signals,
     detections: analysis.detections,
-    evidence: evidence.map((item) => ({
-      id: item.id,
-      fieldName: item.fieldName,
-      value: item.value,
-      sourceUrl: item.sourceUrl,
-      provider: item.provider,
-      rawExcerpt: item.rawExcerpt,
-      confidence: item.confidence
-    }))
+    evidence: evidenceForScoring
   });
+  const gtmDiagnostics = calculateGtmDiagnostics({
+    profile: scoredProfileData as RediemBrandProfileInput,
+    signals: analysis.signals,
+    detections: analysis.detections,
+    evidence: evidenceForScoring
+  });
+  const topDiagnostics = selectTopDiagnostics(gtmDiagnostics);
+  const primaryGtmDiagnosis = topDiagnostics[0] ?? selectPrimaryGtmDiagnosis(gtmDiagnostics);
+  const recommendedPlayTypes = deriveRecommendedPlayTypes(topDiagnostics, cfrSnapshot);
+  const displacementWedges = generateDisplacementWedges({
+    detections: analysis.detections,
+    evidence: evidenceForScoring
+  });
+  const primaryDisplacementWedge = selectPrimaryDisplacementWedge(displacementWedges);
+  const currentStack = detectedCurrentStack(displacementWedges);
+  const displacementCrmFields = buildDisplacementCrmFields(
+    displacementWedges,
+    primaryDisplacementWedge,
+    currentStack
+  );
 
   await writeBrandScoreHistory(client, {
     workspaceId: input.workspaceId,
@@ -486,6 +536,18 @@ export async function analyzeBrandForRediem(
       rawExcerpt: item.rawExcerpt
     })),
     sourceUrls: uniqueStrings(pages.map((page) => page.url)),
+    communityFlywheelRatio: cfrSnapshot,
+    gtmDiagnostics,
+    topDiagnostics,
+    primaryGtmDiagnosis,
+    recommendedPlayTypes,
+    displacementWedges,
+    primaryDisplacementWedge,
+    detectedCurrentStack: currentStack,
+    whatNotToSay: primaryDisplacementWedge?.whatNotToSay ?? null,
+    rediemWedge: primaryDisplacementWedge?.rediemWedge ?? null,
+    crmFields: displacementCrmFields,
+    n8nExport: displacementCrmFields,
     providerCalls: providerStats.calls,
     cachedProviderCalls: providerStats.cachedCalls
   };
@@ -1292,6 +1354,54 @@ async function writeCommunityFlywheelRecords(
   }
 }
 
+function selectTopDiagnostics(diagnostics: GtmDiagnosticScore[]): GtmDiagnosticScore[] {
+  return [...diagnostics]
+    .filter((diagnostic) => diagnostic.confidence >= 0.45 && diagnostic.score >= 50)
+    .sort(compareDiagnostics)
+    .slice(0, 3);
+}
+
+function selectPrimaryGtmDiagnosis(diagnostics: GtmDiagnosticScore[]): GtmDiagnosticScore | null {
+  return [...diagnostics]
+    .filter((diagnostic) => diagnostic.confidence >= 0.35)
+    .sort(compareDiagnostics)[0] ?? null;
+}
+
+function compareDiagnostics(left: GtmDiagnosticScore, right: GtmDiagnosticScore): number {
+  return (
+    right.score - left.score ||
+    right.confidence - left.confidence ||
+    left.metricId.localeCompare(right.metricId)
+  );
+}
+
+function deriveRecommendedPlayTypes(
+  topDiagnostics: GtmDiagnosticScore[],
+  cfrSnapshot: CommunityFlywheelSnapshotEstimate
+): CommunityFlywheelPlayType[] {
+  return uniqueItems([
+    ...topDiagnostics.flatMap((diagnostic) => diagnostic.recommendedPlayTypes),
+    ...(cfrSnapshot.recommendedPlay ? [cfrSnapshot.recommendedPlay] : [])
+  ]).slice(0, 5);
+}
+
+function buildDisplacementCrmFields(
+  wedges: RediemDisplacementWedge[],
+  primaryWedge: RediemDisplacementWedge | null,
+  currentStack: string
+): Record<string, unknown> {
+  return {
+    primary_displacement_wedge: primaryWedge?.recommendedAngle ?? null,
+    detected_current_stack: currentStack || null,
+    what_not_to_say: primaryWedge?.whatNotToSay ?? null,
+    rediem_wedge: primaryWedge?.rediemWedge ?? null,
+    displacement_wedge_vendor: primaryWedge?.vendor ?? null,
+    displacement_wedge_category: primaryWedge?.category ?? null,
+    displacement_wedge_confidence: primaryWedge?.confidence ?? null,
+    displacement_wedge_count: wedges.length
+  };
+}
+
 async function getCachedDossier(
   client: AnalyzeBrandForRediemClient,
   key: string
@@ -1454,6 +1564,10 @@ function titleizeDomain(domain: string): string {
 
 function uniqueStrings(values: Array<string | undefined>): string[] {
   return [...new Set(values.filter((value): value is string => Boolean(value)))];
+}
+
+function uniqueItems<T>(values: T[]): T[] {
+  return [...new Set(values)];
 }
 
 function toJsonCompatible(value: unknown): unknown {

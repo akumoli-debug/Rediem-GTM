@@ -90,6 +90,22 @@ Primary message:
 
 > Rediem can estimate where earned community growth is leaking into subsidized transactional growth, then recommend the first loop to fix.
 
+### GTM Diagnostic Metrics
+
+CFR is the first Rediem-native diagnostic, but it should sit inside a broader participation-led commerce playbook. Use [docs/GTM_DIAGNOSTIC_METRICS.md](/docs/GTM_DIAGNOSTIC_METRICS.md) to diagnose the specific reason an account is a Rediem opportunity:
+
+- Participation Capture Gap, or PCG: customers are participating, but the behavior is not captured into owned profiles or rewards.
+- Retail-to-Community Bridge Index, or RCBI: retail buyers can be converted into owned community members through receipt verification.
+- Mission-to-Action Ratio, or MAR: mission language exists, but customers need concrete actions to take.
+- UGC Verification Gap, or UVG: social content is not clearly tied to verified customers or members.
+- Discount Dependence Ratio, or DDR: retention appears more discount-led than participation-led.
+- Zero-Party Data Depth, or ZPDD: declared customer preference data is shallow or disconnected from rewards.
+- Product Drop Participation Score, or PDPS: launches and drops create attention that can become participation.
+- Stack Fragmentation Index, or SFI: reviews, loyalty, subscriptions, referrals, social, and retail data appear split across tools.
+- Owned Community Conversion Score, or OCCS: public community energy needs a stronger path into owned membership.
+
+These diagnostics are prospecting estimates with confidence and source URLs. They should never imply exact revenue, CAC, churn, retention, customer count, or conversion metrics from public data.
+
 ## Buyer Personas
 
 Economic buyers:

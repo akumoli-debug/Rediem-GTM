@@ -13,6 +13,7 @@ It is not positioned as a generic enrichment clone. The primary product path is 
 - Classifies community archetypes such as cult consumer brand, mission-led brand, ritual repeat-use brand, retail-to-DTC bridge brand, creator/ambassador-led brand, and product-drop brand.
 - Scores Rediem fit around community energy, participation capture gap, ritual repeat-purchase fit, retail-to-owned-data opportunity, mission identity, stack migration opportunity, and timing.
 - Estimates Community Flywheel Ratio, or CFR.
+- Defines Rediem-native GTM diagnostics for participation capture, retail-to-community bridge, mission-to-action, UGC verification, discount dependence, zero-party data depth, product drops, stack fragmentation, and owned community conversion.
 - Detects flywheel leaks and recommends Rediem-specific plays.
 - Generates activation ideas and buyer angles for Rediem AEs.
 - Resolves Rediem buyer personas across ecommerce, retention, lifecycle, loyalty, community, CRM, CMO, founder, and technical integration stakeholders.
@@ -183,6 +184,8 @@ See [docs/N8N_WORKFLOW.md](/docs/N8N_WORKFLOW.md).
 - [ARCHITECTURE.md](/ARCHITECTURE.md)
 - [GTM_PLAYBOOK.md](/GTM_PLAYBOOK.md)
 - [COMMUNITY_FLYWHEEL_RATIO.md](/COMMUNITY_FLYWHEEL_RATIO.md)
+- [docs/GTM_DIAGNOSTIC_METRICS.md](/docs/GTM_DIAGNOSTIC_METRICS.md)
+- [docs/PLAYBOOK_AS_CODE.md](/docs/PLAYBOOK_AS_CODE.md)
 - [docs/DEMO.md](/docs/DEMO.md)
 - [docs/N8N_WORKFLOW.md](/docs/N8N_WORKFLOW.md)
 - [docs/ROADMAP.md](/docs/ROADMAP.md)

@@ -71,6 +71,62 @@ export type RediemSignalView = {
   sourceUrl: string | null;
 };
 
+export type RediemCommunityFlywheelView = {
+  estimatedCfr: number | null;
+  cfrTier: string;
+  cfrConfidence: number | null;
+  earnedCommunityGrowth: number | null;
+  subsidizedTransactionalGrowth: number | null;
+  explanation: string[];
+  lowConfidence: boolean;
+};
+
+export type RediemGtmDiagnosticView = {
+  metricId: string;
+  label: string;
+  score: number;
+  tier: string;
+  confidence: number;
+  explanation: string;
+  sourceUrls: string[];
+};
+
+export type RediemParticipationLeakView = {
+  leakType: string;
+  severity: number;
+  description: string;
+  recommendedFix: string;
+  evidenceIds: string[];
+  sourceUrls: string[];
+};
+
+export type RediemRecommendedPlaybookView = {
+  id: string;
+  title: string;
+  thesis: string;
+  readiness: string;
+  confidence: number;
+  buyerPersona: string;
+  outboundAngle: string;
+  activationIdea: string;
+  whySelected: string[];
+  sourceUrls: string[];
+};
+
+export type RediemDisplacementWedgeView = {
+  vendor: string;
+  category: string;
+  likelyCurrentMotion: string;
+  whatNotToSay: string;
+  rediemWedge: string;
+  migrationRisk: string;
+  recommendedAngle: string;
+  buyerPersona: string;
+  supportingDiagnostics: string[];
+  confidence: number;
+  sourceUrls: string[];
+};
+
 export type RediemAccountDetail = {
   row: RediemAccountRow;
   fitBreakdown: Array<{ label: string; score: number }>;
@@ -78,6 +134,12 @@ export type RediemAccountDetail = {
   detections: RediemDetectionView[];
   signals: RediemSignalView[];
   activationIdeas: RediemActivationIdeaView[];
+  communityFlywheel: RediemCommunityFlywheelView;
+  topDiagnostics: RediemGtmDiagnosticView[];
+  primaryParticipationLeak: RediemParticipationLeakView | null;
+  recommendedPlaybook: RediemRecommendedPlaybookView | null;
+  displacementWedge: RediemDisplacementWedgeView | null;
+  evidenceUrls: string[];
   buyerCommittee: {
     economicBuyers: RediemBuyer[];
     operatorBuyers: RediemBuyer[];

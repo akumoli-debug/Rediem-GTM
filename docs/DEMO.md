@@ -15,6 +15,7 @@ Place the screenshot at docs/assets/rediem-cockpit.png, then remove this comment
 - Community archetype classification.
 - Rediem Fit Score and component scores.
 - Community Flywheel Ratio estimate with confidence.
+- GTM diagnostic metrics for participation capture, retail-to-community bridge, mission-to-action, UGC verification, discount dependence, zero-party data depth, product drops, stack fragmentation, and owned community conversion.
 - Primary flywheel leak and recommended Rediem play.
 - Activation ideas tied to visible evidence.
 - Rediem buyer committee and recommended first contact.
@@ -44,6 +45,10 @@ examples/sample-rediem-dossier.json
   "communityArchetypes": [],
   "rediemScores": {},
   "communityFlywheelRatio": {},
+  "gtmDiagnostics": [],
+  "topDiagnostics": [],
+  "primaryGtmDiagnosis": {},
+  "recommendedPlayTypes": [],
   "flywheelLeaks": [],
   "activationIdeas": [],
   "buyerCommittee": {},
@@ -67,6 +72,12 @@ Example CFR estimate:
 
 ```text
 0.82, Emerging Community Loop, 0.61 confidence
+```
+
+Example top GTM diagnostics:
+
+```text
+UGC Verification Gap, Participation Capture Gap, Owned Community Conversion Score
 ```
 
 Example primary flywheel leak:
@@ -97,6 +108,9 @@ Your retail and review activity shows customers are already participating, but t
   "cfrTier": "Emerging Community Loop",
   "primaryFlywheelLeak": "POINTS_ONLY_LOYALTY",
   "recommendedPlay": "VIP_TIER_MIGRATION",
+  "topGtmDiagnostic": "UGC Verification Gap",
+  "primaryGtmDiagnosis": "UGC Verification Gap",
+  "recommendedGtmPlaybook": "UGC_SOCIAL_CHALLENGE",
   "recommendedFirstContactTitle": "Director of Retention",
   "sourceUrls": [
     "https://sample-beverage.test/rewards",
@@ -110,13 +124,15 @@ Your retail and review activity shows customers are already participating, but t
 1. Import brand domain.
 2. Run Rediem brand analysis.
 3. Review fit score, archetypes, CFR tier, and evidence.
-4. Show the primary flywheel leak and recommended play.
-5. Show activation ideas and buyer committee.
-6. Show the n8n/CRM payload that can power HubSpot, spreadsheets, or sequencer review.
+4. Show top GTM diagnostics and the primary GTM diagnosis.
+5. Show the primary flywheel leak and recommended play.
+6. Show activation ideas and buyer committee.
+7. Show the n8n/CRM payload that can power HubSpot, spreadsheets, or sequencer review.
 
 ## Known Demo Limits
 
 - Live provider quality depends on configured adapters and keys.
 - CFR is an estimate during prospecting.
+- GTM diagnostics are public-signal estimates with confidence, not exact customer metrics.
 - Contact enrichment and sequencer handoff should remain verified-email-only.
 - UI-triggered background jobs are still roadmap work.

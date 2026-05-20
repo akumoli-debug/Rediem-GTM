@@ -10,6 +10,7 @@ The repo does not require n8n for local development. This document describes the
 CSV row
   -> analyze brand
   -> score Rediem fit
+  -> calculate CFR and GTM diagnostic metrics
   -> if fit score > threshold
   -> resolve buyer committee
   -> generate activation angle
@@ -56,6 +57,29 @@ CSV row
   "cfrTier": "Emerging Community Loop",
   "primaryFlywheelLeak": "POINTS_ONLY_LOYALTY",
   "recommendedPlay": "VIP_TIER_MIGRATION",
+  "topGtmDiagnostic": "UGC Verification Gap",
+  "primaryGtmDiagnosis": "UGC Verification Gap",
+  "recommendedGtmPlaybook": "UGC_SOCIAL_CHALLENGE",
+  "primary_displacement_wedge": "Keep the loyalty investment intact while Rediem expands what can be verified, rewarded, and routed back into the customer profile.",
+  "detected_current_stack": "LoyaltyLion (loyalty), Okendo (reviews), Recharge (subscriptions), Klaviyo (email_sms), Shopify (ecommerce)",
+  "what_not_to_say": "Do not say 'replace your loyalty platform.'",
+  "rediem_wedge": "Move from points and referrals into broader verified participation across reviews, referrals, UGC, preferences, events, and retail proof.",
+  "gtmDiagnostics": [
+    {
+      "metricId": "UVG",
+      "label": "UGC Verification Gap",
+      "score": 100,
+      "confidence": 0.72,
+      "tier": "Priority"
+    },
+    {
+      "metricId": "PCG",
+      "label": "Participation Capture Gap",
+      "score": 85,
+      "confidence": 0.72,
+      "tier": "Priority"
+    }
+  ],
   "activationIdea": "Receipt upload challenge",
   "recommendedFirstContactTitle": "Director of Retention",
   "sourceUrls": [
@@ -78,6 +102,21 @@ Company fields:
 - `community_archetypes`
 - `community_energy_score`
 - `participation_capture_gap`
+- `top_gtm_diagnostic`
+- `retail_to_community_bridge_index`
+- `mission_to_action_ratio`
+- `ugc_verification_gap`
+- `discount_dependence_ratio`
+- `zero_party_data_depth`
+- `product_drop_participation_score`
+- `stack_fragmentation_index`
+- `owned_community_conversion_score`
+- `primary_gtm_diagnosis`
+- `recommended_gtm_playbook`
+- `primary_displacement_wedge`
+- `detected_current_stack`
+- `what_not_to_say`
+- `rediem_wedge`
 - `loyalty_maturity_level`
 - `estimated_cfr`
 - `cfr_tier`
@@ -113,6 +152,13 @@ Suggested custom variables:
 - `community_archetype`
 - `primary_flywheel_leak`
 - `recommended_play`
+- `top_gtm_diagnostic`
+- `primary_gtm_diagnosis`
+- `recommended_gtm_playbook`
+- `primary_displacement_wedge`
+- `detected_current_stack`
+- `what_not_to_say`
+- `rediem_wedge`
 - `activation_idea`
 - `buyer_angle`
 - `source_url_1`
@@ -130,6 +176,22 @@ Recommended columns:
 - Community Archetypes
 - CFR Tier
 - CFR Confidence
+- Top GTM Diagnostic
+- Primary GTM Diagnosis
+- Recommended GTM Playbook
+- Primary Displacement Wedge
+- Detected Current Stack
+- What Not To Say
+- Rediem Wedge
+- PCG
+- RCBI
+- MAR
+- UVG
+- DDR
+- ZPDD
+- PDPS
+- SFI
+- OCCS
 - Primary Leak
 - Recommended Play
 - First Contact

@@ -327,10 +327,36 @@ test("analyzeBrandForRediem creates a cited Rediem dossier from mocked pages", a
   assert.equal(client.rows.cfrSnapshots.length, 1);
   assert.equal(typeof client.rows.cfrSnapshots[0]?.estimatedCfr, "number");
   assert.equal(typeof client.rows.cfrSnapshots[0]?.cfrConfidence, "number");
+  assert.equal(typeof dossier.communityFlywheelRatio.estimatedCfr, "number");
+  assert.equal(dossier.communityFlywheelRatio.estimatedCfr, client.rows.cfrSnapshots[0]?.estimatedCfr);
+  assert.equal(dossier.gtmDiagnostics.length, 9);
+  assert.deepEqual(
+    dossier.gtmDiagnostics.map((diagnostic) => diagnostic.metricId),
+    ["PCG", "RCBI", "MAR", "UVG", "DDR", "ZPDD", "PDPS", "SFI", "OCCS"]
+  );
+  assert.ok(dossier.topDiagnostics.length > 0);
+  assert.ok(dossier.topDiagnostics.length <= 3);
+  assert.ok(
+    dossier.topDiagnostics.every((diagnostic) => diagnostic.confidence >= 0.45),
+    "top diagnostics should be high-confidence public estimates"
+  );
+  assert.ok(dossier.primaryGtmDiagnosis);
+  assert.ok(dossier.recommendedPlayTypes.length > 0);
+  assert.ok(
+    dossier.gtmDiagnostics.every((diagnostic) => diagnostic.sourceUrls.length > 0),
+    "diagnostics should carry evidence-aware source URLs in mock mode"
+  );
   assert.ok(client.rows.cfrLeaks.length > 0);
   assert.ok(client.rows.cfrPlays.length > 0);
   assert.ok(client.rows.detections.some((detection) => detection.vendor === "Smile.io"));
   assert.ok(client.rows.detections.some((detection) => detection.vendor === "Recharge"));
+  assert.ok(dossier.displacementWedges.length >= 3);
+  assert.equal(dossier.primaryDisplacementWedge?.vendor, "Smile");
+  assert.match(dossier.whatNotToSay ?? "", /replace your loyalty platform/);
+  assert.match(dossier.rediemWedge ?? "", /broader verified participation/);
+  assert.match(dossier.detectedCurrentStack, /Smile \(loyalty\)/);
+  assert.match(String(dossier.crmFields.primary_displacement_wedge), /participation layer|verified|rewarded/);
+  assert.equal(dossier.n8nExport.rediem_wedge, dossier.crmFields.rediem_wedge);
   assert.ok(
     client.rows.evidence.some(
       (evidence) => evidence.fieldName === "brandProfile.hasLoyaltyProgram"

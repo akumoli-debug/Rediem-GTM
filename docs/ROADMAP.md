@@ -24,6 +24,7 @@ This roadmap is intentionally honest. The repo is demo-ready for Rediem-specific
 - HubSpot field sync with safe overwrite policies.
 - n8n webhook templates and sample workflow JSON.
 - CFR and community archetype UI panels on Rediem account detail pages.
+- Implement GTM diagnostic metrics beyond CFR: PCG, RCBI, MAR, UVG, DDR, ZPDD, PDPS, SFI, and OCCS with confidence, evidence IDs, source URLs, recommended plays, and low-confidence handling.
 - Competitor displacement enrichment for loyalty, reviews, subscription, SMS/email, and referral tools.
 - npm audit cleanup.
 - Production auth and workspace access control.
@@ -38,9 +39,10 @@ This roadmap is intentionally honest. The repo is demo-ready for Rediem-specific
 5. Implement live web research and structured extraction adapters first.
 6. Add live people lookup only after brand scoring quality is stable.
 7. Add CFR and community archetype panels to the Rediem account detail UI.
-8. Add CRM field mapping defaults for Rediem fit, CFR, recommended play, buyer committee, and source URLs.
-9. Add low-confidence handling in the Rediem UI so unsupported claims appear as unknown rather than positive/negative facts.
-10. Add Rediem eval fixtures for beauty, beverage, apparel, wellness, food, home, and pet brands.
+8. Implement the GTM diagnostic metric service and export fields for PCG, RCBI, MAR, UVG, DDR, ZPDD, PDPS, SFI, and OCCS.
+9. Add CRM field mapping defaults for Rediem fit, CFR, diagnostic metrics, recommended play, buyer committee, and source URLs.
+10. Add low-confidence handling in the Rediem UI so unsupported claims appear as unknown rather than positive/negative facts.
+11. Add Rediem eval fixtures for beauty, beverage, apparel, wellness, food, home, and pet brands.
 
 ## Later
 

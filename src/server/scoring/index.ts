@@ -36,3 +36,21 @@ export * from "./rediem";
 export * from "./rediemTitleTaxonomy";
 export * from "./communityFlywheel";
 export * from "./communityArchetypes";
+export {
+  calculateDiscountDependenceRatio,
+  calculateGtmDiagnostics,
+  calculateMissionToActionRatio,
+  calculateOwnedCommunityConversionScore,
+  calculateProductDropParticipationScore,
+  calculateRetailToCommunityBridgeIndex,
+  calculateStackFragmentationIndex,
+  calculateUgcVerificationGap,
+  calculateZeroPartyDataDepth
+} from "./gtmDiagnostics";
+export type {
+  GtmDiagnosticInput,
+  GtmDiagnosticMetricId,
+  GtmDiagnosticScore,
+  GtmDiagnosticTier
+} from "./gtmDiagnostics";
+export * from "./displacementWedges";
