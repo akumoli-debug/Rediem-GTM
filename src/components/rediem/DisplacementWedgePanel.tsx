@@ -19,6 +19,10 @@ export function DisplacementWedgePanel({
           <div className="rediem-wedge-heading">
             <span className="status cached">{wedge.vendor} · {wedge.category}</span>
             <strong>{wedge.buyerPersona}</strong>
+            <small>
+              {wedge.confidenceLabel} · {formatConfidence(wedge.confidence)} ·{" "}
+              {wedge.evidenceCount} evidence links
+            </small>
           </div>
           <div className="rediem-wedge-warning">
             <span>What not to say</span>
@@ -46,6 +50,10 @@ export function DisplacementWedgePanel({
       )}
     </section>
   );
+}
+
+function formatConfidence(value: number) {
+  return `${Math.round(value * 100)}%`;
 }
 
 function EvidenceLinks({ urls }: { urls: string[] }) {

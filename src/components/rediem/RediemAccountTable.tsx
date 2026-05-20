@@ -26,6 +26,7 @@ export function RediemAccountTable({
   const [category, setCategory] = useState("");
   const [migrationThreshold, setMigrationThreshold] = useState(false);
   const [communityThreshold, setCommunityThreshold] = useState(false);
+  const [needsRefreshOnly, setNeedsRefreshOnly] = useState(false);
 
   const filteredRows = useMemo(
     () =>
@@ -57,12 +58,16 @@ export function RediemAccountTable({
         if (communityThreshold && (row.communityReadinessScore ?? 0) <= 70) {
           return false;
         }
+        if (needsRefreshOnly && !row.analysisFreshness.isStale) {
+          return false;
+        }
         return true;
       }),
     [
       category,
       communityThreshold,
       migrationThreshold,
+      needsRefreshOnly,
       noLoyalty,
       pointsLoyalty,
       reviewsOnly,
@@ -134,6 +139,11 @@ export function RediemAccountTable({
             label="Community readiness > 70"
             onChange={setCommunityThreshold}
           />
+          <FilterToggle
+            checked={needsRefreshOnly}
+            label="Needs refresh"
+            onChange={setNeedsRefreshOnly}
+          />
           <label className="rediem-select-filter">
             <span>Category</span>
             <select onChange={(event) => setCategory(event.target.value)} value={category}>
@@ -201,6 +211,8 @@ export function RediemAccountTable({
                 <th>Migration Pain</th>
                 <th>Agentic Commerce</th>
                 <th>Rediem Fit</th>
+                <th>Confidence</th>
+                <th>Analysis Status</th>
                 <th>Tier</th>
                 <th>Recommended Play</th>
                 <th>Last Analyzed</th>
@@ -235,6 +247,17 @@ export function RediemAccountTable({
                   <td>{formatScore(row.agenticCommerceScore)}</td>
                   <td>{formatScore(row.rediemFitScore)}</td>
                   <td>
+                    <ConfidencePill
+                      label={row.confidence.label}
+                      score={row.confidence.score}
+                    />
+                  </td>
+                  <td>
+                    <span className={`rediem-freshness ${freshnessClass(row.analysisFreshness.status)}`}>
+                      {row.analysisFreshness.status}
+                    </span>
+                  </td>
+                  <td>
                     <span className={`rediem-tier ${tierClass(row.tier)}`}>{row.tier}</span>
                   </td>
                   <td>{row.recommendedPlay}</td>
@@ -259,7 +282,7 @@ export function RediemAccountTable({
               ))}
               {filteredRows.length === 0 ? (
                 <tr>
-                  <td className="empty-state" colSpan={17}>
+                  <td className="empty-state" colSpan={19}>
                     No Rediem accounts match the current filters.
                   </td>
                 </tr>
@@ -327,6 +350,28 @@ function formatScore(value: number | null) {
 
 function formatDate(value: string) {
   return new Intl.DateTimeFormat("en", { dateStyle: "medium" }).format(new Date(value));
+}
+
+function ConfidencePill({
+  label,
+  score
+}: {
+  label: RediemAccountRow["confidence"]["label"];
+  score: number | null;
+}) {
+  return (
+    <span className={`status ${score !== null && score >= 0.65 ? "ready" : score !== null && score >= 0.55 ? "partial" : "risky"}`}>
+      {formatConfidence(score)} · {label}
+    </span>
+  );
+}
+
+function formatConfidence(value: number | null) {
+  return value === null ? "n/a" : `${Math.round(value * 100)}%`;
+}
+
+function freshnessClass(status: RediemAccountRow["analysisFreshness"]["status"]) {
+  return status.toLowerCase();
 }
 
 function capitalize(value: string) {

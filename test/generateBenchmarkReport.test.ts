@@ -9,8 +9,9 @@ test("generateBenchmarkReport renders a polished sample benchmark report", async
   ) as unknown;
   const markdown = generateBenchmarkReport(sample as never);
 
-  assert.match(markdown, /^# Sample\/Demo Community Flywheel Benchmark 2026/m);
+  assert.match(markdown, /^# SAMPLE \/ DEMO - Community Flywheel Benchmark 2026/m);
   assert.match(markdown, /Demo benchmark generated from sample brand records/);
+  assert.match(markdown, /Dataset mode \| SAMPLE \/ DEMO data/);
   assert.match(markdown, /not real market statistics/);
   assert.match(markdown, /## 2\. Median CFR By Category/);
   assert.match(markdown, /\| Beauty \| 3 \| 1\.04 \| 59% medium \|/);
@@ -37,6 +38,8 @@ test("generateBenchmarkReport can render provided-data mode without sample title
     title: "Provided Panel",
     reportDate: "2026-05-20",
     isSampleData: false,
+    sourceDataMode: "permissioned",
+    reviewedBy: "GTM Ops",
     brands: [
       {
         brandName: "Provided Brand",
@@ -56,7 +59,21 @@ test("generateBenchmarkReport can render provided-data mode without sample title
   });
 
   assert.match(markdown, /^# Provided Panel/m);
-  assert.doesNotMatch(markdown, /^# Sample\/Demo/m);
-  assert.match(markdown, /Dataset mode \| Provided data/);
+  assert.doesNotMatch(markdown, /^# SAMPLE \/ DEMO/m);
+  assert.match(markdown, /Dataset mode \| Reviewed provided data/);
+  assert.match(markdown, /Governance review \| GTM Ops/);
   assert.match(markdown, /Validate data rights, collection methods, and representativeness/);
+});
+
+test("generateBenchmarkReport blocks real reports without governance owner", () => {
+  assert.throws(
+    () =>
+      generateBenchmarkReport({
+        title: "Ungoverned Panel",
+        isSampleData: false,
+        sourceDataMode: "permissioned",
+        brands: []
+      }),
+    /reviewedBy/
+  );
 });

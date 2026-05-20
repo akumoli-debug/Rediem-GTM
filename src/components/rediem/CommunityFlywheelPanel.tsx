@@ -38,7 +38,10 @@ export function CommunityFlywheelPanel({
             </div>
             <div>
               <span>CFR confidence</span>
-              <strong>{formatConfidence(communityFlywheel.cfrConfidence)}</strong>
+              <strong>
+                {formatConfidence(communityFlywheel.cfrConfidence)} ·{" "}
+                {confidenceLabel(communityFlywheel.cfrConfidence)}
+              </strong>
             </div>
           </div>
           <div className="rediem-cfr-comparison">
@@ -79,4 +82,10 @@ function formatScore(value: number | null) {
 
 function formatConfidence(value: number | null) {
   return value === null ? "n/a" : `${Math.round(value * 100)}%`;
+}
+
+function confidenceLabel(value: number | null) {
+  if (value === null || value < 0.55) return "Low confidence / review required";
+  if (value < 0.65) return "Medium confidence";
+  return "High confidence";
 }

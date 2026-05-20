@@ -14,6 +14,12 @@ import {
 } from "@/server/scoring/displacementWedges";
 import { selectRediemPlaybooks } from "@/server/playbooks/rediemPlaybooks";
 import { normalizeRediemTitle } from "@/server/scoring/rediemTitleTaxonomy";
+import {
+  classifyAnalysisFreshness,
+  classifyConfidence,
+  classifyOutboundReadiness,
+  deriveAccountConfidence
+} from "@/server/rediem/accountHealth";
 import type {
   RediemAccountDetail,
   RediemAccountRow,
@@ -103,6 +109,12 @@ const MOCK_REDIEM_ROW: RediemAccountRow = {
   tier: "Tier 1",
   recommendedPlay: "Retail-to-owned data bridge",
   lastAnalyzed: "2026-05-20T12:00:00.000Z",
+  analysisFreshness: classifyAnalysisFreshness("2026-05-20T12:00:00.000Z"),
+  confidence: classifyConfidence(0.68),
+  outboundReadiness: classifyOutboundReadiness({
+    freshness: classifyAnalysisFreshness("2026-05-20T12:00:00.000Z"),
+    confidence: classifyConfidence(0.68)
+  }),
   evidence: MOCK_EVIDENCE,
   formulaOutputs: []
 };
@@ -200,6 +212,8 @@ const MOCK_REDIEM_DETAIL: RediemAccountDetail = {
       score: 100,
       tier: "Priority",
       confidence: 0.72,
+      confidenceLabel: "High confidence",
+      evidenceCount: 2,
       explanation: "Visible UGC and review proof are not clearly tied to verified customer participation.",
       sourceUrls: ["https://sample-beverage.test/community", "https://sample-beverage.test/reviews"]
     },
@@ -209,6 +223,8 @@ const MOCK_REDIEM_DETAIL: RediemAccountDetail = {
       score: 85,
       tier: "Priority",
       confidence: 0.72,
+      confidenceLabel: "High confidence",
+      evidenceCount: 2,
       explanation: "Customers appear to participate through reviews, social, retail, and subscriptions, but owned capture looks thinner.",
       sourceUrls: ["https://sample-beverage.test/rewards", "https://sample-beverage.test/reviews"]
     },
@@ -218,10 +234,13 @@ const MOCK_REDIEM_DETAIL: RediemAccountDetail = {
       score: 67,
       tier: "High",
       confidence: 0.68,
+      confidenceLabel: "High confidence",
+      evidenceCount: 1,
       explanation: "Retail presence is visible, but public evidence of receipt-to-owned profile capture is limited.",
       sourceUrls: ["https://sample-beverage.test/store-locator"]
     }
   ],
+  diagnosticDetails: [],
   primaryParticipationLeak: {
     leakType: "POINTS_ONLY_LOYALTY",
     severity: 84,
@@ -235,7 +254,10 @@ const MOCK_REDIEM_DETAIL: RediemAccountDetail = {
     title: "Retail-to-owned data bridge",
     thesis: "Retail demand should become owned community data through receipt verification, member profiles, and follow-on DTC participation.",
     readiness: "OUTBOUND_READY",
+    readinessReasons: [],
     confidence: 0.68,
+    confidenceLabel: "High confidence",
+    evidenceCount: 2,
     buyerPersona: "VP Ecommerce",
     outboundAngle: "Retail appears to create demand the brand may not fully own. Rediem can turn retail purchases into verified community profiles and follow-on DTC actions.",
     activationIdea: "Launch a receipt upload challenge that rewards verified retail buyers and routes them into reviews, referrals, or subscriptions.",
@@ -260,7 +282,17 @@ const MOCK_REDIEM_DETAIL: RediemAccountDetail = {
       "Klaviyo is present, so Rediem events can be routed into existing lifecycle segmentation."
     ],
     confidence: 0.82,
+    confidenceLabel: "High confidence",
+    evidenceCount: 1,
     sourceUrls: ["https://sample-beverage.test/rewards"]
+  },
+  feedback: {
+    playbookAccepted: null,
+    playbookOverrideReason: null,
+    aeNotes: "",
+    reviewedAt: null,
+    reviewedBy: null,
+    status: null
   },
   evidenceUrls: [
     "https://sample-beverage.test/rewards",
@@ -468,7 +500,9 @@ export async function getRediemAccountDetailData(
   const topDiagnostics = [...gtmDiagnostics]
     .filter((diagnostic) => diagnostic.score >= 50 || diagnostic.confidence >= 0.45)
     .sort((left, right) => right.score - left.score || right.confidence - left.confidence)
-    .slice(0, 3);
+    .slice(0, 2);
+  const diagnosticDetails = [...gtmDiagnostics]
+    .sort((left, right) => right.score - left.score || right.confidence - left.confidence);
   const playbookSelection = selectRediemPlaybooks({
     gtmDiagnostics,
     communityFlywheelRatio: cfrEstimate,
@@ -489,6 +523,13 @@ export async function getRediemAccountDetailData(
         account.signals,
         account.competitorToolDetections
       ).components
+    : null;
+  const playbookReadiness = playbookSelection
+    ? classifyOutboundReadiness({
+        baseReadiness: playbookSelection.readiness,
+        freshness: row.analysisFreshness,
+        confidence: playbookSelection.confidence
+      })
     : null;
 
   return {
@@ -519,23 +560,22 @@ export async function getRediemAccountDetailData(
         : cfrEstimate?.explanation ?? [],
       lowConfidence: (persistedCfr?.cfrConfidence ?? cfrEstimate?.cfrConfidence ?? 0) < 0.45
     },
-    topDiagnostics: topDiagnostics.map((diagnostic) => ({
-      metricId: diagnostic.metricId,
-      label: diagnostic.label,
-      score: diagnostic.score,
-      tier: diagnostic.tier,
-      confidence: diagnostic.confidence,
-      explanation: diagnostic.explanation,
-      sourceUrls: diagnostic.sourceUrls
-    })),
+    topDiagnostics: topDiagnostics.map(toDiagnosticView),
+    diagnosticDetails: diagnosticDetails.map(toDiagnosticView),
     primaryParticipationLeak: toPrimaryLeakView(account.communityFlywheelLeaks[0], cfrEstimate?.leaks[0]),
     recommendedPlaybook: playbookSelection
       ? {
           id: playbookSelection.playbook.id,
           title: playbookSelection.playbook.title,
           thesis: playbookSelection.playbook.thesis,
-          readiness: playbookSelection.readiness,
+          readiness: playbookReadiness?.status ?? playbookSelection.readiness,
+          readinessReasons: playbookReadiness?.reasons ?? [],
           confidence: playbookSelection.confidence,
+          confidenceLabel: classifyConfidence(playbookSelection.confidence).label,
+          evidenceCount: uniqueStrings([
+            ...playbookSelection.sourceUrls,
+            ...playbookSelection.supportingEvidenceIds
+          ]).length,
           buyerPersona: playbookSelection.playbook.recommendedBuyerPersonas[0] ?? "Retention or ecommerce owner",
           outboundAngle: playbookSelection.playbook.outboundAngle,
           activationIdea: playbookSelection.playbook.activationIdea,
@@ -555,9 +595,12 @@ export async function getRediemAccountDetailData(
           buyerPersona: displacementWedge.buyerPersona,
           supportingDiagnostics: displacementWedge.supportingDiagnostics,
           confidence: displacementWedge.confidence,
+          confidenceLabel: classifyConfidence(displacementWedge.confidence).label,
+          evidenceCount: displacementWedge.sourceUrls.length,
           sourceUrls: displacementWedge.sourceUrls
         }
       : null,
+    feedback: buildEmptyFeedback(),
     evidenceUrls: uniqueStrings(evidence.map((item) => item.sourceUrl)),
     buyerCommittee: groupRediemBuyers(account.people),
     suggestedOutboundAngle: playbookSelection?.playbook.outboundAngle ?? displacementWedge?.recommendedAngle ?? buildOutboundAngle(account.brandActivationIdeas[0], row)
@@ -624,6 +667,17 @@ function toRediemAccountRow({
   const fitScore = profile
     ? profile.rediemFitScore ?? scoreRediemFit(profile, account.signals, account.competitorToolDetections).score
     : null;
+  const lastAnalyzedDate = (
+    profile?.lastScoredAt ??
+    account.lastEnrichedAt ??
+    profile?.updatedAt ??
+    account.updatedAt
+  );
+  const confidence = deriveAccountConfidence([
+    account.confidenceScore,
+    ...evidence.map((item) => item.confidence)
+  ]);
+  const analysisFreshness = classifyAnalysisFreshness(lastAnalyzedDate);
 
   return {
     id: account.id,
@@ -645,12 +699,13 @@ function toRediemAccountRow({
     rediemFitScore: fitScore,
     tier: fitScore === null ? "Unanalyzed" : classifyRediemTier(fitScore),
     recommendedPlay: recommendedPlayFrom(formulaOutputs, account.brandActivationIdeas[0]?.title, profile),
-    lastAnalyzed: (
-      profile?.lastScoredAt ??
-      account.lastEnrichedAt ??
-      profile?.updatedAt ??
-      account.updatedAt
-    ).toISOString(),
+    lastAnalyzed: lastAnalyzedDate.toISOString(),
+    analysisFreshness,
+    confidence,
+    outboundReadiness: classifyOutboundReadiness({
+      freshness: analysisFreshness,
+      confidence
+    }),
     evidence,
     formulaOutputs
   };
@@ -833,6 +888,43 @@ function toActivationIdeaView(
     description: idea.description,
     confidence: idea.confidence,
     evidenceIds: arrayOfStrings(idea.evidenceIds)
+  };
+}
+
+function toDiagnosticView(diagnostic: {
+  metricId: string;
+  label: string;
+  score: number;
+  tier: string;
+  confidence: number;
+  explanation: string;
+  sourceUrls: string[];
+  sourceEvidenceIds?: string[];
+}) {
+  return {
+    metricId: diagnostic.metricId,
+    label: diagnostic.label,
+    score: diagnostic.score,
+    tier: diagnostic.tier,
+    confidence: diagnostic.confidence,
+    confidenceLabel: classifyConfidence(diagnostic.confidence).label,
+    evidenceCount: uniqueStrings([
+      ...diagnostic.sourceUrls,
+      ...(diagnostic.sourceEvidenceIds ?? [])
+    ]).length,
+    explanation: diagnostic.explanation,
+    sourceUrls: diagnostic.sourceUrls
+  };
+}
+
+function buildEmptyFeedback() {
+  return {
+    playbookAccepted: null,
+    playbookOverrideReason: null,
+    aeNotes: "",
+    reviewedAt: null,
+    reviewedBy: null,
+    status: null
   };
 }
 

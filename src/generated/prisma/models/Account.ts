@@ -55,6 +55,11 @@ export type AccountMinAggregateOutputType = {
   accountScore: number | null
   confidenceScore: number | null
   lastEnrichedAt: Date | null
+  playbookAccepted: boolean | null
+  playbookOverrideReason: string | null
+  aeNotes: string | null
+  reviewedAt: Date | null
+  reviewedBy: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -76,6 +81,11 @@ export type AccountMaxAggregateOutputType = {
   accountScore: number | null
   confidenceScore: number | null
   lastEnrichedAt: Date | null
+  playbookAccepted: boolean | null
+  playbookOverrideReason: string | null
+  aeNotes: string | null
+  reviewedAt: Date | null
+  reviewedBy: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -97,6 +107,11 @@ export type AccountCountAggregateOutputType = {
   accountScore: number
   confidenceScore: number
   lastEnrichedAt: number
+  playbookAccepted: number
+  playbookOverrideReason: number
+  aeNotes: number
+  reviewedAt: number
+  reviewedBy: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -132,6 +147,11 @@ export type AccountMinAggregateInputType = {
   accountScore?: true
   confidenceScore?: true
   lastEnrichedAt?: true
+  playbookAccepted?: true
+  playbookOverrideReason?: true
+  aeNotes?: true
+  reviewedAt?: true
+  reviewedBy?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -153,6 +173,11 @@ export type AccountMaxAggregateInputType = {
   accountScore?: true
   confidenceScore?: true
   lastEnrichedAt?: true
+  playbookAccepted?: true
+  playbookOverrideReason?: true
+  aeNotes?: true
+  reviewedAt?: true
+  reviewedBy?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -174,6 +199,11 @@ export type AccountCountAggregateInputType = {
   accountScore?: true
   confidenceScore?: true
   lastEnrichedAt?: true
+  playbookAccepted?: true
+  playbookOverrideReason?: true
+  aeNotes?: true
+  reviewedAt?: true
+  reviewedBy?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -282,6 +312,11 @@ export type AccountGroupByOutputType = {
   accountScore: number | null
   confidenceScore: number | null
   lastEnrichedAt: Date | null
+  playbookAccepted: boolean | null
+  playbookOverrideReason: string | null
+  aeNotes: string | null
+  reviewedAt: Date | null
+  reviewedBy: string | null
   createdAt: Date
   updatedAt: Date
   _count: AccountCountAggregateOutputType | null
@@ -326,6 +361,11 @@ export type AccountWhereInput = {
   accountScore?: Prisma.FloatNullableFilter<"Account"> | number | null
   confidenceScore?: Prisma.FloatNullableFilter<"Account"> | number | null
   lastEnrichedAt?: Prisma.DateTimeNullableFilter<"Account"> | Date | string | null
+  playbookAccepted?: Prisma.BoolNullableFilter<"Account"> | boolean | null
+  playbookOverrideReason?: Prisma.StringNullableFilter<"Account"> | string | null
+  aeNotes?: Prisma.StringNullableFilter<"Account"> | string | null
+  reviewedAt?: Prisma.DateTimeNullableFilter<"Account"> | Date | string | null
+  reviewedBy?: Prisma.StringNullableFilter<"Account"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Account"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Account"> | Date | string
   workspace?: Prisma.XOR<Prisma.WorkspaceScalarRelationFilter, Prisma.WorkspaceWhereInput>
@@ -357,6 +397,11 @@ export type AccountOrderByWithRelationInput = {
   accountScore?: Prisma.SortOrderInput | Prisma.SortOrder
   confidenceScore?: Prisma.SortOrderInput | Prisma.SortOrder
   lastEnrichedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  playbookAccepted?: Prisma.SortOrderInput | Prisma.SortOrder
+  playbookOverrideReason?: Prisma.SortOrderInput | Prisma.SortOrder
+  aeNotes?: Prisma.SortOrderInput | Prisma.SortOrder
+  reviewedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  reviewedBy?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   workspace?: Prisma.WorkspaceOrderByWithRelationInput
@@ -392,6 +437,11 @@ export type AccountWhereUniqueInput = Prisma.AtLeast<{
   accountScore?: Prisma.FloatNullableFilter<"Account"> | number | null
   confidenceScore?: Prisma.FloatNullableFilter<"Account"> | number | null
   lastEnrichedAt?: Prisma.DateTimeNullableFilter<"Account"> | Date | string | null
+  playbookAccepted?: Prisma.BoolNullableFilter<"Account"> | boolean | null
+  playbookOverrideReason?: Prisma.StringNullableFilter<"Account"> | string | null
+  aeNotes?: Prisma.StringNullableFilter<"Account"> | string | null
+  reviewedAt?: Prisma.DateTimeNullableFilter<"Account"> | Date | string | null
+  reviewedBy?: Prisma.StringNullableFilter<"Account"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Account"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Account"> | Date | string
   workspace?: Prisma.XOR<Prisma.WorkspaceScalarRelationFilter, Prisma.WorkspaceWhereInput>
@@ -423,6 +473,11 @@ export type AccountOrderByWithAggregationInput = {
   accountScore?: Prisma.SortOrderInput | Prisma.SortOrder
   confidenceScore?: Prisma.SortOrderInput | Prisma.SortOrder
   lastEnrichedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  playbookAccepted?: Prisma.SortOrderInput | Prisma.SortOrder
+  playbookOverrideReason?: Prisma.SortOrderInput | Prisma.SortOrder
+  aeNotes?: Prisma.SortOrderInput | Prisma.SortOrder
+  reviewedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  reviewedBy?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.AccountCountOrderByAggregateInput
@@ -452,6 +507,11 @@ export type AccountScalarWhereWithAggregatesInput = {
   accountScore?: Prisma.FloatNullableWithAggregatesFilter<"Account"> | number | null
   confidenceScore?: Prisma.FloatNullableWithAggregatesFilter<"Account"> | number | null
   lastEnrichedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Account"> | Date | string | null
+  playbookAccepted?: Prisma.BoolNullableWithAggregatesFilter<"Account"> | boolean | null
+  playbookOverrideReason?: Prisma.StringNullableWithAggregatesFilter<"Account"> | string | null
+  aeNotes?: Prisma.StringNullableWithAggregatesFilter<"Account"> | string | null
+  reviewedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Account"> | Date | string | null
+  reviewedBy?: Prisma.StringNullableWithAggregatesFilter<"Account"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Account"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Account"> | Date | string
 }
@@ -472,6 +532,11 @@ export type AccountCreateInput = {
   accountScore?: number | null
   confidenceScore?: number | null
   lastEnrichedAt?: Date | string | null
+  playbookAccepted?: boolean | null
+  playbookOverrideReason?: string | null
+  aeNotes?: string | null
+  reviewedAt?: Date | string | null
+  reviewedBy?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   workspace: Prisma.WorkspaceCreateNestedOneWithoutAccountsInput
@@ -503,6 +568,11 @@ export type AccountUncheckedCreateInput = {
   accountScore?: number | null
   confidenceScore?: number | null
   lastEnrichedAt?: Date | string | null
+  playbookAccepted?: boolean | null
+  playbookOverrideReason?: string | null
+  aeNotes?: string | null
+  reviewedAt?: Date | string | null
+  reviewedBy?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   people?: Prisma.PersonUncheckedCreateNestedManyWithoutAccountInput
@@ -532,6 +602,11 @@ export type AccountUpdateInput = {
   accountScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   confidenceScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   lastEnrichedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  playbookAccepted?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  playbookOverrideReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aeNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  reviewedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   workspace?: Prisma.WorkspaceUpdateOneRequiredWithoutAccountsNestedInput
@@ -563,6 +638,11 @@ export type AccountUncheckedUpdateInput = {
   accountScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   confidenceScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   lastEnrichedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  playbookAccepted?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  playbookOverrideReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aeNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  reviewedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   people?: Prisma.PersonUncheckedUpdateManyWithoutAccountNestedInput
@@ -593,6 +673,11 @@ export type AccountCreateManyInput = {
   accountScore?: number | null
   confidenceScore?: number | null
   lastEnrichedAt?: Date | string | null
+  playbookAccepted?: boolean | null
+  playbookOverrideReason?: string | null
+  aeNotes?: string | null
+  reviewedAt?: Date | string | null
+  reviewedBy?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -613,6 +698,11 @@ export type AccountUpdateManyMutationInput = {
   accountScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   confidenceScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   lastEnrichedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  playbookAccepted?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  playbookOverrideReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aeNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  reviewedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -634,6 +724,11 @@ export type AccountUncheckedUpdateManyInput = {
   accountScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   confidenceScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   lastEnrichedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  playbookAccepted?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  playbookOverrideReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aeNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  reviewedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -670,6 +765,11 @@ export type AccountCountOrderByAggregateInput = {
   accountScore?: Prisma.SortOrder
   confidenceScore?: Prisma.SortOrder
   lastEnrichedAt?: Prisma.SortOrder
+  playbookAccepted?: Prisma.SortOrder
+  playbookOverrideReason?: Prisma.SortOrder
+  aeNotes?: Prisma.SortOrder
+  reviewedAt?: Prisma.SortOrder
+  reviewedBy?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -697,6 +797,11 @@ export type AccountMaxOrderByAggregateInput = {
   accountScore?: Prisma.SortOrder
   confidenceScore?: Prisma.SortOrder
   lastEnrichedAt?: Prisma.SortOrder
+  playbookAccepted?: Prisma.SortOrder
+  playbookOverrideReason?: Prisma.SortOrder
+  aeNotes?: Prisma.SortOrder
+  reviewedAt?: Prisma.SortOrder
+  reviewedBy?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -718,6 +823,11 @@ export type AccountMinOrderByAggregateInput = {
   accountScore?: Prisma.SortOrder
   confidenceScore?: Prisma.SortOrder
   lastEnrichedAt?: Prisma.SortOrder
+  playbookAccepted?: Prisma.SortOrder
+  playbookOverrideReason?: Prisma.SortOrder
+  aeNotes?: Prisma.SortOrder
+  reviewedAt?: Prisma.SortOrder
+  reviewedBy?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -802,6 +912,10 @@ export type NullableFloatFieldUpdateOperationsInput = {
 
 export type NullableDateTimeFieldUpdateOperationsInput = {
   set?: Date | string | null
+}
+
+export type NullableBoolFieldUpdateOperationsInput = {
+  set?: boolean | null
 }
 
 export type AccountCreateNestedOneWithoutPeopleInput = {
@@ -948,6 +1062,11 @@ export type AccountCreateWithoutWorkspaceInput = {
   accountScore?: number | null
   confidenceScore?: number | null
   lastEnrichedAt?: Date | string | null
+  playbookAccepted?: boolean | null
+  playbookOverrideReason?: string | null
+  aeNotes?: string | null
+  reviewedAt?: Date | string | null
+  reviewedBy?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   people?: Prisma.PersonCreateNestedManyWithoutAccountInput
@@ -977,6 +1096,11 @@ export type AccountUncheckedCreateWithoutWorkspaceInput = {
   accountScore?: number | null
   confidenceScore?: number | null
   lastEnrichedAt?: Date | string | null
+  playbookAccepted?: boolean | null
+  playbookOverrideReason?: string | null
+  aeNotes?: string | null
+  reviewedAt?: Date | string | null
+  reviewedBy?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   people?: Prisma.PersonUncheckedCreateNestedManyWithoutAccountInput
@@ -1036,6 +1160,11 @@ export type AccountScalarWhereInput = {
   accountScore?: Prisma.FloatNullableFilter<"Account"> | number | null
   confidenceScore?: Prisma.FloatNullableFilter<"Account"> | number | null
   lastEnrichedAt?: Prisma.DateTimeNullableFilter<"Account"> | Date | string | null
+  playbookAccepted?: Prisma.BoolNullableFilter<"Account"> | boolean | null
+  playbookOverrideReason?: Prisma.StringNullableFilter<"Account"> | string | null
+  aeNotes?: Prisma.StringNullableFilter<"Account"> | string | null
+  reviewedAt?: Prisma.DateTimeNullableFilter<"Account"> | Date | string | null
+  reviewedBy?: Prisma.StringNullableFilter<"Account"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Account"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Account"> | Date | string
 }
@@ -1056,6 +1185,11 @@ export type AccountCreateWithoutPeopleInput = {
   accountScore?: number | null
   confidenceScore?: number | null
   lastEnrichedAt?: Date | string | null
+  playbookAccepted?: boolean | null
+  playbookOverrideReason?: string | null
+  aeNotes?: string | null
+  reviewedAt?: Date | string | null
+  reviewedBy?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   workspace: Prisma.WorkspaceCreateNestedOneWithoutAccountsInput
@@ -1086,6 +1220,11 @@ export type AccountUncheckedCreateWithoutPeopleInput = {
   accountScore?: number | null
   confidenceScore?: number | null
   lastEnrichedAt?: Date | string | null
+  playbookAccepted?: boolean | null
+  playbookOverrideReason?: string | null
+  aeNotes?: string | null
+  reviewedAt?: Date | string | null
+  reviewedBy?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   signals?: Prisma.SignalUncheckedCreateNestedManyWithoutAccountInput
@@ -1130,6 +1269,11 @@ export type AccountUpdateWithoutPeopleInput = {
   accountScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   confidenceScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   lastEnrichedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  playbookAccepted?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  playbookOverrideReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aeNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  reviewedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   workspace?: Prisma.WorkspaceUpdateOneRequiredWithoutAccountsNestedInput
@@ -1160,6 +1304,11 @@ export type AccountUncheckedUpdateWithoutPeopleInput = {
   accountScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   confidenceScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   lastEnrichedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  playbookAccepted?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  playbookOverrideReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aeNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  reviewedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   signals?: Prisma.SignalUncheckedUpdateManyWithoutAccountNestedInput
@@ -1188,6 +1337,11 @@ export type AccountCreateWithoutSignalsInput = {
   accountScore?: number | null
   confidenceScore?: number | null
   lastEnrichedAt?: Date | string | null
+  playbookAccepted?: boolean | null
+  playbookOverrideReason?: string | null
+  aeNotes?: string | null
+  reviewedAt?: Date | string | null
+  reviewedBy?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   workspace: Prisma.WorkspaceCreateNestedOneWithoutAccountsInput
@@ -1218,6 +1372,11 @@ export type AccountUncheckedCreateWithoutSignalsInput = {
   accountScore?: number | null
   confidenceScore?: number | null
   lastEnrichedAt?: Date | string | null
+  playbookAccepted?: boolean | null
+  playbookOverrideReason?: string | null
+  aeNotes?: string | null
+  reviewedAt?: Date | string | null
+  reviewedBy?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   people?: Prisma.PersonUncheckedCreateNestedManyWithoutAccountInput
@@ -1262,6 +1421,11 @@ export type AccountUpdateWithoutSignalsInput = {
   accountScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   confidenceScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   lastEnrichedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  playbookAccepted?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  playbookOverrideReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aeNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  reviewedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   workspace?: Prisma.WorkspaceUpdateOneRequiredWithoutAccountsNestedInput
@@ -1292,6 +1456,11 @@ export type AccountUncheckedUpdateWithoutSignalsInput = {
   accountScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   confidenceScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   lastEnrichedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  playbookAccepted?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  playbookOverrideReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aeNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  reviewedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   people?: Prisma.PersonUncheckedUpdateManyWithoutAccountNestedInput
@@ -1320,6 +1489,11 @@ export type AccountCreateWithoutBrandProfileInput = {
   accountScore?: number | null
   confidenceScore?: number | null
   lastEnrichedAt?: Date | string | null
+  playbookAccepted?: boolean | null
+  playbookOverrideReason?: string | null
+  aeNotes?: string | null
+  reviewedAt?: Date | string | null
+  reviewedBy?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   workspace: Prisma.WorkspaceCreateNestedOneWithoutAccountsInput
@@ -1350,6 +1524,11 @@ export type AccountUncheckedCreateWithoutBrandProfileInput = {
   accountScore?: number | null
   confidenceScore?: number | null
   lastEnrichedAt?: Date | string | null
+  playbookAccepted?: boolean | null
+  playbookOverrideReason?: string | null
+  aeNotes?: string | null
+  reviewedAt?: Date | string | null
+  reviewedBy?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   people?: Prisma.PersonUncheckedCreateNestedManyWithoutAccountInput
@@ -1394,6 +1573,11 @@ export type AccountUpdateWithoutBrandProfileInput = {
   accountScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   confidenceScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   lastEnrichedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  playbookAccepted?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  playbookOverrideReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aeNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  reviewedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   workspace?: Prisma.WorkspaceUpdateOneRequiredWithoutAccountsNestedInput
@@ -1424,6 +1608,11 @@ export type AccountUncheckedUpdateWithoutBrandProfileInput = {
   accountScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   confidenceScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   lastEnrichedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  playbookAccepted?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  playbookOverrideReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aeNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  reviewedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   people?: Prisma.PersonUncheckedUpdateManyWithoutAccountNestedInput
@@ -1452,6 +1641,11 @@ export type AccountCreateWithoutBrandActivationIdeasInput = {
   accountScore?: number | null
   confidenceScore?: number | null
   lastEnrichedAt?: Date | string | null
+  playbookAccepted?: boolean | null
+  playbookOverrideReason?: string | null
+  aeNotes?: string | null
+  reviewedAt?: Date | string | null
+  reviewedBy?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   workspace: Prisma.WorkspaceCreateNestedOneWithoutAccountsInput
@@ -1482,6 +1676,11 @@ export type AccountUncheckedCreateWithoutBrandActivationIdeasInput = {
   accountScore?: number | null
   confidenceScore?: number | null
   lastEnrichedAt?: Date | string | null
+  playbookAccepted?: boolean | null
+  playbookOverrideReason?: string | null
+  aeNotes?: string | null
+  reviewedAt?: Date | string | null
+  reviewedBy?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   people?: Prisma.PersonUncheckedCreateNestedManyWithoutAccountInput
@@ -1526,6 +1725,11 @@ export type AccountUpdateWithoutBrandActivationIdeasInput = {
   accountScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   confidenceScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   lastEnrichedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  playbookAccepted?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  playbookOverrideReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aeNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  reviewedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   workspace?: Prisma.WorkspaceUpdateOneRequiredWithoutAccountsNestedInput
@@ -1556,6 +1760,11 @@ export type AccountUncheckedUpdateWithoutBrandActivationIdeasInput = {
   accountScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   confidenceScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   lastEnrichedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  playbookAccepted?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  playbookOverrideReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aeNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  reviewedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   people?: Prisma.PersonUncheckedUpdateManyWithoutAccountNestedInput
@@ -1584,6 +1793,11 @@ export type AccountCreateWithoutCompetitorToolDetectionsInput = {
   accountScore?: number | null
   confidenceScore?: number | null
   lastEnrichedAt?: Date | string | null
+  playbookAccepted?: boolean | null
+  playbookOverrideReason?: string | null
+  aeNotes?: string | null
+  reviewedAt?: Date | string | null
+  reviewedBy?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   workspace: Prisma.WorkspaceCreateNestedOneWithoutAccountsInput
@@ -1614,6 +1828,11 @@ export type AccountUncheckedCreateWithoutCompetitorToolDetectionsInput = {
   accountScore?: number | null
   confidenceScore?: number | null
   lastEnrichedAt?: Date | string | null
+  playbookAccepted?: boolean | null
+  playbookOverrideReason?: string | null
+  aeNotes?: string | null
+  reviewedAt?: Date | string | null
+  reviewedBy?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   people?: Prisma.PersonUncheckedCreateNestedManyWithoutAccountInput
@@ -1658,6 +1877,11 @@ export type AccountUpdateWithoutCompetitorToolDetectionsInput = {
   accountScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   confidenceScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   lastEnrichedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  playbookAccepted?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  playbookOverrideReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aeNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  reviewedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   workspace?: Prisma.WorkspaceUpdateOneRequiredWithoutAccountsNestedInput
@@ -1688,6 +1912,11 @@ export type AccountUncheckedUpdateWithoutCompetitorToolDetectionsInput = {
   accountScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   confidenceScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   lastEnrichedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  playbookAccepted?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  playbookOverrideReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aeNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  reviewedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   people?: Prisma.PersonUncheckedUpdateManyWithoutAccountNestedInput
@@ -1716,6 +1945,11 @@ export type AccountCreateWithoutBrandScoreHistoryInput = {
   accountScore?: number | null
   confidenceScore?: number | null
   lastEnrichedAt?: Date | string | null
+  playbookAccepted?: boolean | null
+  playbookOverrideReason?: string | null
+  aeNotes?: string | null
+  reviewedAt?: Date | string | null
+  reviewedBy?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   workspace: Prisma.WorkspaceCreateNestedOneWithoutAccountsInput
@@ -1746,6 +1980,11 @@ export type AccountUncheckedCreateWithoutBrandScoreHistoryInput = {
   accountScore?: number | null
   confidenceScore?: number | null
   lastEnrichedAt?: Date | string | null
+  playbookAccepted?: boolean | null
+  playbookOverrideReason?: string | null
+  aeNotes?: string | null
+  reviewedAt?: Date | string | null
+  reviewedBy?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   people?: Prisma.PersonUncheckedCreateNestedManyWithoutAccountInput
@@ -1790,6 +2029,11 @@ export type AccountUpdateWithoutBrandScoreHistoryInput = {
   accountScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   confidenceScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   lastEnrichedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  playbookAccepted?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  playbookOverrideReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aeNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  reviewedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   workspace?: Prisma.WorkspaceUpdateOneRequiredWithoutAccountsNestedInput
@@ -1820,6 +2064,11 @@ export type AccountUncheckedUpdateWithoutBrandScoreHistoryInput = {
   accountScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   confidenceScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   lastEnrichedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  playbookAccepted?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  playbookOverrideReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aeNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  reviewedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   people?: Prisma.PersonUncheckedUpdateManyWithoutAccountNestedInput
@@ -1848,6 +2097,11 @@ export type AccountCreateWithoutCommunityFlywheelSnapshotsInput = {
   accountScore?: number | null
   confidenceScore?: number | null
   lastEnrichedAt?: Date | string | null
+  playbookAccepted?: boolean | null
+  playbookOverrideReason?: string | null
+  aeNotes?: string | null
+  reviewedAt?: Date | string | null
+  reviewedBy?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   workspace: Prisma.WorkspaceCreateNestedOneWithoutAccountsInput
@@ -1878,6 +2132,11 @@ export type AccountUncheckedCreateWithoutCommunityFlywheelSnapshotsInput = {
   accountScore?: number | null
   confidenceScore?: number | null
   lastEnrichedAt?: Date | string | null
+  playbookAccepted?: boolean | null
+  playbookOverrideReason?: string | null
+  aeNotes?: string | null
+  reviewedAt?: Date | string | null
+  reviewedBy?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   people?: Prisma.PersonUncheckedCreateNestedManyWithoutAccountInput
@@ -1922,6 +2181,11 @@ export type AccountUpdateWithoutCommunityFlywheelSnapshotsInput = {
   accountScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   confidenceScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   lastEnrichedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  playbookAccepted?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  playbookOverrideReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aeNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  reviewedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   workspace?: Prisma.WorkspaceUpdateOneRequiredWithoutAccountsNestedInput
@@ -1952,6 +2216,11 @@ export type AccountUncheckedUpdateWithoutCommunityFlywheelSnapshotsInput = {
   accountScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   confidenceScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   lastEnrichedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  playbookAccepted?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  playbookOverrideReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aeNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  reviewedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   people?: Prisma.PersonUncheckedUpdateManyWithoutAccountNestedInput
@@ -1980,6 +2249,11 @@ export type AccountCreateWithoutCommunityFlywheelLeaksInput = {
   accountScore?: number | null
   confidenceScore?: number | null
   lastEnrichedAt?: Date | string | null
+  playbookAccepted?: boolean | null
+  playbookOverrideReason?: string | null
+  aeNotes?: string | null
+  reviewedAt?: Date | string | null
+  reviewedBy?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   workspace: Prisma.WorkspaceCreateNestedOneWithoutAccountsInput
@@ -2010,6 +2284,11 @@ export type AccountUncheckedCreateWithoutCommunityFlywheelLeaksInput = {
   accountScore?: number | null
   confidenceScore?: number | null
   lastEnrichedAt?: Date | string | null
+  playbookAccepted?: boolean | null
+  playbookOverrideReason?: string | null
+  aeNotes?: string | null
+  reviewedAt?: Date | string | null
+  reviewedBy?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   people?: Prisma.PersonUncheckedCreateNestedManyWithoutAccountInput
@@ -2054,6 +2333,11 @@ export type AccountUpdateWithoutCommunityFlywheelLeaksInput = {
   accountScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   confidenceScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   lastEnrichedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  playbookAccepted?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  playbookOverrideReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aeNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  reviewedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   workspace?: Prisma.WorkspaceUpdateOneRequiredWithoutAccountsNestedInput
@@ -2084,6 +2368,11 @@ export type AccountUncheckedUpdateWithoutCommunityFlywheelLeaksInput = {
   accountScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   confidenceScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   lastEnrichedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  playbookAccepted?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  playbookOverrideReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aeNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  reviewedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   people?: Prisma.PersonUncheckedUpdateManyWithoutAccountNestedInput
@@ -2112,6 +2401,11 @@ export type AccountCreateWithoutCommunityFlywheelPlaysInput = {
   accountScore?: number | null
   confidenceScore?: number | null
   lastEnrichedAt?: Date | string | null
+  playbookAccepted?: boolean | null
+  playbookOverrideReason?: string | null
+  aeNotes?: string | null
+  reviewedAt?: Date | string | null
+  reviewedBy?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   workspace: Prisma.WorkspaceCreateNestedOneWithoutAccountsInput
@@ -2142,6 +2436,11 @@ export type AccountUncheckedCreateWithoutCommunityFlywheelPlaysInput = {
   accountScore?: number | null
   confidenceScore?: number | null
   lastEnrichedAt?: Date | string | null
+  playbookAccepted?: boolean | null
+  playbookOverrideReason?: string | null
+  aeNotes?: string | null
+  reviewedAt?: Date | string | null
+  reviewedBy?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   people?: Prisma.PersonUncheckedCreateNestedManyWithoutAccountInput
@@ -2186,6 +2485,11 @@ export type AccountUpdateWithoutCommunityFlywheelPlaysInput = {
   accountScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   confidenceScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   lastEnrichedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  playbookAccepted?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  playbookOverrideReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aeNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  reviewedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   workspace?: Prisma.WorkspaceUpdateOneRequiredWithoutAccountsNestedInput
@@ -2216,6 +2520,11 @@ export type AccountUncheckedUpdateWithoutCommunityFlywheelPlaysInput = {
   accountScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   confidenceScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   lastEnrichedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  playbookAccepted?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  playbookOverrideReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aeNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  reviewedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   people?: Prisma.PersonUncheckedUpdateManyWithoutAccountNestedInput
@@ -2244,6 +2553,11 @@ export type AccountCreateManyWorkspaceInput = {
   accountScore?: number | null
   confidenceScore?: number | null
   lastEnrichedAt?: Date | string | null
+  playbookAccepted?: boolean | null
+  playbookOverrideReason?: string | null
+  aeNotes?: string | null
+  reviewedAt?: Date | string | null
+  reviewedBy?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -2264,6 +2578,11 @@ export type AccountUpdateWithoutWorkspaceInput = {
   accountScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   confidenceScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   lastEnrichedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  playbookAccepted?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  playbookOverrideReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aeNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  reviewedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   people?: Prisma.PersonUpdateManyWithoutAccountNestedInput
@@ -2293,6 +2612,11 @@ export type AccountUncheckedUpdateWithoutWorkspaceInput = {
   accountScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   confidenceScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   lastEnrichedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  playbookAccepted?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  playbookOverrideReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aeNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  reviewedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   people?: Prisma.PersonUncheckedUpdateManyWithoutAccountNestedInput
@@ -2322,6 +2646,11 @@ export type AccountUncheckedUpdateManyWithoutWorkspaceInput = {
   accountScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   confidenceScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   lastEnrichedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  playbookAccepted?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  playbookOverrideReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aeNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  reviewedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -2437,6 +2766,11 @@ export type AccountSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   accountScore?: boolean
   confidenceScore?: boolean
   lastEnrichedAt?: boolean
+  playbookAccepted?: boolean
+  playbookOverrideReason?: boolean
+  aeNotes?: boolean
+  reviewedAt?: boolean
+  reviewedBy?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   workspace?: boolean | Prisma.WorkspaceDefaultArgs<ExtArgs>
@@ -2469,6 +2803,11 @@ export type AccountSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   accountScore?: boolean
   confidenceScore?: boolean
   lastEnrichedAt?: boolean
+  playbookAccepted?: boolean
+  playbookOverrideReason?: boolean
+  aeNotes?: boolean
+  reviewedAt?: boolean
+  reviewedBy?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   workspace?: boolean | Prisma.WorkspaceDefaultArgs<ExtArgs>
@@ -2491,6 +2830,11 @@ export type AccountSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   accountScore?: boolean
   confidenceScore?: boolean
   lastEnrichedAt?: boolean
+  playbookAccepted?: boolean
+  playbookOverrideReason?: boolean
+  aeNotes?: boolean
+  reviewedAt?: boolean
+  reviewedBy?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   workspace?: boolean | Prisma.WorkspaceDefaultArgs<ExtArgs>
@@ -2513,11 +2857,16 @@ export type AccountSelectScalar = {
   accountScore?: boolean
   confidenceScore?: boolean
   lastEnrichedAt?: boolean
+  playbookAccepted?: boolean
+  playbookOverrideReason?: boolean
+  aeNotes?: boolean
+  reviewedAt?: boolean
+  reviewedBy?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type AccountOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "workspaceId" | "domain" | "name" | "linkedinUrl" | "industry" | "employeeCount" | "hqLocation" | "websiteSummary" | "pricingSummary" | "careersSummary" | "blogSummary" | "pressSummary" | "accountScore" | "confidenceScore" | "lastEnrichedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["account"]>
+export type AccountOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "workspaceId" | "domain" | "name" | "linkedinUrl" | "industry" | "employeeCount" | "hqLocation" | "websiteSummary" | "pricingSummary" | "careersSummary" | "blogSummary" | "pressSummary" | "accountScore" | "confidenceScore" | "lastEnrichedAt" | "playbookAccepted" | "playbookOverrideReason" | "aeNotes" | "reviewedAt" | "reviewedBy" | "createdAt" | "updatedAt", ExtArgs["result"]["account"]>
 export type AccountInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   workspace?: boolean | Prisma.WorkspaceDefaultArgs<ExtArgs>
   people?: boolean | Prisma.Account$peopleArgs<ExtArgs>
@@ -2569,6 +2918,11 @@ export type $AccountPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     accountScore: number | null
     confidenceScore: number | null
     lastEnrichedAt: Date | null
+    playbookAccepted: boolean | null
+    playbookOverrideReason: string | null
+    aeNotes: string | null
+    reviewedAt: Date | null
+    reviewedBy: string | null
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["account"]>
@@ -3020,6 +3374,11 @@ export interface AccountFieldRefs {
   readonly accountScore: Prisma.FieldRef<"Account", 'Float'>
   readonly confidenceScore: Prisma.FieldRef<"Account", 'Float'>
   readonly lastEnrichedAt: Prisma.FieldRef<"Account", 'DateTime'>
+  readonly playbookAccepted: Prisma.FieldRef<"Account", 'Boolean'>
+  readonly playbookOverrideReason: Prisma.FieldRef<"Account", 'String'>
+  readonly aeNotes: Prisma.FieldRef<"Account", 'String'>
+  readonly reviewedAt: Prisma.FieldRef<"Account", 'DateTime'>
+  readonly reviewedBy: Prisma.FieldRef<"Account", 'String'>
   readonly createdAt: Prisma.FieldRef<"Account", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Account", 'DateTime'>
 }

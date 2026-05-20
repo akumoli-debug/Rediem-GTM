@@ -23,10 +23,13 @@ examples/reports/community-flywheel-benchmark-2026.md
 The default report mode is sample/demo. In this mode, the report must say:
 
 - The benchmark is generated from sample brand records.
+- The title and dataset mode visibly say `SAMPLE / DEMO`.
 - The category reads are publishing examples, not real market statistics.
 - CFR and diagnostics are estimates unless backed by first-party or permissioned data.
 
-Only set `isSampleData` to `false` when the input contains a real, permissioned dataset and the team has reviewed collection scope, sample size, data rights, and publication language.
+Only set `isSampleData` to `false` when the input contains a real, permissioned dataset and the team has reviewed collection scope, sample size, data rights, and publication language. The generator now enforces this: real reports must set `sourceDataMode` to `provided` or `permissioned` and include `reviewedBy`.
+
+If those fields are missing, generation fails instead of creating a real-sounding market report from ambiguous data.
 
 ## Input Shape
 
@@ -35,6 +38,9 @@ The generator expects JSON with:
 - `title`
 - `reportDate`
 - `isSampleData`
+- `sourceDataMode` (`sample`, `demo`, `provided`, or `permissioned`)
+- `reviewedBy` for real/provided reports
+- `reviewedAt`
 - `methodologyNote`
 - `brands`
 
@@ -76,3 +82,14 @@ Use benchmark reports to show how CFR can become a category asset:
 - Keep vendor and stack language non-combative.
 - Avoid exact market claims unless the dataset truly supports them.
 - Never infer revenue, CAC, churn, retention, customer count, social volume, review volume, or sell-through from public sample data.
+
+## Governance Checklist
+
+Before external publication of a non-sample benchmark:
+
+- Confirm `isSampleData: false`.
+- Confirm `sourceDataMode` is `provided` or `permissioned`.
+- Add a named `reviewedBy` owner.
+- Document data provenance, sample size, collection dates, and permission scope in `methodologyNote`.
+- Remove or soften any real-sounding market claim that is not directly supported by the dataset.
+- Keep low-confidence rows framed as directional, not definitive.

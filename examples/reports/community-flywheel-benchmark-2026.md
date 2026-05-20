@@ -1,11 +1,13 @@
-# Sample/Demo Community Flywheel Benchmark 2026
+# SAMPLE / DEMO - Community Flywheel Benchmark 2026
 
 _Demo benchmark generated from sample brand records. It illustrates how Rediem could package category-level thought leadership, not real market statistics._
 
 | Field | Value |
 | --- | --- |
 | Report date | 2026-05-20 |
-| Dataset mode | Sample/demo data |
+| Dataset mode | SAMPLE / DEMO data |
+| Source data mode | sample |
+| Governance review | Not applicable for sample/demo |
 | Brands analyzed | 12 |
 | Categories | 4 |
 | Methodology | Demo panel of fictional brand records used to illustrate category-level Rediem thought leadership. Category medians are computed only from the records in this JSON file. |

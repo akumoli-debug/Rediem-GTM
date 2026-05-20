@@ -144,6 +144,11 @@ model Account {
   accountScore    Float?
   confidenceScore Float?
   lastEnrichedAt  DateTime?
+  playbookAccepted       Boolean?
+  playbookOverrideReason String?
+  aeNotes                String?
+  reviewedAt            DateTime?
+  reviewedBy            String?
   createdAt       DateTime  @default(now())
   updatedAt       DateTime  @updatedAt
 

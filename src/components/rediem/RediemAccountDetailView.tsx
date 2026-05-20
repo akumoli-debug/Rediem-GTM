@@ -9,11 +9,12 @@ import { GtmDiagnosticsPanel } from "./GtmDiagnosticsPanel";
 import { ParticipationLeakPanel } from "./ParticipationLeakPanel";
 import { RecommendedPlaybookPanel } from "./RecommendedPlaybookPanel";
 import { ScoreBar } from "./ScoreBar";
-import type { RediemAccountDetail } from "./types";
+import type { RediemAccountDetail, RediemGtmFeedbackStatus } from "./types";
 
 export function RediemAccountDetailView({ detail }: { detail: RediemAccountDetail }) {
   const [showEvidence, setShowEvidence] = useState(false);
   const [notice, setNotice] = useState("");
+  const [feedback, setFeedback] = useState(detail.feedback);
   const { row } = detail;
 
   function queueAction(action: string) {
@@ -27,6 +28,17 @@ export function RediemAccountDetailView({ detail }: { detail: RediemAccountDetai
           <p className="eyebrow">Brand Account</p>
           <h2>{row.brand}</h2>
           <p>{row.domain}</p>
+          <div className="rediem-header-meta">
+            <span className={`rediem-freshness ${row.analysisFreshness.status.toLowerCase()}`}>
+              {row.analysisFreshness.status}
+            </span>
+            <span className={`status ${row.confidence.isLowConfidence ? "risky" : "ready"}`}>
+              {formatConfidence(row.confidence.score)} · {row.confidence.label}
+            </span>
+            <span className={`status ${row.outboundReadiness.status === "OUTBOUND_READY" ? "ready" : "risky"}`}>
+              {formatReadiness(row.outboundReadiness.status)}
+            </span>
+          </div>
         </div>
         <div className="rediem-detail-actions">
           <button onClick={() => queueAction("Rediem analysis")} type="button">
@@ -47,13 +59,37 @@ export function RediemAccountDetailView({ detail }: { detail: RediemAccountDetai
         </div>
       </section>
       {notice ? <p className="table-notice rediem-detail-notice">{notice}</p> : null}
+      {row.analysisFreshness.status !== "Fresh" || row.outboundReadiness.reasons.length > 0 ? (
+        <section className="rediem-review-banner">
+          <strong>
+            {row.analysisFreshness.isStale
+              ? "Refresh required before outbound"
+              : "Review freshness before outbound"}
+          </strong>
+          <p>
+            Last analyzed {formatDate(row.lastAnalyzed)}. Rediem treats analysis older than{" "}
+            {row.analysisFreshness.staleAfterDays} days as stale.
+          </p>
+          {row.outboundReadiness.reasons.length > 0 ? (
+            <ul>
+              {row.outboundReadiness.reasons.map((reason) => (
+                <li key={reason}>{reason}</li>
+              ))}
+            </ul>
+          ) : null}
+        </section>
+      ) : null}
 
       <section className="rediem-cockpit-grid">
         <div className="rediem-cockpit-main">
           <CommunityFlywheelPanel detail={detail} />
 
           <div className="rediem-priority-grid">
-            <GtmDiagnosticsPanel diagnostics={detail.topDiagnostics} />
+            <GtmDiagnosticsPanel
+              diagnostics={detail.topDiagnostics}
+              diagnosticDetails={detail.diagnosticDetails}
+              recommendedPlaybook={detail.recommendedPlaybook}
+            />
             <ParticipationLeakPanel leak={detail.primaryParticipationLeak} />
           </div>
 
@@ -138,6 +174,14 @@ export function RediemAccountDetailView({ detail }: { detail: RediemAccountDetai
         </div>
 
         <aside className="rediem-cockpit-side">
+          <AEFeedbackPanel
+            feedback={feedback}
+            onChange={setFeedback}
+            onNotice={(message) => setNotice(message)}
+            playbookTitle={detail.recommendedPlaybook?.title ?? "No selected playbook"}
+            reviewerLabel="Current AE"
+          />
+
           <DisplacementWedgePanel
             evidenceUrls={detail.evidenceUrls}
             wedge={detail.displacementWedge}
@@ -216,6 +260,89 @@ export function RediemAccountDetailView({ detail }: { detail: RediemAccountDetai
   );
 }
 
+function AEFeedbackPanel({
+  feedback,
+  onChange,
+  onNotice,
+  playbookTitle,
+  reviewerLabel
+}: {
+  feedback: RediemAccountDetail["feedback"];
+  onChange: (feedback: RediemAccountDetail["feedback"]) => void;
+  onNotice: (message: string) => void;
+  playbookTitle: string;
+  reviewerLabel: string;
+}) {
+  function selectStatus(status: RediemGtmFeedbackStatus) {
+    const next = {
+      ...feedback,
+      status,
+      playbookAccepted:
+        status === "ACCEPT_PLAY"
+          ? true
+          : status === "OVERRIDE_PLAY" || status === "NOT_A_FIT"
+            ? false
+            : null,
+      reviewedAt: new Date().toISOString(),
+      reviewedBy: feedback.reviewedBy ?? reviewerLabel
+    };
+    onChange(next);
+    onNotice("AE feedback captured locally. Backend persistence is ready for wiring.");
+  }
+
+  return (
+    <section className="data-panel rediem-card">
+      <div className="panel-header">
+        <h2>AE Feedback</h2>
+        <p>Lightweight review loop for playbook acceptance, overrides, and research needs.</p>
+      </div>
+      <div className="rediem-feedback-body">
+        <div className="rediem-feedback-play">
+          <span>Recommended play</span>
+          <strong>{playbookTitle}</strong>
+        </div>
+        <div className="rediem-feedback-actions">
+          <button onClick={() => selectStatus("ACCEPT_PLAY")} type="button">
+            Accept play
+          </button>
+          <button onClick={() => selectStatus("OVERRIDE_PLAY")} type="button">
+            Override play
+          </button>
+          <button onClick={() => selectStatus("NEEDS_RESEARCH")} type="button">
+            Needs research
+          </button>
+          <button onClick={() => selectStatus("NOT_A_FIT")} type="button">
+            Not a fit
+          </button>
+        </div>
+        <label className="rediem-feedback-field">
+          <span>Override reason</span>
+          <input
+            onChange={(event) =>
+              onChange({ ...feedback, playbookOverrideReason: event.target.value })
+            }
+            placeholder="Different buyer, weak evidence, timing, disqualifier..."
+            value={feedback.playbookOverrideReason ?? ""}
+          />
+        </label>
+        <label className="rediem-feedback-field">
+          <span>AE notes</span>
+          <textarea
+            onChange={(event) => onChange({ ...feedback, aeNotes: event.target.value })}
+            placeholder="Notes stay local until backend mutation is wired."
+            rows={4}
+            value={feedback.aeNotes}
+          />
+        </label>
+        <small>
+          {feedback.status ? formatEnum(feedback.status) : "No AE review yet"}
+          {feedback.reviewedAt ? ` · ${formatDate(feedback.reviewedAt)}` : ""}
+        </small>
+      </div>
+    </section>
+  );
+}
+
 function BuyerGroup({
   label,
   people
@@ -259,6 +386,18 @@ function formatScore(value: number | null) {
 
 function formatConfidence(value: number | null) {
   return value === null ? "Confidence n/a" : `${Math.round(value * 100)}%`;
+}
+
+function formatDate(value: string) {
+  return new Intl.DateTimeFormat("en", {
+    month: "short",
+    day: "numeric",
+    year: "numeric"
+  }).format(new Date(value));
+}
+
+function formatReadiness(value: string) {
+  return formatEnum(value);
 }
 
 function formatEnum(value: string) {

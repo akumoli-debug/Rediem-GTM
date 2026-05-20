@@ -115,6 +115,11 @@ export const AccountScalarFieldEnum = {
   accountScore: 'accountScore',
   confidenceScore: 'confidenceScore',
   lastEnrichedAt: 'lastEnrichedAt',
+  playbookAccepted: 'playbookAccepted',
+  playbookOverrideReason: 'playbookOverrideReason',
+  aeNotes: 'aeNotes',
+  reviewedAt: 'reviewedAt',
+  reviewedBy: 'reviewedBy',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const

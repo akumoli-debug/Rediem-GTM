@@ -39,6 +39,9 @@ export type BenchmarkReportInput = {
   title?: string;
   reportDate?: string;
   isSampleData?: boolean;
+  sourceDataMode?: "sample" | "demo" | "provided" | "permissioned";
+  reviewedBy?: string | null;
+  reviewedAt?: string | null;
   methodologyNote?: string;
   brands: BenchmarkBrandInput[];
 };
@@ -80,7 +83,8 @@ const METRIC_LABELS: Record<string, string> = {
 
 export function generateBenchmarkReport(input: BenchmarkReportInput): string {
   const brands = input.brands ?? [];
-  const sampleMode = input.isSampleData !== false;
+  const governance = resolveBenchmarkGovernance(input);
+  const sampleMode = governance.sampleMode;
   const summaries = summarizeCategories(brands);
   const leakRows = topCounts(
     brands.flatMap((brand) =>
@@ -110,7 +114,7 @@ export function generateBenchmarkReport(input: BenchmarkReportInput): string {
     publicAssetSection(sampleMode),
     limitationsSection(input, brands, sampleMode)
   ];
-  const titlePrefix = sampleMode ? "Sample/Demo " : "";
+  const titlePrefix = sampleMode ? "SAMPLE / DEMO - " : "";
 
   return [
     `# ${titlePrefix}${input.title ?? DEFAULT_TITLE}`,
@@ -123,7 +127,9 @@ export function generateBenchmarkReport(input: BenchmarkReportInput): string {
     "",
     table([
       ["Report date", input.reportDate ?? "2026-05-20"],
-      ["Dataset mode", sampleMode ? "Sample/demo data" : "Provided data"],
+      ["Dataset mode", sampleMode ? "SAMPLE / DEMO data" : "Reviewed provided data"],
+      ["Source data mode", governance.sourceDataMode],
+      ["Governance review", governance.reviewedBy ?? "Not applicable for sample/demo"],
       ["Brands analyzed", String(brands.length)],
       ["Categories", String(summaries.length)],
       ["Methodology", input.methodologyNote ?? "Category medians and rankings are computed from the records supplied in the input JSON."]
@@ -132,6 +138,42 @@ export function generateBenchmarkReport(input: BenchmarkReportInput): string {
     ...sections.flatMap(renderSection),
     ""
   ].join("\n");
+}
+
+function resolveBenchmarkGovernance(input: BenchmarkReportInput) {
+  const sourceDataMode = input.sourceDataMode ?? (input.isSampleData === false ? null : "sample");
+
+  if (input.isSampleData === false) {
+    if (sourceDataMode !== "provided" && sourceDataMode !== "permissioned") {
+      throw new Error(
+        "Real benchmark reports require sourceDataMode to be provided or permissioned."
+      );
+    }
+
+    if (!input.reviewedBy?.trim()) {
+      throw new Error(
+        "Real benchmark reports require reviewedBy before publication."
+      );
+    }
+
+    return {
+      sampleMode: false,
+      sourceDataMode,
+      reviewedBy: input.reviewedBy.trim()
+    };
+  }
+
+  if (sourceDataMode !== "sample" && sourceDataMode !== "demo") {
+    throw new Error(
+      "Sample benchmark reports must use sourceDataMode sample or demo."
+    );
+  }
+
+  return {
+    sampleMode: true,
+    sourceDataMode,
+    reviewedBy: null
+  };
 }
 
 function executiveSummarySection(

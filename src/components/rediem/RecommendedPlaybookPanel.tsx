@@ -18,12 +18,17 @@ export function RecommendedPlaybookPanel({
         <div className="rediem-playbook-focus">
           <div className="rediem-playbook-title">
             <span className={`status ${playbook.confidence < 0.45 ? "risky" : "ready"}`}>
-              {formatReadiness(playbook.readiness)} · {formatConfidence(playbook.confidence)}
+              {formatReadiness(playbook.readiness)} · {playbook.confidenceLabel} ·{" "}
+              {formatConfidence(playbook.confidence)}
             </span>
             <h3>{playbook.title}</h3>
             <p>{playbook.thesis}</p>
           </div>
           <div className="rediem-next-action-grid">
+            <div>
+              <span>Evidence count</span>
+              <strong>{playbook.evidenceCount}</strong>
+            </div>
             <div>
               <span>Buyer persona</span>
               <strong>{playbook.buyerPersona}</strong>
@@ -33,7 +38,23 @@ export function RecommendedPlaybookPanel({
               <strong>{playbook.activationIdea}</strong>
             </div>
           </div>
-          <blockquote>{playbook.outboundAngle}</blockquote>
+          <div className="rediem-outbound-angle">
+            <span>
+              Outbound angle · {playbook.confidenceLabel} ·{" "}
+              {formatConfidence(playbook.confidence)}
+            </span>
+            <blockquote>{playbook.outboundAngle}</blockquote>
+          </div>
+          {playbook.readinessReasons.length > 0 ? (
+            <div className="rediem-review-callout">
+              <strong>Manual review required</strong>
+              <ul>
+                {playbook.readinessReasons.map((reason) => (
+                  <li key={reason}>{reason}</li>
+                ))}
+              </ul>
+            </div>
+          ) : null}
           {playbook.whySelected.length > 0 ? (
             <ul className="rediem-plain-list">
               {playbook.whySelected.slice(0, 3).map((reason) => (

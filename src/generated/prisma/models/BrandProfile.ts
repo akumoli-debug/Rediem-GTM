@@ -1182,10 +1182,6 @@ export type BrandProfileUncheckedUpdateOneWithoutAccountNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.BrandProfileUpdateToOneWithWhereWithoutAccountInput, Prisma.BrandProfileUpdateWithoutAccountInput>, Prisma.BrandProfileUncheckedUpdateWithoutAccountInput>
 }
 
-export type NullableBoolFieldUpdateOperationsInput = {
-  set?: boolean | null
-}
-
 export type BrandProfileCreateWithoutWorkspaceInput = {
   id?: string
   ecommercePlatform?: string | null

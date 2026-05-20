@@ -1894,6 +1894,11 @@ export const AccountScalarFieldEnum = {
   accountScore: 'accountScore',
   confidenceScore: 'confidenceScore',
   lastEnrichedAt: 'lastEnrichedAt',
+  playbookAccepted: 'playbookAccepted',
+  playbookOverrideReason: 'playbookOverrideReason',
+  aeNotes: 'aeNotes',
+  reviewedAt: 'reviewedAt',
+  reviewedBy: 'reviewedBy',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -2349,6 +2354,13 @@ export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaMode
 
 
 /**
+ * Reference to a field of type 'Boolean'
+ */
+export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+    
+
+
+/**
  * Reference to a field of type 'EmailStatus'
  */
 export type EnumEmailStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'EmailStatus'>
@@ -2485,13 +2497,6 @@ export type EnumFormulaOutputTypeFieldRefInput<$PrismaModel> = FieldRefInputType
  * Reference to a field of type 'FormulaOutputType[]'
  */
 export type ListEnumFormulaOutputTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'FormulaOutputType[]'>
-    
-
-
-/**
- * Reference to a field of type 'Boolean'
- */
-export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
     
 
 
